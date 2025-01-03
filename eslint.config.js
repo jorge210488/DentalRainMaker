@@ -12,7 +12,7 @@ const __dirname = dirname(__filename)
 
 export default [
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/src/**/*.{js,jsx,ts,tsx}'], // Solo archivos fuente
     ignores: [
       '**/node_modules/**',
       '**/dist/**',
@@ -24,6 +24,7 @@ export default [
       '**/*.d.ts',
       '**/backend/dist/**',
       '**/frontend/.next/**',
+      '**/frontend/dist/**',
     ],
     languageOptions: {
       ecmaVersion: 2021,
@@ -46,7 +47,7 @@ export default [
     },
   },
   {
-    files: ['**/backend/src/**/*.{js,jsx,ts,tsx}'], // Solo src
+    files: ['**/backend/src/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -56,13 +57,20 @@ export default [
     },
   },
   {
-    files: ['**/frontend/src/**/*.{js,jsx,ts,tsx}'], // Solo src
+    files: ['**/frontend/src/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         project: resolve(__dirname, 'frontend/tsconfig.json'),
         tsconfigRootDir: resolve(__dirname, 'frontend'),
       },
+    },
+  },
+  {
+    files: ['**/backend/dist/**/*', '**/frontend/.next/**/*'], // Ignorar archivos generados
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      'import/no-extraneous-dependencies': 'off',
     },
   },
 ]
