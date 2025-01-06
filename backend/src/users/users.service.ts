@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { User, UserDocument } from './schemas/user.schema'
-import { Model } from 'mongoose'
-import { RegisterUserDto } from './dto/registerUser.dto'
-import { UserStatus } from './enums/userStatus.enum'
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from './schemas/user.schema';
+import { Model } from 'mongoose';
+import { RegisterUserDto } from './dto/registerUser.dto';
+import { UserStatus } from './enums/userStatus.enum';
+import { StateUserDto } from './dto/stateUser.dto';
+
 
 @Injectable()
 export class UsersService {
@@ -35,10 +37,28 @@ export class UsersService {
     return updatedUser
   }
 
-  async deleteUser(_id: string): Promise<void> {
-    const result = await this.userModel.findByIdAndDelete(_id).exec()
-    if (!result) {
-      throw new NotFoundException('User not found')
-    }
-  }
+      async updateStateUser(
+        _id: string,
+        state: string,
+      ): Promise<UserDocument> {
+        const updatedStateUser = await this.userModel
+          .findByIdAndUpdate(
+            _id, 
+            { state }, 
+            { new: true,}
+          )
+          .exec();
+        if (!updatedStateUser) {
+          throw new NotFoundException('User not found');
+        }
+        return updatedStateUser;
+      }
+
+
+      async deleteUser(_id: string): Promise<void> {
+        const result = await this.userModel.findByIdAndDelete(_id).exec();
+        if (!result) {
+          throw new NotFoundException('User not found');
+        }
+      }
 }
