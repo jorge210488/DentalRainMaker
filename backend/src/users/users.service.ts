@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
+import { RegisterUserDto } from './dto/registerUser.dto';
+import { UserStatus } from './enums/userStatus.enum';
 
 
 
@@ -12,18 +14,37 @@ export class UsersService {
         @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
       ) {}
     
-      async createUser(
-        createUserDto: CreateUserDto & { userId: string },
-      ): Promise<TaskDocument> {
-        const newTask = new this.taskModel(createTaskDto);
-        return newTask.save();
+      async registerUser(
+        registerUserDto: RegisterUserDto,
+      ): Promise<UserDocument> {
+        const newRegisterUser = new this.userModel(registerUserDto);
+        return newRegisterUser.save();
       }
     
-      async getTasks(userId: string, status?: TaskStatus): Promise<TaskDocument[]> {
-        const filter: { userId: string; completed?: boolean } = { userId };
-        if (status) {
-          filter.completed = status === TaskStatus.COMPLETED;
+      async getUsers(): Promise<UserDocument[]> {
+        return this.userModel.find().exec();
+      }
+      
+      async updateUser(
+        _id: string,
+        updateUserDto: RegisterUserDto,
+      ): Promise<UserDocument> {
+        const updatedUser = await this.userModel
+          .findByIdAndUpdate(_id, updateUserDto, {
+            new: true,
+          })
+          .exec();
+        if (!updatedUser) {
+          throw new NotFoundException('User not found');
         }
-        return this.taskModel.find(filter).exec();
+        return updatedUser;
+      }
+
+
+      async deleteUser(_id: string): Promise<void> {
+        const result = await this.userModel.findByIdAndDelete(_id).exec();
+        if (!result) {
+          throw new NotFoundException('User not found');
+        }
       }
 }
