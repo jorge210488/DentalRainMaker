@@ -4,11 +4,16 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "backend/src/**/*.{js,jsx,ts,tsx}": [
