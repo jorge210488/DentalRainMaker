@@ -11,35 +11,54 @@ export class PermissionsGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // Obtener los permisos requeridos desde el decorador
+    // console.log('PermissionsGuard: Checking permissions...')
+
     const requiredPermissions = this.reflector.getAllAndOverride<string[]>(
       'permissions',
       [context.getHandler(), context.getClass()],
     )
 
+    // console.log(
+    //   'PermissionsGuard: Required permissions:',
+    //   requiredPermissions || 'None specified',
+    // )
+
     if (!requiredPermissions) {
-      // Si no se definen permisos, permitir el acceso
+      //   console.log('PermissionsGuard: No permissions required, access granted.')
       return true
     }
 
-    // Obtener el usuario desde la solicitud
     const request = context.switchToHttp().getRequest()
     const user = request.user
 
+    // console.log(
+    //   'PermissionsGuard: User from request:',
+    //   user ? user.user_id : 'No user found',
+    // )
+
     if (!user) {
+      console.log('PermissionsGuard: User not authenticated.')
       throw new ForbiddenException('User not authenticated')
     }
 
-    // Verificar si el usuario tiene los permisos necesarios
     const userPermissions = user.permissions || []
-    const hasPermission = requiredPermissions.every((permission) =>
+    // console.log('PermissionsGuard: User permissions:', userPermissions)
+
+    const hasPermission = requiredPermissions.some((permission) =>
       userPermissions.includes(permission),
     )
 
+    console.log(
+      'PermissionsGuard: User has required permissions:',
+      hasPermission,
+    )
+
     if (!hasPermission) {
+      //   console.log('PermissionsGuard: Insufficient permissions, access denied.')
       throw new ForbiddenException('Insufficient permissions')
     }
 
+    // console.log('PermissionsGuard: Access granted.')
     return true
   }
 }

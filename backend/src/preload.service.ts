@@ -1,6 +1,8 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common'
 import { PermissionsService } from './permissions/permissions.service'
 import { RolesService } from './roles/roles.service'
+import { AuthService } from './auth/auth.service'
+import { UsersService } from './users/users.service'
 
 @Injectable()
 export class PreloadService implements OnModuleInit {
@@ -9,6 +11,8 @@ export class PreloadService implements OnModuleInit {
   constructor(
     private readonly permissionsService: PermissionsService,
     private readonly rolesService: RolesService,
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
   ) {}
 
   async onModuleInit(): Promise<void> {
@@ -22,6 +26,14 @@ export class PreloadService implements OnModuleInit {
       // Preload Roles
       await this.rolesService.preloadRoles()
       this.logger.log('Roles preload completed.')
+
+      // Preload Auth Users
+      await this.authService.preloadUsers()
+      this.logger.log('Auth users preload completed.')
+
+      // Preload Updated Users
+      await this.usersService.preloadUpdateUsers()
+      this.logger.log('Updated users preload completed.')
     } catch (error) {
       this.logger.error('Error during preload process:', error.message)
     }
