@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { PreloadService } from './preload.service'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
 import { RolesModule } from './roles/roles.module'
+import { PermissionsModule } from './permissions/permissions.module'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
 import { DatabaseModule } from './database/database.module'
@@ -14,6 +16,7 @@ import { validationSchema } from './config/validation'
     UsersModule,
     AuthModule,
     RolesModule,
+    PermissionsModule,
     ConfigModule.forRoot({
       validationSchema,
       isGlobal: true,
@@ -26,6 +29,6 @@ import { validationSchema } from './config/validation'
     DatabaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PreloadService],
 })
 export class AppModule {}
