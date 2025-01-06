@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Schema as MongooseSchema } from 'mongoose'
-import { Credential } from '../../auth/schemas/credential.schema'
 import { Role } from '../../roles/schemas/role.schema'
 import { v4 as uuidv4 } from 'uuid'
 

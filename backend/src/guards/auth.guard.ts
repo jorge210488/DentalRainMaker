@@ -64,7 +64,11 @@ export class AuthGuard implements CanActivate {
       }
     } catch (error) {
       // Log para tokens inválidos
-      console.log('AuthGuard: Invalid token detected')
+      console.error('AuthGuard: Invalid token detected', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+      })
       throw new UnauthorizedException('Invalid Token')
     }
 

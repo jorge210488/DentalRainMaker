@@ -160,10 +160,10 @@ export class AuthService {
           await this.signup(createUserDto)
           // console.log(`Local user ${localUser.email} created successfully.`)
         } catch (error) {
-          // console.error(
-          //   `Failed to create local user ${localUser.email}:`,
-          //   error.message,
-          // )
+          console.error(
+            `Failed to create local user ${localUser.email}:`,
+            error.message,
+          )
         }
       }
 
@@ -182,15 +182,15 @@ export class AuthService {
           await this.signup(createUserDto)
           // console.log(`Google user ${googleUser.email} created successfully.`)
         } catch (error) {
-          // console.error(
-          //   `Failed to create Google user ${googleUser.email}:`,
-          //   error.message,
-          // )
+          console.error(
+            `Failed to create Google user ${googleUser.email}:`,
+            error.message,
+          )
         }
       }
       // console.log('Preload of users completed successfully.')
     } catch (error) {
-      // console.error('Error during user preload:', error.message)
+      console.error('Error during user preload:', error.message)
       throw new BadRequestException('Failed to preload users.')
     }
   }

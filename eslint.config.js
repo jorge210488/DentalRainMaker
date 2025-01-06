@@ -11,8 +11,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export default [
+  // Configuración para TypeScript
   {
-    files: ['**/src/**/*.{js,jsx,ts,tsx}'], // Solo archivos fuente
+    files: ['**/src/**/*.{ts,tsx}'], // Solo archivos TypeScript
     ignores: [
       '**/node_modules/**',
       '**/dist/**',
@@ -46,8 +47,37 @@ export default [
       'import/no-extraneous-dependencies': 'error',
     },
   },
+
+  // Configuración para JavaScript
   {
-    files: ['**/backend/src/**/*.{js,jsx,ts,tsx}'],
+    files: ['**/src/**/*.{js,jsx}'], // Solo archivos JavaScript
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'module',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      prettier: prettierPlugin,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+      import: importPlugin,
+    },
+    rules: {
+      'prettier/prettier': 'error',
+      'no-unused-vars': 'warn', // Usar la regla nativa de ESLint para JS
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'import/no-extraneous-dependencies': 'error',
+    },
+  },
+
+  // Configuración específica para backend
+  {
+    files: ['**/backend/src/**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -56,8 +86,10 @@ export default [
       },
     },
   },
+
+  // Configuración específica para frontend
   {
-    files: ['**/frontend/src/**/*.{js,jsx,ts,tsx}'],
+    files: ['**/frontend/src/**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -66,8 +98,10 @@ export default [
       },
     },
   },
+
+  // Ignorar archivos generados
   {
-    files: ['**/backend/dist/**/*', '**/frontend/.next/**/*'], // Ignorar archivos generados
+    files: ['**/backend/dist/**/*', '**/frontend/.next/**/*'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
       'import/no-extraneous-dependencies': 'off',
