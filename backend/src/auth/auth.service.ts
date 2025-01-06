@@ -14,6 +14,8 @@ import { LoginUserDto } from './dto/loginUser.dto'
 import * as crypto from 'crypto'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
+import * as localUsersData from '../utils/localUsers.json'
+import * as googleUsersData from '../utils/googleUsers.json'
 
 @Injectable()
 export class AuthService {
@@ -45,10 +47,9 @@ export class AuthService {
       throw new BadRequestException('Email is already in use.')
     }
 
-    // Generar un password aleatorio si el proveedor no es local y no se envió un password
     const generatedPassword =
       provider !== 'local' && !password
-        ? crypto.randomBytes(8).toString('hex') // Genera una contraseña aleatoria
+        ? crypto.randomBytes(8).toString('hex')
         : password
 
     const credential = new this.credentialModel({
@@ -59,8 +60,7 @@ export class AuthService {
     })
     await credential.save()
 
-    // Validar y obtener el rol asociado al usuario
-    const role = await this.roleModel.findOne({ name: type || 'PATIENT' }) // Busca el rol en base al nombre
+    const role = await this.roleModel.findOne({ name: type || 'PATIENT' })
     if (!role) {
       throw new BadRequestException(`Role ${type || 'PATIENT'} not found.`)
     }
@@ -121,10 +121,9 @@ export class AuthService {
       }
     }
 
-    // Busca el usuario relacionado usando el credential_id
     const user = await this.userModel
       .findOne({ credential: credential._id })
-      .populate('type') // Popular el campo `type` para obtener el rol asociado
+      .populate('type')
 
     if (!user) {
       throw new NotFoundException('User not found for these credentials.')
@@ -132,14 +131,67 @@ export class AuthService {
 
     const token = this.jwtService.sign({
       sub: credential._id,
-      email: credential.email,
+      user_id: user._id,
       role: user.type.name,
+      email: credential.email,
     })
 
     return {
       token,
       userId: user._id,
       type: user.type.name,
+    }
+  }
+
+  async preloadUsers(): Promise<void> {
+    try {
+      // Cargar usuarios locales
+      for (const localUser of localUsersData) {
+        try {
+          const createUserDto: CreateUserDto = {
+            email: localUser.email,
+            password: localUser.password,
+            confirmPassword: localUser.password,
+            provider: localUser.provider,
+            given_name: localUser.given_name,
+            family_name: localUser.family_name,
+            type: localUser.type,
+          }
+          await this.signup(createUserDto)
+          // console.log(`Local user ${localUser.email} created successfully.`)
+        } catch (error) {
+          console.error(
+            `Failed to create local user ${localUser.email}:`,
+            error.message,
+          )
+        }
+      }
+
+      // Cargar usuarios de Google
+      for (const googleUser of googleUsersData) {
+        try {
+          const createUserDto: CreateUserDto = {
+            email: googleUser.email,
+            provider: googleUser.provider,
+            providerId: googleUser.providerId,
+            given_name: googleUser.given_name,
+            family_name: googleUser.family_name,
+            name: googleUser.name,
+            type: googleUser.type,
+          }
+          await this.signup(createUserDto)
+          // console.log(`Google user ${googleUser.email} created successfully.`)
+        } catch (error) {
+          console.error(
+            `Failed to create Google user ${googleUser.email}:`,
+            error.message,
+          )
+        }
+      }
+      // console.log('Preload of users completed successfully.')
+    } catch (error) {
+      console.error('Error during user preload:', error.message)
+      throw new BadRequestException('Failed to preload users.')
     }
   }
 }
