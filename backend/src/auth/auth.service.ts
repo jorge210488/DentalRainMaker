@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { Credential, CredentialDocument } from './schemas/credential.schema'
 import { User, UserDocument } from '../users/schemas/user.schema'
+import { Role, RoleDocument } from '../roles/schemas/role.schema'
 import { CreateUserDto } from './dto/createUser.dto'
 import { LoginUserDto } from './dto/loginUser.dto'
 import * as crypto from 'crypto'
@@ -21,9 +22,12 @@ export class AuthService {
     private credentialModel: Model<CredentialDocument>,
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
+    @InjectModel(Role.name) // Inyección del modelo Role
+    private roleModel: Model<RoleDocument>,
     private readonly jwtService: JwtService,
   ) {}
 
+  // Método para registrar un nuevo usuario
   async signup(createUserDto: CreateUserDto): Promise<UserDocument> {
     const {
       email,
@@ -55,6 +59,12 @@ export class AuthService {
     })
     await credential.save()
 
+    // Validar y obtener el rol asociado al usuario
+    const role = await this.roleModel.findOne({ name: type || 'PATIENT' }) // Busca el rol en base al nombre
+    if (!role) {
+      throw new BadRequestException(`Role ${type || 'PATIENT'} not found.`)
+    }
+
     const combinedName =
       provider === 'local' ? `${given_name} ${family_name}` : name
 
@@ -62,7 +72,7 @@ export class AuthService {
       name: combinedName,
       given_name,
       family_name,
-      type: type || 'PATIENT',
+      type: role._id, // Asigna la referencia al ID del rol
       primary_email_address: email,
       credential: credential._id,
     })
@@ -70,6 +80,7 @@ export class AuthService {
     return user.save()
   }
 
+  // Método para iniciar sesión
   async signin(
     userData: LoginUserDto,
   ): Promise<{ token: string; userId: string; type: string }> {
@@ -111,21 +122,24 @@ export class AuthService {
     }
 
     // Busca el usuario relacionado usando el credential_id
-    const user = await this.userModel.findOne({ credential: credential._id })
+    const user = await this.userModel
+      .findOne({ credential: credential._id })
+      .populate('type') // Popular el campo `type` para obtener el rol asociado
+
     if (!user) {
       throw new NotFoundException('User not found for these credentials.')
     }
 
-    // Genera el token
     const token = this.jwtService.sign({
       sub: credential._id,
       email: credential.email,
+      role: user.type.name,
     })
 
     return {
       token,
       userId: user._id,
-      type: user.type,
+      type: user.type.name,
     }
   }
 }

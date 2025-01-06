@@ -7,40 +7,35 @@ import { UserStatus } from './enums/userStatus.enum';
 import { StateUserDto } from './dto/stateUser.dto';
 
 
-
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+  ) {}
 
-    constructor(
-        @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-      ) {}
-    
-      async registerUser(
-        registerUserDto: RegisterUserDto,
-      ): Promise<UserDocument> {
-        const newRegisterUser = new this.userModel(registerUserDto);
-        return newRegisterUser.save();
-      }
-    
-      async getUsers(): Promise<UserDocument[]> {
-        return this.userModel.find().exec();
-      }
-      
-      async updateUser(
-        _id: string,
-        updateUserDto: RegisterUserDto,
-      ): Promise<UserDocument> {
-        const updatedUser = await this.userModel
-          .findByIdAndUpdate(_id, updateUserDto, {
-            new: true,
-          })
-          .exec();
-        if (!updatedUser) {
-          throw new NotFoundException('User not found');
-        }
-        return updatedUser;
-      }
+  async registerUser(registerUserDto: RegisterUserDto): Promise<UserDocument> {
+    const newRegisterUser = new this.userModel(registerUserDto)
+    return newRegisterUser.save()
+  }
 
+  async getUsers(): Promise<UserDocument[]> {
+    return this.userModel.find().exec()
+  }
+
+  async updateUser(
+    _id: string,
+    updateUserDto: RegisterUserDto,
+  ): Promise<UserDocument> {
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(_id, updateUserDto, {
+        new: true,
+      })
+      .exec()
+    if (!updatedUser) {
+      throw new NotFoundException('User not found')
+    }
+    return updatedUser
+  }
 
       async updateStateUser(
         _id: string,
