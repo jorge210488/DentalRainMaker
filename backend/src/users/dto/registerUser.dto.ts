@@ -229,7 +229,7 @@ import {
     @ApiProperty({
       description:
         'The credential field must be a string of text',
-      example: 'jwayne@gmail.com',
+      example: 'bfbf0e86-d3c1-4a80-8f8f-6e02b463118a',
       required: true,
     })
     credential: Credential;

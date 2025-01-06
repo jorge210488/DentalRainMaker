@@ -15,6 +15,7 @@ import { RegisterUserDto } from './dto/registerUser.dto';
 import { UserDocument } from './schemas/user.schema';
 import { ApiBearerAuth, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { JwtPayload } from 'src/auth/interfaces/jwtPayload.interface';
+import { StateUserDto } from './dto/stateUser.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -50,6 +51,18 @@ export class UsersController {
         @Body() updateUserDto: RegisterUserDto,
     ): Promise<UserDocument> {
         return this.usersService.updateUser(_id, updateUserDto);
+    }
+
+
+    @ApiBearerAuth()
+    @HttpCode(200)
+    @Put('state/:id')
+    async updateStateUser(
+        @Param('id') _id: string,
+        @Body() stateUserDto: StateUserDto,
+    ): Promise<UserDocument> {
+        const { state } = stateUserDto;
+        return this.usersService.updateStateUser(_id, state);
     }
 
 

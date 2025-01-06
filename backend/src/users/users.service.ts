@@ -4,6 +4,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { RegisterUserDto } from './dto/registerUser.dto';
 import { UserStatus } from './enums/userStatus.enum';
+import { StateUserDto } from './dto/stateUser.dto';
 
 
 
@@ -38,6 +39,24 @@ export class UsersService {
           throw new NotFoundException('User not found');
         }
         return updatedUser;
+      }
+
+
+      async updateStateUser(
+        _id: string,
+        state: string,
+      ): Promise<UserDocument> {
+        const updatedStateUser = await this.userModel
+          .findByIdAndUpdate(
+            _id, 
+            { state }, 
+            { new: true,}
+          )
+          .exec();
+        if (!updatedStateUser) {
+          throw new NotFoundException('User not found');
+        }
+        return updatedStateUser;
       }
 
 
