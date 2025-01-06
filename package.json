@@ -11,7 +11,11 @@
     "format:check": "prettier --check ."
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
+    "backend/src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "frontend/src/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
