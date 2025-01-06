@@ -1,0 +1,17 @@
+[
+  {
+    "name": "ADMIN",
+    "permissions": ["ALL_ACCESS"]
+  },
+  {
+    "name": "PATIENT",
+    "permissions": [
+      "UPDATE_USER",
+      "DELETE_USER",
+      "READ_OWN_USER",
+      "READ_OWN_APPOINTMENT",
+      "CREATE_APPOINTMENT",
+      "UPDATE_APPOINTMENT"
+    ]
+  }
+]
