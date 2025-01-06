@@ -3,8 +3,6 @@ import { InjectModel } from '@nestjs/mongoose'
 import { User, UserDocument } from './schemas/user.schema'
 import { Model } from 'mongoose'
 import { UpdateUserDto } from './dto/updateUser.dto'
-import { UserStatus } from './enums/userStatus.enum'
-import { StateUserDto } from './dto/stateUser.dto'
 import * as updateUsersData from '../utils/updateUsers.json'
 
 @Injectable()

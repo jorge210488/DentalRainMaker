@@ -5,16 +5,13 @@ import {
   Get,
   Param,
   Put,
-  Post,
-  Query,
   HttpCode,
   UseGuards,
-  Req,
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { UpdateUserDto } from './dto/updateUser.dto'
 import { UserDocument } from './schemas/user.schema'
-import { ApiBearerAuth, ApiTags, ApiQuery } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { StateUserDto } from './dto/stateUser.dto'
 import { AuthGuard } from '../guards/auth.guard'
 import { RolesGuard } from '../guards/role.guard'
