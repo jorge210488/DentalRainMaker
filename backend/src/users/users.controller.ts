@@ -21,14 +21,15 @@ import { Permissions } from '../decorators/permissions.decorator'
 
 @ApiTags('users')
 @Controller('users')
-@UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
-@Roles('ADMIN')
-@Permissions('ALL_ACCESS', 'READ_ALL_USERS')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
   @ApiBearerAuth()
   @HttpCode(200)
   @Get()
+  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+  @Roles('ADMIN')
+  @Permissions('ALL_ACCESS', 'READ_ALL_USERS')
   async getUsers(): Promise<UserDocument[]> {
     return this.usersService.getUsers()
   }
