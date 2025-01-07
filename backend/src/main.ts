@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const configService = app.get(ConfigService)
   const frontendOrigin = configService.get<string>('FRONTEND_URL')
-  const port = configService.get<number>('PORT')
+  const port = configService.get<number>('PORT') || 3000
 
   app.enableCors({
     origin: frontendOrigin,

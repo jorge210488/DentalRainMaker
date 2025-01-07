@@ -64,19 +64,19 @@ export class RolesService {
   }
 
   async preloadRoles(): Promise<void> {
-    this.logger.log('Starting roles preload...')
+    // this.logger.log('Starting roles preload...')
     for (const roleData of rolesData) {
       const existingRole = await this.roleModel.findOne({ name: roleData.name })
       if (!existingRole) {
-        this.logger.log(`Creating role: ${roleData.name}`)
+        // this.logger.log(`Creating role: ${roleData.name}`)
         await this.roleModel.create({
           name: roleData.name,
           permissions: roleData.permissions,
         })
       } else {
-        this.logger.log(`Role already exists: ${roleData.name}`)
+        // this.logger.log(`Role already exists: ${roleData.name}`)
       }
     }
-    this.logger.log('Roles preload completed.')
+    // this.logger.log('Roles preload completed.')
   }
 }
