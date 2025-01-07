@@ -16,6 +16,7 @@ import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import * as localUsersData from '../utils/localUsers.json'
 import * as googleUsersData from '../utils/googleUsers.json'
+import { NodemailerService } from '../nodemailer/nodemailer.service'
 
 @Injectable()
 export class AuthService {
@@ -24,12 +25,12 @@ export class AuthService {
     private credentialModel: Model<CredentialDocument>,
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
-    @InjectModel(Role.name) // Inyección del modelo Role
+    @InjectModel(Role.name)
     private roleModel: Model<RoleDocument>,
     private readonly jwtService: JwtService,
+    private readonly nodemailerService: NodemailerService,
   ) {}
 
-  // Método para registrar un nuevo usuario
   async signup(createUserDto: CreateUserDto): Promise<UserDocument> {
     const {
       email,
@@ -76,6 +77,13 @@ export class AuthService {
       primary_email_address: email,
       credential: credential._id,
     })
+
+    await this.nodemailerService.sendRegistrationEmail(
+      email,
+      'Welcome to Dental Rain Maker',
+      combinedName,
+      type,
+    )
 
     return user.save()
   }

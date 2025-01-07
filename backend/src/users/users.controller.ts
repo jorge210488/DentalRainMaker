@@ -36,6 +36,16 @@ export class UsersController {
 
   @ApiBearerAuth()
   @HttpCode(200)
+  @Get(':id')
+  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+  @Roles('ADMIN', 'PATIENT')
+  @Permissions('ALL_ACCESS', 'READ_OWN_USER')
+  async getUserById(@Param('id') _id: string): Promise<UserDocument> {
+    return this.usersService.getUserById(_id)
+  }
+
+  @ApiBearerAuth()
+  @HttpCode(200)
   @Put(':id')
   async updateUser(
     @Param('id') _id: string,
