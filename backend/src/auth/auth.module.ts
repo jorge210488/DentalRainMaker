@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { Credential, CredentialSchema } from './schemas/credential.schema'
 import { User, UserSchema } from '../users/schemas/user.schema'
 import { Role, RoleSchema } from '../roles/schemas/role.schema'
+import { NodemailerService } from '../nodemailer/nodemailer.service'
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { Role, RoleSchema } from '../roles/schemas/role.schema'
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, NodemailerService],
   exports: [AuthService],
 })
 export class AuthModule {}

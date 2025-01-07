@@ -10,6 +10,8 @@ import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
 import { DatabaseModule } from './database/database.module'
 import { validationSchema } from './config/validation'
+import { NodemailerModule } from './nodemailer/nodemailer.module'
+import { CloudinaryModule } from './cloudinary/cloudinary.module'
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { validationSchema } from './config/validation'
       secret: process.env.JWT_SECRET,
     }),
     DatabaseModule,
+    NodemailerModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService, PreloadService],

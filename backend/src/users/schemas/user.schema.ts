@@ -127,6 +127,12 @@ export class User {
     required: true,
   })
   credential: string
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  img_url?: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)
