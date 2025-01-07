@@ -1,0 +1,22 @@
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Deploy to Render Back
+        run: curl -X POST "https://api.render.com/deploy/srv-ctu9hh23esus739a93f0?key=jo6hta_gPBg"
