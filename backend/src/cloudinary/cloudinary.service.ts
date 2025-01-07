@@ -47,4 +47,29 @@ export class CloudinaryService {
 
     return result
   }
+
+  async uploadImages(file: Express.Multer.File): Promise<UploadApiResponse> {
+    if (!file) {
+      throw new BadRequestException('File not provided')
+    }
+
+    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+      const upload = v2.uploader.upload_stream(
+        {
+          resource_type: 'auto',
+          folder: 'DentalRainMaker Frontend',
+        },
+        (error, result) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(result)
+          }
+        },
+      )
+      toStream(file.buffer).pipe(upload)
+    })
+
+    return result
+  }
 }

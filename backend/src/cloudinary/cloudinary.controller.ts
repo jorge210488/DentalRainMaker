@@ -46,7 +46,7 @@ export class CloudinaryController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description:
-      'Archivo de imagen que será subido. Debe ser JPG, PNG, o WEBP y menor a 200KB.',
+      'Archivo de imagen que será subido. Debe ser JPG, PNG, o WEBP y menor a 2MB.',
     required: true,
     schema: {
       type: 'object',
@@ -77,5 +77,45 @@ export class CloudinaryController {
     @Body() dto: CloudinaryDto,
   ) {
     return this.cloudinaryService.uploadImage(id, file, dto)
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+  @Roles('ADMIN')
+  @Permissions('ALL_ACCESS')
+  @Post('/files/dentalrainmaker')
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description:
+      'Archivo de imagen que será subido. Debe ser JPG, PNG, o WEBP y menor a 2MB.',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async uploadImages(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 2000000, // 2MB
+            message: 'El archivo debe ser menor a 2MB',
+          }),
+          new FileTypeValidator({
+            fileType: /(jpg|jpeg|png|webp)$/,
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.cloudinaryService.uploadImages(file)
   }
 }
