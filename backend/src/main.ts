@@ -9,7 +9,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const configService = app.get(ConfigService)
   const frontendOrigin = configService.get<string>('FRONTEND_URL')
-  const port = configService.get<number>('PORT') || 3000
 
   app.enableCors({
     origin: frontendOrigin,
@@ -37,8 +36,6 @@ async function bootstrap() {
     }),
   )
 
-  await app.listen(port)
-
-  console.log(`Application is running on: http://localhost:${port}`)
+  await app.listen(3200)
 }
 bootstrap()
