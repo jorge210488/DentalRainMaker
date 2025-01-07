@@ -56,9 +56,9 @@ export class PermissionsService {
           name: permission,
           description: `Auto-generated permission for ${permission}`,
         })
-        this.logger.log(`Permission "${permission}" created.`)
+        // this.logger.log(`Permission "${permission}" created.`)
       } else {
-        this.logger.log(`Permission "${permission}" already exists.`)
+        // this.logger.log(`Permission "${permission}" already exists.`)
       }
     }
   }
