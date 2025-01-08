@@ -16,7 +16,6 @@ import { StateUserDto } from './dto/stateUser.dto'
 import { AuthGuard } from '../guards/auth.guard'
 import { RolesGuard } from '../guards/role.guard'
 import { PermissionsGuard } from '../guards/permission.guard'
-import { Roles } from '../decorators/roles.decorator'
 import { Permissions } from '../decorators/permissions.decorator'
 
 @ApiTags('users')
@@ -28,7 +27,6 @@ export class UsersController {
   @HttpCode(200)
   @Get()
   @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
-  @Roles('ADMIN')
   @Permissions('ALL_ACCESS', 'READ_ALL_USERS')
   async getUsers(): Promise<UserDocument[]> {
     return this.usersService.getUsers()
@@ -38,7 +36,6 @@ export class UsersController {
   @HttpCode(200)
   @Get(':id')
   @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
-  @Roles('ADMIN', 'PATIENT')
   @Permissions('ALL_ACCESS', 'READ_OWN_USER')
   async getUserById(@Param('id') _id: string): Promise<UserDocument> {
     return this.usersService.getUserById(_id)
@@ -47,6 +44,8 @@ export class UsersController {
   @ApiBearerAuth()
   @HttpCode(200)
   @Put(':id')
+  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+  @Permissions('ALL_ACCESS', 'UPDATE_USER')
   async updateUser(
     @Param('id') _id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -57,6 +56,8 @@ export class UsersController {
   @ApiBearerAuth()
   @HttpCode(200)
   @Put('state/:id')
+  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+  @Permissions('ALL_ACCESS', 'SOFT_DELETE_USER')
   async updateStateUser(
     @Param('id') _id: string,
     @Body() stateUserDto: StateUserDto,
@@ -68,6 +69,8 @@ export class UsersController {
   @ApiBearerAuth()
   @HttpCode(204)
   @Delete(':id')
+  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+  @Permissions('ALL_ACCESS', 'DELETE_USER')
   async deleteUser(@Param('id') _id: string): Promise<void> {
     return this.usersService.deleteUser(_id)
   }
