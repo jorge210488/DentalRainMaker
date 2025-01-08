@@ -12,6 +12,8 @@ import { DatabaseModule } from './database/database.module'
 import { validationSchema } from './config/validation'
 import { NodemailerModule } from './nodemailer/nodemailer.module'
 import { CloudinaryModule } from './cloudinary/cloudinary.module'
+import { AuthGuard } from './guards/auth.guard'
+import { APP_GUARD } from '@nestjs/core'
 
 @Module({
   imports: [
@@ -33,6 +35,13 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module'
     CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PreloadService],
+  providers: [
+    AppService,
+    PreloadService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -8,14 +8,21 @@ import {
   Body,
   HttpStatus,
   HttpException,
+  UseGuards,
 } from '@nestjs/common'
 import { PermissionsService } from './permissions.service'
 import { CreatePermissionDto } from './dto/createPermission.dto'
 import { Permission } from './schemas/permission.schema'
-import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger'
+import { ApiTags, ApiOperation, ApiParam, ApiBearerAuth } from '@nestjs/swagger'
+import { RolesGuard } from '../guards/role.guard'
+import { PermissionsGuard } from '../guards/permission.guard'
+import { Permissions } from '../decorators/permissions.decorator'
 
 @ApiTags('Permissions')
+@ApiBearerAuth()
 @Controller('permissions')
+@UseGuards(RolesGuard, PermissionsGuard)
+@Permissions('ALL_ACCESS')
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
