@@ -27,7 +27,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "elena.garcía@gmail.com",
@@ -57,7 +60,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "luis.silva@gmail.com",
@@ -87,7 +93,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "elena.sánchez@gmail.com",
@@ -117,7 +126,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "carlos.ramírez@gmail.com",
@@ -147,7 +159,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "antonio.garcía@gmail.com",
@@ -177,7 +192,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "marta.ruiz@gmail.com",
@@ -207,7 +225,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "luis.gonzález@gmail.com",
@@ -237,7 +258,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "ana.cruz@gmail.com",
@@ -267,7 +291,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "marta.ortega@gmail.com",
@@ -297,7 +324,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "elena.morales@gmail.com",
@@ -327,7 +357,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "antonio.romero@gmail.com",
@@ -357,7 +390,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "clara.jiménez@gmail.com",
@@ -387,7 +423,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "sara.cruz@gmail.com",
@@ -417,7 +456,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "marta.jiménez@gmail.com",
@@ -447,7 +489,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "elena.vargas@gmail.com",
@@ -477,7 +522,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "antonio.romero@gmail.com",
@@ -507,7 +555,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "ana.ruiz@gmail.com",
@@ -537,7 +588,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "ana.gonzález@gmail.com",
@@ -567,7 +621,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "maría.vargas@gmail.com",
@@ -597,7 +654,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "jorge.ortega@gmail.com",
@@ -627,7 +687,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "ana.ramírez@gmail.com",
@@ -657,7 +720,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "miguel.morales@gmail.com",
@@ -687,7 +753,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "lucía.castro@gmail.com",
@@ -717,7 +786,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "clara.vargas@gmail.com",
@@ -747,7 +819,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "rosa.vargas@gmail.com",
@@ -777,7 +852,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "miguel.castro@gmail.com",
@@ -807,7 +885,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "lucía.romero@gmail.com",
@@ -837,7 +918,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "miguel.rodríguez@gmail.com",
@@ -867,7 +951,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "juan.ruiz@gmail.com",
@@ -897,7 +984,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "francisco.vargas@gmail.com",
@@ -927,7 +1017,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "marta.romero@gmail.com",
@@ -957,7 +1050,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "josé.lópez@gmail.com",
@@ -987,7 +1083,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "sara.ruiz@gmail.com",
@@ -1017,7 +1116,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "josé.morales@gmail.com",
@@ -1047,7 +1149,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "luis.hernández@gmail.com",
@@ -1077,7 +1182,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "juan.garcía@gmail.com",
@@ -1107,7 +1215,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "luis.martínez@gmail.com",
@@ -1137,7 +1248,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "marta.castro@gmail.com",
@@ -1167,7 +1281,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "elena.garcía@gmail.com",
@@ -1197,7 +1314,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "jorge.ramírez@gmail.com",
@@ -1227,7 +1347,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "rosa.díaz@gmail.com",
@@ -1257,7 +1380,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "rafael.castro@gmail.com",
@@ -1287,7 +1413,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "clara.vargas@gmail.com",
@@ -1317,7 +1446,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "rosa.vargas@gmail.com",
@@ -1347,7 +1479,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "francisco.castro@gmail.com",
@@ -1377,7 +1512,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "elena.ortega@gmail.com",
@@ -1407,7 +1545,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "luis.castro@gmail.com",
@@ -1437,7 +1578,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "sara.gonzález@gmail.com",
@@ -1467,7 +1611,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "antonio.martínez@gmail.com",
@@ -1497,7 +1644,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "kthornton@gmail.com",
@@ -1527,7 +1677,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "booneguy@yahoo.com",
@@ -1557,7 +1710,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "gregory11@reid.org",
@@ -1587,7 +1743,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "john92@santiago-shepherd.com",
@@ -1617,7 +1776,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "joshuapugh@hotmail.com",
@@ -1647,7 +1809,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "nicole87@yahoo.com",
@@ -1677,7 +1842,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "charlesgonzales@hotmail.com",
@@ -1707,7 +1875,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "ubrown@hotmail.com",
@@ -1737,7 +1908,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "jessewallace@taylor.com",
@@ -1767,7 +1941,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "zwilson@coleman-frazier.com",
@@ -1797,7 +1974,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "randall78@foley.org",
@@ -1827,7 +2007,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "cruzlindsey@cannon.com",
@@ -1857,7 +2040,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "webbcalvin@murphy-lopez.com",
@@ -1887,7 +2073,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "mendozaangela@yahoo.com",
@@ -1917,7 +2106,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "kristina37@williams.com",
@@ -1947,7 +2139,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "ariley@gmail.com",
@@ -1977,7 +2172,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "martinshannon@santana-ross.com",
@@ -2007,7 +2205,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "bsanchez@hotmail.com",
@@ -2037,7 +2238,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "jeffreysheppard@gmail.com",
@@ -2067,7 +2271,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "elaineperez@li-calderon.biz",
@@ -2097,7 +2304,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "kwarner@yahoo.com",
@@ -2127,7 +2337,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "wilsonisaiah@hotmail.com",
@@ -2157,7 +2370,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "wbaker@torres.com",
@@ -2187,7 +2403,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "yellison@moore-myers.info",
@@ -2217,7 +2436,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "nathan33@hotmail.com",
@@ -2247,7 +2469,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "rebeccaduffy@butler.com",
@@ -2277,7 +2502,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "xwarner@gmail.com",
@@ -2307,7 +2535,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "zsanchez@kelly.com",
@@ -2337,7 +2568,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "alloyd@gmail.com",
@@ -2367,7 +2601,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "iwatson@gmail.com",
@@ -2397,7 +2634,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "crystal67@ford.com",
@@ -2427,7 +2667,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "cassie28@tucker-murillo.org",
@@ -2457,7 +2700,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "ycervantes@hotmail.com",
@@ -2487,7 +2733,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "saraklein@tanner.com",
@@ -2517,7 +2766,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "julia16@george.com",
@@ -2547,7 +2799,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "hermanpatricia@lutz-schmidt.biz",
@@ -2577,7 +2832,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "sandersconnie@jones-martinez.com",
@@ -2607,7 +2865,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "lduncan@hotmail.com",
@@ -2637,7 +2898,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "timothyberg@murphy.com",
@@ -2667,7 +2931,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "kimberly41@hotmail.com",
@@ -2697,7 +2964,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "ilopez@hill-hernandez.com",
@@ -2727,7 +2997,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Harmony Health Group"
+    ]
   },
   {
     "email": "robert34@yahoo.com",
@@ -2757,7 +3030,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "smithashley@king-joyce.com",
@@ -2787,7 +3063,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Wellness & Care Hub"
+    ]
   },
   {
     "email": "jacquelineharmon@yahoo.com",
@@ -2817,7 +3096,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "kgoodwin@hotmail.com",
@@ -2847,7 +3129,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "ngregory@yahoo.com",
@@ -2877,7 +3162,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "victoria08@brown.com",
@@ -2907,7 +3195,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   },
   {
     "email": "lgutierrez@hotmail.com",
@@ -2937,7 +3228,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Green Valley Clinic"
+    ]
   },
   {
     "email": "colejulie@reilly-flores.com",
@@ -2967,7 +3261,10 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Sunny Health Center"
+    ]
   },
   {
     "email": "martinezamber@perez-valenzuela.com",
@@ -2997,6 +3294,9 @@
         "type": "work"
       }
     ],
-    "state": "ACTIVE"
+    "state": "ACTIVE",
+    "clinic_name": [
+      "Family First Medical"
+    ]
   }
 ]

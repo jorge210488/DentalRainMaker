@@ -19,32 +19,28 @@ import { PermissionsGuard } from '../guards/permission.guard'
 import { Permissions } from '../decorators/permissions.decorator'
 
 @ApiTags('users')
+@ApiBearerAuth()
 @Controller('users')
+@UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiBearerAuth()
   @HttpCode(200)
   @Get()
-  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
   @Permissions('ALL_ACCESS', 'READ_ALL_USERS')
   async getUsers(): Promise<UserDocument[]> {
     return this.usersService.getUsers()
   }
 
-  @ApiBearerAuth()
   @HttpCode(200)
   @Get(':id')
-  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
   @Permissions('ALL_ACCESS', 'READ_OWN_USER')
   async getUserById(@Param('id') _id: string): Promise<UserDocument> {
     return this.usersService.getUserById(_id)
   }
 
-  @ApiBearerAuth()
   @HttpCode(200)
   @Put(':id')
-  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
   @Permissions('ALL_ACCESS', 'UPDATE_USER')
   async updateUser(
     @Param('id') _id: string,
@@ -53,10 +49,8 @@ export class UsersController {
     return this.usersService.updateUser(_id, updateUserDto)
   }
 
-  @ApiBearerAuth()
   @HttpCode(200)
   @Put('state/:id')
-  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
   @Permissions('ALL_ACCESS', 'SOFT_DELETE_USER')
   async updateStateUser(
     @Param('id') _id: string,
@@ -66,10 +60,8 @@ export class UsersController {
     return this.usersService.updateStateUser(_id, state)
   }
 
-  @ApiBearerAuth()
   @HttpCode(204)
   @Delete(':id')
-  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
   @Permissions('ALL_ACCESS', 'DELETE_USER')
   async deleteUser(@Param('id') _id: string): Promise<void> {
     return this.usersService.deleteUser(_id)
