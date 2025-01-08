@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { Reflector } from '@nestjs/core'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { User, UserDocument } from '../users/schemas/user.schema'
@@ -13,10 +14,21 @@ import { User, UserDocument } from '../users/schemas/user.schema'
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
+    private readonly reflector: Reflector, // Agregado para manejar metadata
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Verificar si el endpoint es público
+    const isPublic = this.reflector.get<boolean>(
+      'isPublic',
+      context.getHandler(),
+    )
+    if (isPublic) {
+      console.log('AuthGuard: Public route accessed')
+      return true
+    }
+
     const request = context.switchToHttp().getRequest()
     const token = request.headers['authorization']?.split(' ')[1] ?? ''
 
