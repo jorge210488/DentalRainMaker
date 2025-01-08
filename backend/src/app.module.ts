@@ -14,11 +14,12 @@ import { NodemailerModule } from './nodemailer/nodemailer.module'
 import { CloudinaryModule } from './cloudinary/cloudinary.module'
 import { AuthGuard } from './guards/auth.guard'
 import { APP_GUARD } from '@nestjs/core'
+import { ClinicsModule } from './clinics/clinics.module'
 
 @Module({
   imports: [
-    UsersModule,
     AuthModule,
+    UsersModule,
     RolesModule,
     PermissionsModule,
     ConfigModule.forRoot({
@@ -33,6 +34,7 @@ import { APP_GUARD } from '@nestjs/core'
     DatabaseModule,
     NodemailerModule,
     CloudinaryModule,
+    ClinicsModule,
   ],
   controllers: [AppController],
   providers: [

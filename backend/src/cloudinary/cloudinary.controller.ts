@@ -16,7 +16,6 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '../guards/auth.guard'
 import { RolesGuard } from '../guards/role.guard'
 import { PermissionsGuard } from '../guards/permission.guard'
-import { Roles } from '../decorators/roles.decorator'
 import { Permissions } from '../decorators/permissions.decorator'
 import {
   ApiBearerAuth,
@@ -28,13 +27,12 @@ import {
 import { CloudinaryDto } from './dto/cloudinary.dto'
 
 @ApiTags('Cloudinary')
+@ApiBearerAuth()
+@UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
 @Controller()
 export class CloudinaryController {
   constructor(private readonly cloudinaryService: CloudinaryService) {}
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
-  @Roles('ADMIN', 'PATIENT')
   @Permissions('ALL_ACCESS', 'UPDATE_USER')
   @Post('/files/uploadImage/:id')
   @UseInterceptors(FileInterceptor('image'))
@@ -79,9 +77,6 @@ export class CloudinaryController {
     return this.cloudinaryService.uploadImage(id, file, dto)
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
-  @Roles('ADMIN')
   @Permissions('ALL_ACCESS')
   @Post('/files/dentalrainmaker')
   @UseInterceptors(FileInterceptor('image'))
