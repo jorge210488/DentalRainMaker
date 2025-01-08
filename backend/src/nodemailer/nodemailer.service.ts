@@ -38,9 +38,11 @@ export class NodemailerService {
     }
 
     let htmlTemplate = fs.readFileSync(templatePath, 'utf8')
+    const formattedType =
+      type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()
 
     htmlTemplate = htmlTemplate.replace('{{name}}', name)
-    htmlTemplate = htmlTemplate.replace('{{role}}', type)
+    htmlTemplate = htmlTemplate.replace('{{role}}', formattedType)
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
