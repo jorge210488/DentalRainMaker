@@ -15,6 +15,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module'
 import { AuthGuard } from './guards/auth.guard'
 import { APP_GUARD } from '@nestjs/core'
 import { ClinicsModule } from './clinics/clinics.module'
+import { NotificationsModule } from './notifications/notifications.module'
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ClinicsModule } from './clinics/clinics.module'
     NodemailerModule,
     CloudinaryModule,
     ClinicsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [

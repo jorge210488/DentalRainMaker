@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { User, UserDocument } from '../users/schemas/user.schema'
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -19,11 +20,18 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // Verificar si el endpoint es público
-    const isPublic = this.reflector.get<boolean>(
-      'isPublic',
+    console.log('AuthGuard: Checking route:', {
+      path: context.switchToHttp().getRequest().url,
+      method: context.switchToHttp().getRequest().method,
+    })
+
+    // Verificar si es una ruta pública
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
-    )
+      context.getClass(),
+    ])
+    // console.log(`AuthGuard: Metadata isPublic - ${isPublic}`)
+
     if (isPublic) {
       console.log('AuthGuard: Public route accessed')
       return true
@@ -40,20 +48,16 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Bearer token not found')
     }
 
-    const secret = process.env.JWT_SECRET
-
     try {
-      const payload = this.jwtService.verify(token, { secret })
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,
+      })
 
       if (payload) {
         console.log('AuthGuard: Token is valid')
-        payload.iat = new Date(payload.iat * 1000)
-        payload.exp = new Date(payload.exp * 1000)
-
-        // Obtener el usuario completo desde la base de datos
         const user = await this.userModel
           .findById(payload.user_id)
-          .populate('type') // Popular el rol asociado al usuario
+          .populate('type')
           .exec()
 
         if (!user) {
@@ -61,21 +65,18 @@ export class AuthGuard implements CanActivate {
         }
 
         console.log(
-          `AuthGuard: Payload - User ID: ${user._id}, Role: ${user.type.name}, Permissions: ${user.type.permissions}`,
+          `AuthGuard: Payload - User ID: ${user._id}, Role: ${user.type.name}`,
         )
-
-        // Añadir los permisos del rol al objeto `request.user`
         request.user = {
           ...payload,
           user_id: user._id,
           role: user.type.name,
-          permissions: user.type.permissions || [], // Asegurarse de incluir permisos como un array
+          permissions: user.type.permissions || [],
         }
 
         return true
       }
     } catch (error) {
-      // Log para tokens inválidos
       console.error('AuthGuard: Invalid token detected', {
         message: error.message,
         stack: error.stack,
@@ -84,7 +85,6 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid Token')
     }
 
-    // Log para cualquier otro caso no manejado
     console.log('AuthGuard: Unhandled case')
     return false
   }
