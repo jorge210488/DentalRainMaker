@@ -17,6 +17,6 @@ import { Notification, NotificationSchema } from './schemas/notification.schema'
   ],
   providers: [NotificationsService, FirebaseAdmin],
   controllers: [NotificationsController],
-  exports: [FirebaseAdmin],
+  exports: [FirebaseAdmin, NotificationsService],
 })
 export class NotificationsModule {}
