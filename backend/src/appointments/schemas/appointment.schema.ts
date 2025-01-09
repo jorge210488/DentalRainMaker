@@ -152,6 +152,13 @@ export class Appointment {
   broken: boolean
 
   @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Clinic',
+    required: true,
+  })
+  clinic_id: Clinic
+
+  @Prop({
     type: Object,
     required: true,
   })
