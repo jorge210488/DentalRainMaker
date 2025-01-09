@@ -10,11 +10,19 @@ import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
 import { DatabaseModule } from './database/database.module'
 import { validationSchema } from './config/validation'
+import { NodemailerModule } from './nodemailer/nodemailer.module'
+import { CloudinaryModule } from './cloudinary/cloudinary.module'
+import { AuthGuard } from './guards/auth.guard'
+import { APP_GUARD } from '@nestjs/core'
+import { ClinicsModule } from './clinics/clinics.module'
+import { NotificationsModule } from './notifications/notifications.module'
+import { ClaimsModule } from './claims/claims.module'
+import { TasksModule } from './tasks/tasks.module'
 
 @Module({
   imports: [
-    UsersModule,
     AuthModule,
+    UsersModule,
     RolesModule,
     PermissionsModule,
     ConfigModule.forRoot({
@@ -27,8 +35,21 @@ import { validationSchema } from './config/validation'
       secret: process.env.JWT_SECRET,
     }),
     DatabaseModule,
+    NodemailerModule,
+    CloudinaryModule,
+    ClinicsModule,
+    NotificationsModule,
+    ClaimsModule,
+    TasksModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PreloadService],
+  providers: [
+    AppService,
+    PreloadService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

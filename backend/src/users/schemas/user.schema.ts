@@ -127,6 +127,20 @@ export class User {
     required: true,
   })
   credential: string
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  img_url?: string
+
+  @Prop({
+    type: [MongooseSchema.Types.ObjectId],
+    ref: 'Clinic',
+    required: true,
+    default: [],
+  })
+  clinics: string[]
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

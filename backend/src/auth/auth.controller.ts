@@ -4,7 +4,9 @@ import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/createUser.dto'
 import { LoginUserDto } from './dto/loginUser.dto'
 import { UserDocument } from '../users/schemas/user.schema'
+import { Public } from '../decorators/public.decorator'
 
+@Public()
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {

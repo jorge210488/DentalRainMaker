@@ -3,6 +3,8 @@ import { PermissionsService } from './permissions/permissions.service'
 import { RolesService } from './roles/roles.service'
 import { AuthService } from './auth/auth.service'
 import { UsersService } from './users/users.service'
+import { ClinicsService } from './clinics/clinics.service'
+import { FirebaseAdmin } from './config/firebaseAdmin'
 
 @Injectable()
 export class PreloadService implements OnModuleInit {
@@ -11,14 +13,20 @@ export class PreloadService implements OnModuleInit {
   constructor(
     private readonly permissionsService: PermissionsService,
     private readonly rolesService: RolesService,
+    private readonly clinicsService: ClinicsService,
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly firebaseAdmin: FirebaseAdmin,
   ) {}
 
   async onModuleInit(): Promise<void> {
     this.logger.log('Starting preload process...')
 
     try {
+      // Probar la conexión con Firebase
+      await this.firebaseAdmin.testFirebaseConnection()
+      this.logger.log('Firebase connection verified.')
+
       // Preload Permissions
       await this.permissionsService.preloadPermissions()
       this.logger.log('Permissions preload completed.')
@@ -26,6 +34,10 @@ export class PreloadService implements OnModuleInit {
       // Preload Roles
       await this.rolesService.preloadRoles()
       this.logger.log('Roles preload completed.')
+
+      // Preload Clinics
+      await this.clinicsService.preloadClinics()
+      this.logger.log('Clinics preload completed.')
 
       // Preload Auth Users
       await this.authService.preloadUsers()
