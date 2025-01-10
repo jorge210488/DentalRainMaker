@@ -1,6 +1,7 @@
 // front/src/app/api/auth/[...nextauth]/route.ts
 import NextAuth, { AuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+import { getFirebaseToken } from '@/utils/firebase'
 
 const handler = NextAuth({
   providers: [
@@ -61,9 +62,28 @@ const handler = NextAuth({
           }
 
           const data = await response.json()
+
+          // Obtener el token de Firebase y enviarlo al backend
+          const firebaseToken = await getFirebaseToken()
+          if (firebaseToken) {
+            await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/notifications/save`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  userId: data.user.id,
+                  token: firebaseToken,
+                }),
+              },
+            )
+            console.log('Firebase token saved successfully')
+          }
           console.log('User signed in successfully', data)
         } catch (error) {
-          console.error('Sign-in failed')
+          console.error('Sign-in failed or Firebase token save failed')
           return false // Prevent sign-in
         }
       }
