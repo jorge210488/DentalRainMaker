@@ -21,7 +21,8 @@ import { TasksModule } from './tasks/tasks.module'
 import { AppointmentsModule } from './appointments/appointments.module'
 import { AppointmentTypeModule } from './appointmentsType/appointmentType.module'
 import { SmsModule } from './sms/sms.module'
-import { GohighlevelModule } from './gohighlevel/gohighlevel.module'
+import { GoHighLevelModule } from './gohighlevel/gohighlevel.module'
+
 
 @Module({
   imports: [
@@ -48,7 +49,7 @@ import { GohighlevelModule } from './gohighlevel/gohighlevel.module'
     AppointmentsModule,
     AppointmentTypeModule,
     SmsModule,
-    GohighlevelModule,
+    GoHighLevelModule,
   ],
   controllers: [AppController],
   providers: [
