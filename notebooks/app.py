@@ -6,7 +6,7 @@ import json
 app = FastAPI()
 
 # Ruta base de los archivos JSON (corrección de la ruta)
-DATA_PATH = "C:/Users/jugas/OneDrive/Escritorio/DENTALRAINMAKER/DentalRainMaker/notebooks/data"
+DATA_PATH = "/data"
 
 @app.get("/")
 def read_root():
