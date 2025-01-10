@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Schema as MongooseSchema } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-export type UserDocument = AppointmentType & Document
+export type AppointmentTypeDocument = AppointmentType & Document
 
 @Schema({ timestamps: false })
 export class AppointmentType {
@@ -47,7 +47,7 @@ export class AppointmentType {
     required: false,
   })
   additional_data?: Object
-
 }
 
-export const AppointmentTypeSchema = SchemaFactory.createForClass(AppointmentType)
+export const AppointmentTypeSchema =
+  SchemaFactory.createForClass(AppointmentType)

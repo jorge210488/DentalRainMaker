@@ -18,6 +18,8 @@ import { ClinicsModule } from './clinics/clinics.module'
 import { NotificationsModule } from './notifications/notifications.module'
 import { ClaimsModule } from './claims/claims.module'
 import { TasksModule } from './tasks/tasks.module'
+import { AppointmentsModule } from './appointments/appointments.module'
+import { AppointmentTypeModule } from './appointmentsType/appointmentType.module'
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { TasksModule } from './tasks/tasks.module'
     NotificationsModule,
     ClaimsModule,
     TasksModule,
+    AppointmentsModule,
+    AppointmentTypeModule,
   ],
   controllers: [AppController],
   providers: [
