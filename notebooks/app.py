@@ -5,8 +5,13 @@ import json
 
 app = FastAPI()
 
+data
 # Ruta base de los archivos JSON
-DATA_PATH = "C:/Users/jugas/OneDrive/Escritorio/DENTALRAINMAKER/DentalRainMaker/notebooks/data"
+DATA_PATH = "data"
+=======
+# Ruta base de los archivos JSON (corrección de la ruta)
+DATA_PATH = "data"
+dev
 
 def get_available_files():
     """
