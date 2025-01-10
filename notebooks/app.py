@@ -5,6 +5,7 @@ import json
 
 app = FastAPI()
 
+data
 # Ruta base de los archivos JSON
 DATA_PATH = "data"
 

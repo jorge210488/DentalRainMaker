@@ -20,6 +20,7 @@ import { ClaimsModule } from './claims/claims.module'
 import { TasksModule } from './tasks/tasks.module'
 import { AppointmentsModule } from './appointments/appointments.module'
 import { AppointmentTypeModule } from './appointmentsType/appointmentType.module'
+import { SmsModule } from './sms/sms.module'
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { AppointmentTypeModule } from './appointmentsType/appointmentType.module
     TasksModule,
     AppointmentsModule,
     AppointmentTypeModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [
