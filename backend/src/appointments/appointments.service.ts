@@ -41,10 +41,6 @@ export class AppointmentsService {
         .findById(createAppointmentDto.appointment_type_id)
         .exec(),
     ])
-    console.log('Usuario', user)
-    console.log('Doctor', doctor)
-    console.log('Clinica', clinic)
-    console.log('Tipo de cita', appointmentType)
 
     if (!user) {
       throw new NotFoundException(
