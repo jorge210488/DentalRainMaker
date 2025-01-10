@@ -69,6 +69,9 @@ const handler = NextAuth({
       }
       return true // Allow sign-in
     },
+    async redirect({ url, baseUrl }) {
+      return '/home'
+    },
     async jwt({ token, account, profile }) {
       if (account && profile) {
         token.id = account.providerAccountId // Google User ID

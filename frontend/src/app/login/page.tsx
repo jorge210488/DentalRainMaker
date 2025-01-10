@@ -9,9 +9,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { images } from '../../assets/index'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { LoginFormData } from '../types/auth'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -71,7 +71,12 @@ export default function LoginForm() {
             <h1 className='text-2xl font-bold tracking-tight'>Welcome!</h1>
           </div>
 
-          <Button variant='outline' type='button' className='w-full'>
+          <Button
+            variant='outline'
+            type='button'
+            className='w-full'
+            onClick={() => signIn('google')}
+          >
             <svg className='mr-2 h-4 w-4' viewBox='0 0 24 24'>
               <path
                 d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'
