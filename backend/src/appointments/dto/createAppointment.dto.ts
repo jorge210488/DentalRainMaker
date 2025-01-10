@@ -217,6 +217,14 @@ export class CreateAppointmentDto {
   broken?: boolean
 
   @ApiProperty({
+    description: 'ID of the doctor',
+    example: '61b7d88a78989f2b1c5e4d45',
+  })
+  @IsString()
+  @IsNotEmpty()
+  doctor_id: string
+
+  @ApiProperty({
     description: 'ID of the clinic',
     example: '61b7d88a78989f2b1c5e4d45',
   })

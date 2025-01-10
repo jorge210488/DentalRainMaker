@@ -33,16 +33,27 @@ export class AppointmentsService {
     createAppointmentDto: CreateAppointmentDto,
   ): Promise<Appointment> {
     // Validar si el contact_id existe en la colección User
-    const [user, clinic, appointmentType] = await Promise.all([
-      this.userModel.findById(createAppointmentDto.contact_id),
-      this.clinicModel.findById(createAppointmentDto.clinic_id),
-      this.appointmentTypeModel.findById(
-        createAppointmentDto.appointment_type_id,
-      ),
+    const [user, doctor, clinic, appointmentType] = await Promise.all([
+      this.userModel.findById(createAppointmentDto.contact_id).exec(),
+      this.userModel.findById(createAppointmentDto.doctor_id).exec(),
+      this.clinicModel.findById(createAppointmentDto.clinic_id).exec(),
+      this.appointmentTypeModel
+        .findById(createAppointmentDto.appointment_type_id)
+        .exec(),
     ])
+    console.log('Usuario', user)
+    console.log('Doctor', doctor)
+    console.log('Clinica', clinic)
+    console.log('Tipo de cita', appointmentType)
+
     if (!user) {
       throw new NotFoundException(
         `User with ID ${createAppointmentDto.contact_id} not found`,
+      )
+    }
+    if (!doctor) {
+      throw new NotFoundException(
+        `Doctor with ID ${createAppointmentDto.contact_id} not found`,
       )
     }
     if (!clinic) {

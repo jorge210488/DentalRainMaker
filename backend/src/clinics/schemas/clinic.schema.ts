@@ -8,7 +8,7 @@ export type ClinicDocument = Clinic & Document
 export class Clinic extends Document {
   @Prop({
     type: String,
-    default: () => uuidv4(),
+    default: uuidv4,
   })
   _id: string
 

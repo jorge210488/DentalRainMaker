@@ -152,12 +152,21 @@ export class Appointment {
   })
   broken: boolean
 
+  // Relación con el esquema User
   @Prop({
-    type: MongooseSchema.Types.ObjectId,
+    type: String,
+    ref: 'User',
+    required: true,
+  })
+  doctor_id: string
+
+  // Relación con el esquema Clinic
+  @Prop({
+    type: String,
     ref: 'Clinic',
     required: true,
   })
-  clinic_id: Clinic
+  clinic_id: string
 
   @Prop({
     type: Object,
