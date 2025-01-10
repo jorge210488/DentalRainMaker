@@ -17,7 +17,6 @@ export class CreateAppointmentDto {
     example: '550e8400-e29b-41d4-a716-446655440000',
   })
   @IsString()
-  @IsUUID()
   @IsOptional()
   _id?: string
 
@@ -170,7 +169,7 @@ export class CreateAppointmentDto {
     example: 'Routine check-up',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   short_description: string
 
   @ApiProperty({
@@ -178,7 +177,7 @@ export class CreateAppointmentDto {
     example: 'Patient has a history of high blood pressure.',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   notes: string
 
   @ApiProperty({
@@ -218,10 +217,18 @@ export class CreateAppointmentDto {
   broken?: boolean
 
   @ApiProperty({
+    description: 'ID of the clinic',
+    example: '61b7d88a78989f2b1c5e4d45',
+  })
+  @IsString()
+  @IsNotEmpty()
+  clinic_id: string
+
+  @ApiProperty({
     description: 'Additional data for the appointment',
     example: { key: 'value' },
   })
   @IsObject()
-  @IsNotEmpty()
+  @IsOptional()
   additional_data: Record<string, unknown>
 }

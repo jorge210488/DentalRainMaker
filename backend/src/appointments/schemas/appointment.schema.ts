@@ -3,6 +3,7 @@ import { Document, Schema as MongooseSchema } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 import { User } from 'src/users/schemas/user.schema'
 import { AppointmentType } from 'src/appointmentsType/schemas/appointmentType.schema'
+import { Clinic } from 'src/clinics/schemas/clinic.schema'
 
 export type AppointmentDocument = Appointment & Document
 
@@ -28,11 +29,11 @@ export class Appointment {
 
   // Relación con el esquema User
   @Prop({
-    type: MongooseSchema.Types.ObjectId,
+    type: String,
     ref: 'User',
     required: true,
   })
-  contact_id: User
+  contact_id: string
 
   @Prop({
     type: Object,
@@ -65,19 +66,19 @@ export class Appointment {
 
   @Prop({
     type: Date,
-    required: true,
+    required: false,
   })
   wall_start_time?: Date
 
   @Prop({
     type: Date,
-    required: true,
+    required: false,
   })
   wall_end_time?: Date
 
   @Prop({
     type: String,
-    required: true,
+    required: false,
   })
   time_zone?: string
 
@@ -105,48 +106,48 @@ export class Appointment {
 
   // Relación con el esquema AppointmentType
   @Prop({
-    type: MongooseSchema.Types.ObjectId,
+    type: String,
     ref: 'AppointmentType',
     required: true,
   })
-  appointment_type_id: AppointmentType
+  appointment_type_id: string
 
   @Prop({
     type: String,
-    required: true,
+    required: false,
   })
-  short_description: string
+  short_description?: string
 
   @Prop({
     type: String,
-    required: true,
+    required: false,
   })
-  notes: string
+  notes?: string
 
   @Prop({
     type: Boolean,
-    required: true,
+    required: false,
     default: false,
   })
   confirmed: boolean
 
   @Prop({
     type: Boolean,
-    required: true,
+    required: false,
     default: false,
   })
   cancelled: boolean
 
   @Prop({
     type: Boolean,
-    required: true,
+    required: false,
     default: false,
   })
   completed: boolean
 
   @Prop({
     type: Boolean,
-    required: true,
+    required: false,
     default: false,
   })
   broken: boolean
@@ -160,9 +161,9 @@ export class Appointment {
 
   @Prop({
     type: Object,
-    required: true,
+    required: false,
   })
-  additional_data: Object
+  additional_data?: Object
 }
 
 export const AppointmentSchema = SchemaFactory.createForClass(Appointment)
