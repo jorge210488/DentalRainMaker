@@ -32,29 +32,14 @@ def read_json_file(filename: str):
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Archivo {filename} no encontrado: {e}")
 
-def create_json_endpoint(filename: str):
-    """
-    Decorador que crea un endpoint para un archivo JSON específico.
-    """
-    @app.get(f"/data/{filename}")
-    def get_json():
+# Crear un endpoint para cada archivo JSON automáticamente
+files = get_available_files()
+for file in files:
+    # Definir el endpoint dinámicamente usando una función interna
+    @app.get(f"/data/{file}")
+    def get_json(filename=file):
         """
         Endpoint que devuelve el contenido de un archivo JSON específico.
         """
         data = read_json_file(filename)
         return JSONResponse(content=data)
-
-# Crear un endpoint para cada archivo JSON automáticamente
-files = get_available_files()
-for file in files:
-    create_json_endpoint(file)  # Crea un endpoint para cada archivo en la carpeta
-
-@app.get("/")
-def read_root():
-    """
-    Endpoint raíz que lista los archivos disponibles.
-    """
-    return {
-        "message": "API para disponibilizar archivos JSON generados por los gráficos.",
-        "available_files": get_available_files()
-    }
