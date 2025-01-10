@@ -15,6 +15,7 @@ async function bootstrap() {
     origin: frontendOrigin,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 
   app.use(loggerGlobal)

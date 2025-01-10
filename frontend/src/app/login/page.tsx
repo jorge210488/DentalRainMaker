@@ -9,13 +9,12 @@ import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { images } from '../../assets/index'
-interface LoginFormData {
-  username: string
-  password: string
-  rememberMe: boolean
-}
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { LoginFormData } from '../types/auth'
 
 export default function LoginForm() {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -23,26 +22,39 @@ export default function LoginForm() {
   } = useForm<LoginFormData>()
 
   const onSubmit = async (data: LoginFormData) => {
+    const { rememberMe, ...rest } = data // Excluir el rememberMe
     const realData = {
-      ...data,
+      ...rest,
       provider: 'local',
     }
+
     try {
-      const response = await fetch('/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(realData),
         },
-        body: JSON.stringify(realData),
-      })
+      )
 
       if (response.ok) {
-        console.log('Formulario enviado con éxito')
+        const result = await response.json()
+        console.log('Inicio de sesión exitoso:', result)
+
+        // Guardar token y otros datos en sessionStorage
+        sessionStorage.setItem('token', result.token)
+        sessionStorage.setItem('userId', result.userId)
+        sessionStorage.setItem('type', result.type)
+
+        router.push('/home')
       } else {
-        console.error('Error al enviar el formulario')
+        console.error('Error al iniciar sesión:', await response.json())
       }
     } catch (error) {
-      console.error('Error de conexión', error)
+      console.error('Error de conexión:', error)
     }
   }
 
@@ -94,17 +106,15 @@ export default function LoginForm() {
 
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <div className='space-y-2'>
-              <Label htmlFor='username'>Username</Label>
+              <Label htmlFor='email'>Email</Label>
               <Input
-                id='username'
-                {...register('username', { required: 'Username is required' })}
-                placeholder='Enter your username'
-                aria-invalid={errors.username ? 'true' : 'false'}
+                id='email'
+                {...register('email', { required: 'Email is required' })}
+                placeholder='Enter your email'
+                aria-invalid={errors.email ? 'true' : 'false'}
               />
-              {errors.username && (
-                <p className='text-sm text-red-500'>
-                  {errors.username.message}
-                </p>
+              {errors.email && (
+                <p className='text-sm text-red-500'>{errors.email.message}</p>
               )}
             </div>
 

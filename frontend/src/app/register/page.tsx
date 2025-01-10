@@ -7,16 +7,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { images } from '../../assets/index'
 import Link from 'next/link'
-
-interface FormData {
-  familyName: string
-  givenName: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+import { useRouter } from 'next/navigation'
+import { FormData } from '../types/auth'
 
 export default function RegisterForm() {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -32,21 +27,33 @@ export default function RegisterForm() {
       provider: 'local',
     }
     try {
-      const response = await fetch('/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(realData),
-      })
+      console.log('Enviando datos:', realData)
 
-      if (response.ok) {
-        console.log('Formulario enviado con éxito')
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(realData),
+        },
+      )
+
+      console.log('Status:', response.status)
+
+      const result = await response.json()
+      console.log('Response JSON:', result)
+
+      if (response.status === 201) {
+        const { message } = result
+        console.log('Registro exitoso:', message)
+        router.push('/login')
       } else {
-        console.error('Error al enviar el formulario')
+        console.error('Error al enviar el formulario:', result)
       }
     } catch (error) {
-      console.error('Error de conexión', error)
+      console.error('Error de conexión:', error)
     }
   }
 
@@ -70,15 +77,15 @@ export default function RegisterForm() {
                 <Label htmlFor='familyName'>Family Name</Label>
                 <Input
                   id='familyName'
-                  {...register('familyName', {
+                  {...register('family_name', {
                     required: 'Family name is required',
                   })}
                   placeholder='Enter your family name'
-                  aria-invalid={errors.familyName ? 'true' : 'false'}
+                  aria-invalid={errors.family_name ? 'true' : 'false'}
                 />
-                {errors.familyName && (
+                {errors.family_name && (
                   <p className='text-sm text-red-500'>
-                    {errors.familyName.message}
+                    {errors.family_name.message}
                   </p>
                 )}
               </div>
@@ -86,15 +93,15 @@ export default function RegisterForm() {
                 <Label htmlFor='givenName'>Given Name</Label>
                 <Input
                   id='givenName'
-                  {...register('givenName', {
+                  {...register('given_name', {
                     required: 'Given name is required',
                   })}
                   placeholder='Enter your given name'
-                  aria-invalid={errors.givenName ? 'true' : 'false'}
+                  aria-invalid={errors.given_name ? 'true' : 'false'}
                 />
-                {errors.givenName && (
+                {errors.given_name && (
                   <p className='text-sm text-red-500'>
-                    {errors.givenName.message}
+                    {errors.given_name.message}
                   </p>
                 )}
               </div>

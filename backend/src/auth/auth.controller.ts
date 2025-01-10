@@ -14,8 +14,15 @@ export class AuthController {
 
   @HttpCode(201)
   @Post('signup')
-  async signup(@Body() createUserDto: CreateUserDto): Promise<UserDocument> {
-    return this.authService.signup(createUserDto)
+  async signup(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<{ message: string; user: UserDocument }> {
+    const user = await this.authService.signup(createUserDto)
+
+    return {
+      message: 'User created successfully',
+      user,
+    }
   }
 
   @Post('signin')
