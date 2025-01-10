@@ -5,30 +5,56 @@ import json
 
 app = FastAPI()
 
-# Ruta base de los archivos JSON (corrección de la ruta)
+# Ruta base de los archivos JSON
 DATA_PATH = "C:/Users/jugas/OneDrive/Escritorio/DENTALRAINMAKER/DentalRainMaker/notebooks/data"
+
+def get_available_files():
+    """
+    Función que obtiene la lista de archivos JSON en la ruta DATA_PATH.
+    """
+    try:
+        # Obtener los archivos JSON de la carpeta
+        files = [f for f in os.listdir(DATA_PATH) if f.endswith('.json')]
+        return files
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al acceder a los archivos: {e}")
+
+def read_json_file(filename: str):
+    """
+    Función que lee el contenido de un archivo JSON y lo devuelve.
+    :param filename: Nombre del archivo JSON (e.g., pie_chart_gender_percentage.json)
+    """
+    try:
+        file_path = os.path.join(DATA_PATH, filename)
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Archivo {filename} no encontrado: {e}")
+
+def create_json_endpoint(filename: str):
+    """
+    Decorador que crea un endpoint para un archivo JSON específico.
+    """
+    @app.get(f"/data/{filename}")
+    def get_json():
+        """
+        Endpoint que devuelve el contenido de un archivo JSON específico.
+        """
+        data = read_json_file(filename)
+        return JSONResponse(content=data)
+
+# Crear un endpoint para cada archivo JSON automáticamente
+files = get_available_files()
+for file in files:
+    create_json_endpoint(file)  # Crea un endpoint para cada archivo en la carpeta
 
 @app.get("/")
 def read_root():
-    return {"message": "API para disponibilizar archivos JSON generados por los gráficos."}
-
-@app.get("/data/{filename}")
-def get_json(filename: str):
     """
-    Devuelve el contenido de un archivo JSON específico.
-    :param filename: Nombre del archivo JSON (e.g., histogram_age_distribution.json)
+    Endpoint raíz que lista los archivos disponibles.
     """
-    # Unir la ruta base con el nombre del archivo
-    file_path = os.path.join(DATA_PATH, filename)
-
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Archivo no encontrado")
-
-    try:
-        with open(file_path, "r") as f:
-            data = json.load(f)
-        return JSONResponse(content=data)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo: {str(e)}")
-
-
+    return {
+        "message": "API para disponibilizar archivos JSON generados por los gráficos.",
+        "available_files": get_available_files()
+    }
