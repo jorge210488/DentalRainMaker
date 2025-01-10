@@ -1,0 +1,29 @@
+{
+    "x": [
+        "44-44",
+        "44-44",
+        "44-44",
+        "44-44",
+        "44-45",
+        "45-45",
+        "45-45",
+        "45-45",
+        "45-45",
+        "45-45"
+    ],
+    "y": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        97,
+        0,
+        0,
+        0,
+        0
+    ],
+    "title": "Distribuci\u00f3n por Edad de los Pacientes",
+    "xaxis_title": "Edad (a\u00f1os)",
+    "yaxis_title": "Cantidad de Pacientes"
+}

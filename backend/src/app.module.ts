@@ -16,6 +16,13 @@ import { AuthGuard } from './guards/auth.guard'
 import { APP_GUARD } from '@nestjs/core'
 import { ClinicsModule } from './clinics/clinics.module'
 import { NotificationsModule } from './notifications/notifications.module'
+import { ClaimsModule } from './claims/claims.module'
+import { TasksModule } from './tasks/tasks.module'
+import { AppointmentsModule } from './appointments/appointments.module'
+import { AppointmentTypeModule } from './appointmentsType/appointmentType.module'
+import { SmsModule } from './sms/sms.module'
+import { GoHighLevelModule } from './gohighlevel/gohighlevel.module'
+
 
 @Module({
   imports: [
@@ -37,6 +44,12 @@ import { NotificationsModule } from './notifications/notifications.module'
     CloudinaryModule,
     ClinicsModule,
     NotificationsModule,
+    ClaimsModule,
+    TasksModule,
+    AppointmentsModule,
+    AppointmentTypeModule,
+    SmsModule,
+    GoHighLevelModule,
   ],
   controllers: [AppController],
   providers: [

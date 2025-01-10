@@ -135,8 +135,7 @@ export class User {
   img_url?: string
 
   @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: 'Clinic',
+    type: [String], // Define como string
     required: true,
     default: [],
   })

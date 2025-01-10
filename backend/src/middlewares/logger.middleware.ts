@@ -5,5 +5,6 @@ export function loggerGlobal(req: Request, res: Response, next: NextFunction) {
   console.log(
     `[${now}] Estás ejecutando un método ${req.method} en la ruta ${req.url}`,
   )
+  console.log(`[${now}] Cuerpo de la solicitud:`, req.body)
   next()
 }

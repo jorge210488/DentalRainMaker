@@ -1,19 +1,19 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { loggerGlobal } from './middlewares/logger.middleware'
-import { ConfigService } from '@nestjs/config'
+// import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  const configService = app.get(ConfigService)
+  // const configService = app.get(ConfigService)
   const port = process.env.PORT || 3000
-  const frontendOrigin = configService.get<string>('FRONTEND_URL')
+  // const frontendOrigin = configService.get<string>('FRONTEND_URL')
 
   app.enableCors({
-    origin: frontendOrigin,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
