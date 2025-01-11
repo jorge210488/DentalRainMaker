@@ -8,38 +8,26 @@ app = FastAPI()
 # Ruta base de los archivos JSON
 DATA_PATH = "data"
 
-def get_available_files():
-    """
-    Función que obtiene la lista de archivos JSON en la ruta DATA_PATH.
-    """
-    try:
-        # Obtener los archivos JSON de la carpeta
-        files = [f for f in os.listdir(DATA_PATH) if f.endswith('.json')]
-        return files
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al acceder a los archivos: {e}")
+# Función para listar archivos JSON en la carpeta `data`
+def list_json_files(directory):
+    return [f for f in os.listdir(directory) if f.endswith(".json")]
 
-def read_json_file(filename: str):
-    """
-    Función que lee el contenido de un archivo JSON y lo devuelve.
-    :param filename: Nombre del archivo JSON (e.g., pie_chart_gender_percentage.json)
-    """
-    try:
-        file_path = os.path.join(DATA_PATH, filename)
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-        return data
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=f"Archivo {filename} no encontrado: {e}")
+# Generar endpoints dinámicamente para cada archivo JSON
+json_files = list_json_files(DATA_PATH)
 
-# Crear un endpoint para cada archivo JSON automáticamente
-files = get_available_files()
-for file in files:
-    # Definir el endpoint dinámicamente usando una función interna
-    @app.get(f"/data/{file}")
-    def get_json(filename=file):
-        """
-        Endpoint que devuelve el contenido de un archivo JSON específico.
-        """
-        data = read_json_file(filename)
-        return JSONResponse(content=data)
+for file in json_files:
+    endpoint_name = f"/data/{file.split('.')[0]}"  # Crear una ruta basada en el nombre del archivo sin extensión
+
+    @app.get(endpoint_name)
+    async def read_json_file(file_name=file):  # Usar un argumento por defecto para vincular el archivo
+        file_path = os.path.join(DATA_PATH, file_name)
+
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=404, detail="Archivo no encontrado")
+
+        try:
+            with open(file_path, "r") as f:
+                data = json.load(f)
+            return JSONResponse(content=data)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error al leer el archivo: {str(e)}")
