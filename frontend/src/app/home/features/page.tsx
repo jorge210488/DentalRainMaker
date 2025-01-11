@@ -1,4 +1,4 @@
-import NavbarHome from '@/components/NavbarHome'
+import NavbarHome from '@/components/HomeComponents/NavbarHome'
 import React from 'react'
 
 const Features: React.FC = () => {
