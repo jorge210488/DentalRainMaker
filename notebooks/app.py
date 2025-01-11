@@ -6,7 +6,7 @@ import json
 app = FastAPI()
 
 # Ruta base de los archivos JSON
-DATA_PATH = "data"
+DATA_PATH = "notebooks"
 
 # Verificar que la carpeta `data` existe
 if not os.path.exists(DATA_PATH):
