@@ -5,7 +5,7 @@ import json
 
 app = FastAPI(title="API de Archivos JSON")
 
-DATA_FOLDER = "/data"
+DATA_FOLDER = "data"
 
 @app.get("/data/density_age_distribution", response_class=JSONResponse, tags=["Datos"])
 async def get_density_age_distribution():
