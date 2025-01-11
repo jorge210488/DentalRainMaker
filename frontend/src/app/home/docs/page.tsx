@@ -1,17 +1,17 @@
-import NavbarHome from '@/components/NavbarHome'
+import NavbarHome from '@/components/HomeComponents/NavbarHome'
 import React from 'react'
 
-const GetStarted: React.FC = () => {
+const Docs: React.FC = () => {
   return (
     <>
       <main className='min-h-screen bg-gray-50'>
         {/* Navbar */}
         <NavbarHome />
 
-        <h1 className='text-black'>GetStarted</h1>
+        <h1 className='text-black'>Docs</h1>
       </main>
     </>
   )
 }
 
-export default GetStarted
+export default Docs

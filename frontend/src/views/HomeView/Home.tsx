@@ -1,6 +1,6 @@
-import GetStarted from '@/components/GetStarted'
-import NavbarHome from '@/components/NavbarHome'
-import Presentation from '@/components/Presentation'
+import GetStarted from '@/components/HomeComponents/GetStarted'
+import NavbarHome from '@/components/HomeComponents/NavbarHome'
+import Presentation from '@/components/HomeComponents/Presentation'
 import React from 'react'
 
 const HomeView: React.FC = () => {

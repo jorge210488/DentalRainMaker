@@ -1,4 +1,4 @@
-import HomeView from '@/views/Home'
+import HomeView from '@/views/HomeView/Home'
 import React from 'react'
 
 const Home: React.FC = () => {
