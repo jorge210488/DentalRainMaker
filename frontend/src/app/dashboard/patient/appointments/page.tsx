@@ -52,18 +52,6 @@ const HomePage = () => {
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
-      {/* Sidebar */}
-      <aside className='fixed left-0 top-0 flex h-full w-20 flex-col items-center bg-white py-4 shadow-md'>
-        <div className='mb-8 h-8 w-8 rounded-full bg-green-500' />
-        <div className='flex flex-col gap-6'>
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-        </div>
-      </aside>
-
       {/* Main content */}
       <main className='ml-24'>
         {/* Header */}
