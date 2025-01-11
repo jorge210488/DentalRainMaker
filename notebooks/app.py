@@ -5,29 +5,60 @@ import json
 
 app = FastAPI(title="API de Archivos JSON")
 
-DATA_FOLDER = "notebooks/data"
+DATA_FOLDER = "/data"
 
-# Archivos JSON específicos
-JSON_FILES = {
-    "density_age_distribution": "density_age_distribution.json",
-    "histogram_age_distribution": "histogram_age_distribution.json",
-    "pie_chart_gender_distribution": "pie_chart_gender_distribution.json",
-    "pie_chart_gender_percentage": "pie_chart_gender_percentage.json",
-}
+@app.get("/data/density_age_distribution", response_class=JSONResponse, tags=["Datos"])
+async def get_density_age_distribution():
+    file_path = os.path.join(DATA_FOLDER, "density_age_distribution.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
 
-# Crear endpoints
-for endpoint_name, file_name in JSON_FILES.items():
-    file_path = os.path.join(DATA_FOLDER, file_name)
+@app.get("/data/histogram_age_distribution", response_class=JSONResponse, tags=["Datos"])
+async def get_histogram_age_distribution():
+    file_path = os.path.join(DATA_FOLDER, "histogram_age_distribution.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
 
-    @app.get(f"/data/{endpoint_name}", response_class=JSONResponse, tags=["Datos"])
-    async def _read_json_file(file_path=file_path):
-        if not os.path.exists(file_path):
-            raise HTTPException(status_code=404, detail="Archivo no encontrado")
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            return data
-        except json.JSONDecodeError:
-            raise HTTPException(status_code=500, detail="Error al leer el archivo")
-        except Exception:
-            raise HTTPException(status_code=500, detail="Error al leer el archivo")
+@app.get("/data/pie_chart_gender_distribution", response_class=JSONResponse, tags=["Datos"])
+async def get_pie_chart_gender_distribution():
+    file_path = os.path.join(DATA_FOLDER, "pie_chart_gender_distribution.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
+
+@app.get("/data/pie_chart_gender_percentage", response_class=JSONResponse, tags=["Datos"])
+async def get_pie_chart_gender_percentage():
+    file_path = os.path.join(DATA_FOLDER, "pie_chart_gender_percentage.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Error al leer el archivo")
