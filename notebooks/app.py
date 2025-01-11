@@ -5,7 +5,6 @@ import json
 
 app = FastAPI(title="API de Archivos JSON")
 
-# Ruta FIJA a la carpeta 'data' (NO PORTABLE)
 DATA_FOLDER = "notebooks/data"
 
 # Archivos JSON específicos
