@@ -3,9 +3,13 @@ fastapi
 numpy
 pandas
 pydantic
-pydantic_core
 starlette
 typing_extensions
-uvicorn
+uvicorn[standard]
+gunicorn
 requests
-
+pip
+setuptools
+wheel
+python-dateutil
+pytz
