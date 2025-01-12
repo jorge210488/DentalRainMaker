@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "types/next-auth.d.ts" // Ruta a tu archivo personalizado
+    "types/next-auth.d.ts", // Ruta a tu archivo personalizado
+    "next.config.js"
   ],
   "exclude": ["node_modules"]
 }
