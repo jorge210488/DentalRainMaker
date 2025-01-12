@@ -15,7 +15,7 @@ async def get_density_age_distribution():
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return data
+        return JSONResponse(content=data)
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Error al leer el archivo")
     except Exception:
@@ -29,7 +29,7 @@ async def get_histogram_age_distribution():
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return data
+        return JSONResponse(content=data)
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Error al leer el archivo")
     except Exception:
