@@ -7,7 +7,7 @@ import { MessagingWidget } from "@/components/patientDashboard/components_messag
 import { MetricsCards } from "@/components/patientDashboard/components_metrics-cards"
 
 export const metadata: Metadata = {
-  title: "Dashboard | DentalCare",
+  title: "Dashboard | Dental Rain Maker",
   description: "Manage your dental care and appointments",
 }
 
