@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { getMessaging, getToken } from 'firebase/messaging'
+import { getMessaging, getToken, onMessage } from 'firebase/messaging'
 import { initializeApp } from 'firebase/app'
 import { saveFirebaseTokenToServer } from '@/server/saveFirebaseToken'
 import { useSession } from 'next-auth/react'
@@ -85,6 +85,22 @@ const SaveFirebaseToken = () => {
         console.error('Error al guardar el token de Firebase:', error)
       }
     }
+
+    // Escuchar notificaciones en primer plano
+    const messaging = getMessaging(app)
+    onMessage(messaging, (payload) => {
+      console.log('Message received in foreground:', payload)
+
+      if (payload.notification) {
+        const { title, body } = payload.notification
+        console.log('Notification received:', title, body)
+
+        // Mostrar notificación (puedes personalizar esta parte)
+        alert(`Notification: ${title}\n${body}`)
+      } else {
+        console.warn('Notification payload is undefined or missing properties.')
+      }
+    })
 
     saveToken()
   }, [session])
