@@ -1,7 +1,6 @@
 import type { AuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { getFirebaseToken } from '@/utils/firebase'
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -107,24 +106,6 @@ export const authOptions: AuthOptions = {
           account.user_id = data.userId
           account.user_type = data.type
 
-          // Obtener el token de Firebase y enviarlo al backend
-          const firebaseToken = await getFirebaseToken()
-          if (firebaseToken) {
-            await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/notifications/save`,
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  userId: data.user.id,
-                  token: firebaseToken,
-                }),
-              },
-            )
-            console.log('Firebase token saved successfully')
-          }
           console.log('User signed in successfully', data)
         } catch (error) {
           console.error('Sign-in failed or Firebase token save failed')

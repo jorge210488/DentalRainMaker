@@ -2,6 +2,7 @@
 
 import { SessionProvider } from 'next-auth/react'
 import './globals.css'
+import SaveFirebaseToken from '@/components/saveFirebaseToken'
 
 export default function RootLayout({
   children,
@@ -11,7 +12,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          {/* Componente que maneja el guardado del token */}
+          <SaveFirebaseToken />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   )
