@@ -11,9 +11,14 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
-const messaging = getMessaging(app)
+const messaging = typeof window !== 'undefined' ? getMessaging(app) : null
 
 export const getFirebaseToken = async (): Promise<string | null> => {
+  if (!messaging) {
+    console.error('Firebase Messaging is not available on the server.')
+    return null
+  }
+
   try {
     const token = await getToken(messaging, {
       vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,

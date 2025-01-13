@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { images } from '../../assets/index'
 import { useRouter } from 'next/navigation'
 import { LoginFormData } from '../types/auth'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -22,39 +22,16 @@ export default function LoginForm() {
   } = useForm<LoginFormData>()
 
   const onSubmit = async (data: LoginFormData) => {
-    const { rememberMe, ...rest } = data // Excluir el rememberMe
-    const realData = {
-      ...rest,
-      provider: 'local',
-    }
+    const { email, password } = data
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(realData),
-        },
-      )
+    const result = await signIn('credentials', {
+      email,
+      password,
+      provider: 'local', // Proveedor definido en authOptions
+    })
 
-      if (response.ok) {
-        const result = await response.json()
-        console.log('Inicio de sesión exitoso:', result)
-
-        // Guardar token y otros datos en sessionStorage
-        sessionStorage.setItem('token', result.token)
-        sessionStorage.setItem('userId', result.userId)
-        sessionStorage.setItem('type', result.type)
-
-        router.push('/home')
-      } else {
-        console.error('Error al iniciar sesión:', await response.json())
-      }
-    } catch (error) {
-      console.error('Error de conexión:', error)
+    if (!result?.ok) {
+      console.error('Error al iniciar sesión:', result?.error)
     }
   }
 
