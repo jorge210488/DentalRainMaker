@@ -156,7 +156,7 @@ export const authOptions: AuthOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-      return '/dashboard/patient/home'
+      return '/home'
     },
   },
 }
