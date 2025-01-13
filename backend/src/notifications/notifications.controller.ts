@@ -18,6 +18,7 @@ export class NotificationsController {
   async saveDeviceToken(
     @Body() { userId, token }: { userId: string; token: string },
   ): Promise<void> {
+    console.log('Received in body:', { userId, token })
     await this.notificationsService.saveDeviceToken(userId, token)
   }
 
