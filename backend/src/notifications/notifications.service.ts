@@ -2,6 +2,7 @@ import {
   Injectable,
   BadRequestException,
   ConflictException,
+  NotFoundException,
 } from '@nestjs/common'
 import { FirebaseAdmin } from '../config/firebaseAdmin'
 import { CreateNotificationDto } from './dtos/createNotification.dto'
@@ -45,14 +46,22 @@ export class NotificationsService {
   async sendPushNotification(
     notificationDto: CreateNotificationDto,
   ): Promise<void> {
-    const { userId, title, body, data } = notificationDto
+    const { userId, notification, data } = notificationDto
+
+    // Extraer `title` y `body` desde `notification`
+    const { title, body } = notification
+
+    // Verificar que `data.type` sea válido
+    if (!data || !data.type) {
+      throw new BadRequestException('Notification type is required in data')
+    }
 
     // Buscar todos los tokens asociados al userId
     const deviceTokens = await this.deviceTokenModel.find({ userId })
 
     if (!deviceTokens.length) {
       console.error(`No device tokens found for userId ${userId}`)
-      throw new Error(`No device tokens found for user ${userId}`)
+      throw new NotFoundException(`No device tokens found for user ${userId}`)
     }
 
     console.log(
@@ -60,21 +69,24 @@ export class NotificationsService {
       deviceTokens,
     )
 
-    const message = {
-      notification: {
-        title,
-        body,
-      },
-      data,
-    }
-
-    // Enviar notificación a todos los tokens asociados al usuario
     for (const { token } of deviceTokens) {
       try {
+        const message = {
+          notification: {
+            title,
+            body,
+          },
+          data: {
+            ...data, // Enviar todos los datos adicionales (incluido `type`)
+          },
+          token, // Anexar el token del dispositivo aquí
+        }
+        console.log('Asi envio el mensaje a firebaseAdmin', message)
+
         const response = await this.firebaseAdmin
           .getAdminInstance()
           .messaging()
-          .send({ ...message, token })
+          .send(message)
 
         console.log(
           `Notification sent successfully to token: ${token}, response: ${response}`,
@@ -92,7 +104,10 @@ export class NotificationsService {
     notificationDto: CreateNotificationDto,
     isSent = false,
   ): Promise<Notification> {
-    const { userId, type, title, data, sendAt } = notificationDto
+    const { userId, notification, data, sendAt } = notificationDto
+
+    // Extraer title y body desde notification
+    const { title, body } = notification
 
     // Establecer ventana de tiempo de 1 semana atrás
     const timeWindow = new Date()
@@ -101,8 +116,8 @@ export class NotificationsService {
     // Buscar notificación existente en la ventana de tiempo
     const existingNotification = await this.notificationModel.findOne({
       userId,
-      type,
-      title,
+      'notification.title': title,
+      'notification.body': body,
       data,
       sendAt: { $gte: timeWindow },
     })
@@ -118,19 +133,18 @@ export class NotificationsService {
     }
 
     // Crear nueva notificación
-    const notification = new this.notificationModel({
+    const notificationToSave = new this.notificationModel({
       ...notificationDto,
       isSent,
     })
 
     console.log(
       'NotificationsService: Saving notification to database',
-      notification,
+      notificationToSave,
     )
 
-    return notification.save()
+    return notificationToSave.save()
   }
-
   async updateNotification(
     id: string,
     updateDto: UpdateNotificationDto,
