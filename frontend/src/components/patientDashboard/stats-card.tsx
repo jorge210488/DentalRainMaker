@@ -1,4 +1,4 @@
-import { Card, CardContent } from '@/components/userDashboard/ui/card'
+import { Card, CardContent } from '@/components/patientDashboard/ui/card'
 import { type LucideIcon } from 'lucide-react'
 
 interface StatsCardProps {

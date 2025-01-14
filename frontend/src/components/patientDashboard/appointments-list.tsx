@@ -1,4 +1,4 @@
-import { Badge } from '@/components/userDashboard/ui/badge'
+import { Badge } from '@/components/patientDashboard/ui/badge'
 import { Clock } from 'lucide-react'
 
 interface Appointment {
