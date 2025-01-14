@@ -72,6 +72,7 @@ export class RolesService {
         await this.roleModel.create({
           name: roleData.name,
           permissions: roleData.permissions,
+          views: roleData.views,
         })
       } else {
         // this.logger.log(`Role already exists: ${roleData.name}`)
