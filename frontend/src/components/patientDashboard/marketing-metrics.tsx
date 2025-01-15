@@ -1,4 +1,4 @@
-import { Card } from '@/components/userDashboard/ui/card'
+import { Card } from '@/components/patientDashboard/ui/card'
 import { Mail, MessageSquare, TrendingUp } from 'lucide-react'
 
 const campaigns = [

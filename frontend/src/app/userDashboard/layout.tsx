@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Sidebar from '@/components/userDashboard/sidebar'
-import Header from '@/components/userDashboard/header'
+import Sidebar from '@/components/patientDashboard/sidebar'
+import Header from '@/components/patientDashboard/header'
 
 const inter = Inter({ subsets: ['latin'] })
 

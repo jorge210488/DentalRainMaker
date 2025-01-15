@@ -1,5 +1,5 @@
-import { Card } from '@/components/userDashboard/ui/card'
-import { Progress } from '@/components/userDashboard/ui/progress'
+import { Card } from '@/components/patientDashboard/ui/card'
+import { Progress } from '@/components/patientDashboard/ui/progress'
 
 export function PredictiveAnalytics() {
   return (

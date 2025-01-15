@@ -3,8 +3,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/components/userDashboard/ui/avatar'
-import { Button } from '@/components/userDashboard/ui/button'
+} from '@/components/patientDashboard/ui/avatar'
+import { Button } from '@/components/patientDashboard/ui/button'
 
 export default function Header() {
   return (
