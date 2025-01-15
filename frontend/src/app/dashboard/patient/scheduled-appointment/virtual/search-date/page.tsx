@@ -86,7 +86,7 @@ const AppointmentsDateTime = () => {
       <header className="mb-6">
         <div className="flex justify-center items-center gap-6 mb-8">
           <div 
-          onClick={() => router.push('/dashboard/patient/scheduled-appointment/in-person')}
+          onClick={() => router.push('/dashboard/patient/scheduled-appointment/virtual')}
           className="flex cursor-pointer items-center">
             <div className="rounded-full bg-green-600 text-white w-8 h-8 flex items-center justify-center">
               1
@@ -94,7 +94,7 @@ const AppointmentsDateTime = () => {
             <span className="ml-2 text-sm font-semibold">Doctor</span>
           </div>
           <div 
-          onClick={() => router.push('/dashboard/patient/scheduled-appointment/in-person/search-date')}
+          onClick={() => router.push('/dashboard/patient/scheduled-appointment/virtual/search-date')}
           className="flex cursor-pointer items-center">
             <div className="rounded-full bg-green-600 text-white w-8 h-8 flex items-center justify-center">
               2
@@ -159,7 +159,7 @@ const AppointmentsDateTime = () => {
       <footer className="mt-6 flex justify-center">
         <button
           disabled={!selectedSlot}
-          onClick={() => router.push('/dashboard/patient/scheduled-appointment/in-person/confirm')}
+          onClick={() => router.push('/dashboard/patient/scheduled-appointment/virtual/confirm')}
           className={`rounded-lg px-6 py-2 ${
             selectedSlot ? "bg-green-600 text-white" : "bg-gray-300 text-gray-500"
           }`}

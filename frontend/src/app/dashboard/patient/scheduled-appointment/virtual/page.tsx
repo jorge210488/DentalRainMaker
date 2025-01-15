@@ -42,7 +42,7 @@ const DoctorSelectionPage = () => {
       <header className="mb-6">
         <div className="flex justify-center items-center gap-6 mb-8">
           <div 
-          onClick={() => router.push('/dashboard/patient/scheduled-appointment/in-person')}
+          onClick={() => router.push('/dashboard/patient/scheduled-appointment/virtual')}
           className="flex cursor-pointer items-center">
             <div className="rounded-full bg-green-600 text-white w-8 h-8 flex items-center justify-center">
               1
@@ -95,7 +95,7 @@ const DoctorSelectionPage = () => {
                   <h3 className="text-lg font-bold">{doctor.name}</h3>
                 </div>
                 <button 
-                onClick={() => router.push('/dashboard/patient/scheduled-appointment/in-person/search-date')}
+                onClick={() => router.push('/dashboard/patient/scheduled-appointment/virtual/search-date')}
                 className="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700">
                   Select
                 </button>

@@ -1,58 +1,50 @@
-'use client'
-import React from 'react'
+'use client';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 
-const ProgramarCita = () => {
+const ScheduleAppointment = () => {
   const router = useRouter();
 
   return (
     <div className='min-h-screen bg-gray-50'>
-      
-
-      {/* Contenido principal */}
+      {/* Main Content */}
       <div className='flex flex-col items-center justify-center px-6 py-12'>
         <h1 className='text-center text-2xl font-semibold text-gray-800'>
-          Programa una cita virtual o presencial en nuestra red de clínicas y
-          centros clínicos.
+          Schedule a virtual or in-person appointment at our clinics and medical centers.
         </h1>
         <p className='mt-4 text-center text-gray-600'>
-          Selecciona el tipo de atención de tu preferencia.
+          Select your preferred type of appointment.
         </p>
 
-        {/* Opciones de citas */}
+        {/* Appointment Options */}
         <div className='mt-8 w-full max-w-md space-y-4'>
-          {/* Cita Presencial */}
-          <div 
-          onClick={() => router.push('/dashboard/patient/scheduled-appointment/in-person')}
-          className='flex cursor-pointer items-center justify-between rounded-lg bg-white px-6 py-4 shadow hover:bg-gray-100'>
+          {/* In-Person Appointment */}
+          <div
+            onClick={() => router.push('/dashboard/patient/scheduled-appointment/in-person')}
+            className='flex cursor-pointer items-center justify-between rounded-lg bg-white px-6 py-4 shadow hover:bg-gray-100'
+          >
             <div>
-              <h3 className='text-lg font-medium text-gray-800'>
-                Cita presencial
-              </h3>
-              <p className='text-sm text-gray-500'>
-                Agenda una cita con un especialista
-              </p>
+              <h3 className='text-lg font-medium text-gray-800'>In-Person Appointment</h3>
+              <p className='text-sm text-gray-500'>Schedule an appointment with a specialist</p>
             </div>
             <span className='text-2xl text-green-500'>→</span>
           </div>
 
-          {/* Cita Virtual */}
-          <div className='flex cursor-pointer items-center justify-between rounded-lg bg-white px-6 py-4 shadow hover:bg-gray-100'>
+          {/* Virtual Appointment */}
+          <div
+            onClick={() => router.push('/dashboard/patient/scheduled-appointment/virtual')}
+            className='flex cursor-pointer items-center justify-between rounded-lg bg-white px-6 py-4 shadow hover:bg-gray-100'
+          >
             <div>
-              <h3 className='text-lg font-medium text-gray-800'>
-                Cita virtual
-              </h3>
-              <p className='text-sm text-gray-500'>
-                Agenda una cita con un especialista
-              </p>
+              <h3 className='text-lg font-medium text-gray-800'>Virtual Appointment</h3>
+              <p className='text-sm text-gray-500'>Schedule an appointment with a specialist</p>
             </div>
             <span className='text-2xl text-green-500'>→</span>
           </div>
-          
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProgramarCita
+export default ScheduleAppointment;
