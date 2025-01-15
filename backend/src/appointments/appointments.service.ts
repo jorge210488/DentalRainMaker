@@ -83,6 +83,14 @@ export class AppointmentsService {
     return appointment
   }
 
+  async getAppointmentByUserId(contact_id: string): Promise<AppointmentDocument[]> {
+    const appointments = await this.appointmentModel.find({ contact_id }).exec();
+    if (!appointments || appointments.length === 0) {
+      throw new NotFoundException(`Appointments for User ID "${contact_id}" not found`);
+    }
+    return appointments;
+  }
+
   async updateAppointment(
     _id: string,
     updateAppointmentDto: CreateAppointmentDto,
@@ -100,11 +108,11 @@ export class AppointmentsService {
 
   async updateStatusAppointment(
     _id: string,
-    field: 'confirmed' | 'cancelled' | 'completed' | 'broken',
+    field: 'confirmed' | 'cancelled' | 'completed' | 'broken' | 'pending' | 'paid',
     value: boolean,
   ): Promise<AppointmentDocument> {
     // Validar el campo
-    if (!['confirmed', 'cancelled', 'completed', 'broken'].includes(field)) {
+    if (!['confirmed', 'cancelled', 'completed', 'broken', 'pending', 'paid'].includes(field)) {
       throw new BadRequestException(`Invalid field: ${field}`)
     }
 
