@@ -217,6 +217,24 @@ export class CreateAppointmentDto {
   broken?: boolean
 
   @ApiProperty({
+    description: 'Whether the appointment is marked as pending',
+    example: false,
+    default: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  pending?: boolean
+
+  @ApiProperty({
+    description: 'Whether the appointment is marked as paid',
+    example: false,
+    default: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  paid?: boolean
+
+  @ApiProperty({
     description: 'ID of the doctor',
     example: '61b7d88a78989f2b1c5e4d45',
   })

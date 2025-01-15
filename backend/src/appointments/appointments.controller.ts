@@ -50,6 +50,15 @@ export class AppointmentsController {
   }
 
   @HttpCode(200)
+  @Get('user/:id')
+  @Permissions('ALL_ACCESS')
+  async getAppointmentByUserId(
+    @Param('id') contact_id: string,
+  ): Promise<AppointmentDocument[]> {
+    return this.appointmentsService.getAppointmentByUserId(contact_id)
+  }
+
+  @HttpCode(200)
   @Put(':id')
   @Permissions('ALL_ACCESS')
   async updateAppointment(
