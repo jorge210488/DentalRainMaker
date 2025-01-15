@@ -1,102 +1,166 @@
+"use client";
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
-import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
-import { getAppointments } from '@/server/Appointment/getAppoinments'
-import { getApp } from 'firebase/app'
-import React, { useState } from 'react'
+const today = new Date().toISOString().split('T')[0];
 
-type Cita = {
-  id: number
-  especialidad: string
-  doctora: string
-  paciente: string
-  fecha: string
-  hora: string
-  ubicacion: string
-  consultorio: string
-  tipo: 'Presencial' | 'Virtual'
-  estadoPago: 'Pendiente' | 'Pagado'
-}
+type Appointment = {
+  id: number;
+  specialty: string;
+  doctor: string;
+  patient: string;
+  date: string;
+  time: string;
+  location: string;
+  office: string;
+  type: 'In-person' | 'Virtual';
+  paymentStatus: 'Pending' | 'Paid';
+};
 
-const citas: Cita[] = [
+const appointments: Appointment[] = [
   {
     id: 1,
-    especialidad: 'Odontología',
-    doctora: 'Dra. Flora Emperatriz Zuñiga',
-    paciente: 'Jose Antonio Rojas Huaman',
-    fecha: 'Lunes - 13 de enero',
-    hora: '15:20hs',
-    ubicacion: 'Centro Clínico Chacarilla',
-    consultorio: 'Consultorio 37',
-    tipo: 'Presencial',
-    estadoPago: 'Pendiente',
+    specialty: 'Dentistry',
+    doctor: 'Dr. Flora Emperatriz Zuñiga',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-11',
+    time: '3:20 PM',
+    location: 'Chacarilla Clinical Center',
+    office: 'Office 37',
+    type: 'In-person',
+    paymentStatus: 'Paid',
   },
   {
     id: 2,
-    especialidad: 'Pediatría',
-    doctora: 'Dra. Mariana Pérez',
-    paciente: 'Maria Fernanda Gómez',
-    fecha: 'Miércoles - 15 de enero',
-    hora: '10:00hs',
-    ubicacion: 'Centro Clínico San Borja',
-    consultorio: 'Consultorio 12',
-    tipo: 'Virtual',
-    estadoPago: 'Pagado',
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-13',
+    time: '10:00 AM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 12',
+    type: 'Virtual',
+    paymentStatus: 'Paid',
   },
-]
+  {
+    id: 3,
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-15',
+    time: '10:00 AM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 12',
+    type: 'In-person',
+    paymentStatus: 'Paid',
+  },
+  {
+    id: 4,
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-16',
+    time: '10:00 AM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 12',
+    type: 'Virtual',
+    paymentStatus: 'Pending',
+  },
+  {
+    id: 5,
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-18',
+    time: '12:00 PM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 14',
+    type: 'In-person',
+    paymentStatus: 'Pending',
+  },
+];
 
-const AppointmentsPage = async() => {
-  
-  const appointments: IAppointment[] = await getAppointments();
-  console.log(appointments);
+const AppointmentsPage = () => {
+  const [primaryFilter, setPrimaryFilter] = useState<'History' | 'Upcoming'>('Upcoming');
+  const [secondaryFilter, setSecondaryFilter] = useState<'All' | 'In-person' | 'Virtual'>('All');
+  const router = useRouter();
 
+  const filteredAppointments = appointments.filter((appointment) => {
+    const isPrimaryMatch =
+      primaryFilter === 'History'
+        ? new Date(appointment.date) < new Date(today)
+        : new Date(appointment.date) >= new Date(today);
 
-  const [filtro, setFiltro] = useState<'Todos' | 'Presencial' | 'Virtual'>(
-    'Todos',
-  )
+    const isSecondaryMatch =
+      secondaryFilter === 'All' || appointment.type === secondaryFilter;
 
-  const citasFiltradas = citas.filter((cita) =>
-    filtro === 'Todos' ? true : cita.tipo === filtro,
-  )
+    return isPrimaryMatch && isSecondaryMatch;
+  });
 
   return (
-    <div className='min-h-screen bg-gray-100 p-6'>
-      
+    <div className="min-h-screen bg-gray-100 p-6">
       {/* Main content */}
-      <main className='ml-24'>
+      <main className="ml-24">
         {/* Header */}
-        <header className='mb-6 flex items-center justify-between'>
-          <h1 className='text-2xl font-bold'>Mis citas</h1>
-          <button className='rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600'>
-            + Sacar cita
+        <header className="mb-6 flex items-center justify-between">
+          <h1 className="text-2xl font-bold">My Appointments</h1>
+          <button 
+            onClick={() => router.push('/dashboard/patient/scheduled-appointment')}
+            className="rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600">
+            + Schedule Appointment
           </button>
         </header>
 
-        {/* Filtros */}
-        <div className='mb-4 flex items-center gap-4'>
+        {/* Primary filters */}
+        <div className="mb-4 flex items-center gap-4">
           <button
-            onClick={() => setFiltro('Todos')}
+            onClick={() => setPrimaryFilter('History')}
             className={`rounded-lg px-4 py-2 ${
-              filtro === 'Todos'
+              primaryFilter === 'History'
                 ? 'bg-green-600 text-white'
                 : 'text-gray-500 hover:text-gray-800'
             }`}
           >
-            Todos
+            History
           </button>
           <button
-            onClick={() => setFiltro('Presencial')}
+            onClick={() => setPrimaryFilter('Upcoming')}
             className={`rounded-lg px-4 py-2 ${
-              filtro === 'Presencial'
+              primaryFilter === 'Upcoming'
                 ? 'bg-green-600 text-white'
                 : 'text-gray-500 hover:text-gray-800'
             }`}
           >
-            Presencial
+            Upcoming
+          </button>
+        </div>
+
+        {/* Secondary filters */}
+        <div className="mb-4 flex items-center gap-4">
+          <button
+            onClick={() => setSecondaryFilter('All')}
+            className={`rounded-lg px-4 py-2 ${
+              secondaryFilter === 'All'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            All
           </button>
           <button
-            onClick={() => setFiltro('Virtual')}
+            onClick={() => setSecondaryFilter('In-person')}
             className={`rounded-lg px-4 py-2 ${
-              filtro === 'Virtual'
+              secondaryFilter === 'In-person'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            In-person
+          </button>
+          <button
+            onClick={() => setSecondaryFilter('Virtual')}
+            className={`rounded-lg px-4 py-2 ${
+              secondaryFilter === 'Virtual'
                 ? 'bg-green-600 text-white'
                 : 'text-gray-500 hover:text-gray-800'
             }`}
@@ -105,45 +169,39 @@ const AppointmentsPage = async() => {
           </button>
         </div>
 
-        {/* Lista de citas */}
-        <div className='space-y-4'>
-          {citasFiltradas.map((cita) => (
+        {/* Appointment list */}
+        <div className="space-y-4">
+          {filteredAppointments.map((appointment) => (
             <div
-              key={cita.id}
-              className='flex items-center justify-between rounded-lg bg-white p-4 shadow-md'
+              key={appointment.id}
+              className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md"
             >
               <div>
                 <p
                   className={`text-sm ${
-                    cita.estadoPago === 'Pendiente'
+                    appointment.paymentStatus === 'Pending'
                       ? 'text-red-500'
                       : 'text-green-500'
                   }`}
                 >
-                  {cita.estadoPago === 'Pendiente'
-                    ? 'Pago pendiente'
-                    : 'Pagado'}
+                  {appointment.paymentStatus === 'Pending' ? 'Payment pending' : 'Paid'}
                 </p>
-                <h2 className='text-lg font-bold'>{cita.doctora}</h2>
-                <p className='text-sm text-gray-600'>{cita.especialidad}</p>
-                <p className='text-sm text-gray-600'>
-                  Paciente: {cita.paciente}
+                <h2 className="text-lg font-bold">{appointment.doctor}</h2>
+                <p className="text-sm text-gray-600">{appointment.specialty}</p>
+                <p className="text-sm text-gray-600">Patient: {appointment.patient}</p>
+                <p className="text-sm text-gray-600">
+                  {appointment.date} - {appointment.time}
                 </p>
-                <p className='text-sm text-gray-600'>
-                  {cita.fecha} - {cita.hora}
-                </p>
-                <p className='text-sm text-gray-600'>
-                  {cita.ubicacion} - {cita.consultorio}
+                <p className="text-sm text-gray-600">
+                  {appointment.location} - {appointment.office}
                 </p>
               </div>
-              <div className='flex flex-col items-end gap-2'>
-                <button className='text-green-600 hover:underline'>
-                  Reprogramar
-                </button>
-                <button className='text-red-600 hover:underline'>Anular</button>
-                {cita.estadoPago === 'Pendiente' && (
-                  <button className='rounded-lg border border-green-600 px-4 py-1 text-green-600 hover:bg-green-100'>
-                    Pagar
+              <div className="flex flex-col items-end gap-2">
+                {/* <button className="text-green-600 hover:underline">Reschedule</button>
+                <button className="text-red-600 hover:underline">Cancel</button> */}
+                {appointment.paymentStatus === 'Pending' && (
+                  <button className="rounded-lg border border-green-600 px-4 py-1 text-green-600 hover:bg-green-100">
+                    Pay
                   </button>
                 )}
               </div>
@@ -152,7 +210,9 @@ const AppointmentsPage = async() => {
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default AppointmentsPage
+export default AppointmentsPage;
+
+

@@ -7,20 +7,20 @@ import { useRouter } from "next/navigation";
 import { use, useContext, useEffect, useState } from "react";
 
 const PatientAppointments = () => {
-    const { appointments } = useAppointmentData();
-    const [userAppointments, setUserAppointments] = useState<IAppointment[]>([]);
-    const {currentUser, token} = useContext(AuthContext);
-    const router = useRouter();
+    // const { appointments } = useAppointmentData();
+    // const [userAppointments, setUserAppointments] = useState<IAppointment[]>([]);
+    // const {currentUser, token} = useContext(AuthContext);
+    // const router = useRouter();
 
-    useEffect(() => {
-        const fetchUserAppointments = async () => {
-            if(!currentUser || !token) return;
-            try {
-                const userResponse = await 
-            } catch (error) {
+    // useEffect(() => {
+    //     const fetchUserAppointments = async () => {
+    //         if(!currentUser || !token) return;
+    //         try {
+               
+    //         } catch (error) {
                 
-            }
-    }, [currentUser]);
+    //         }
+    // }, [currentUser]);
 };
 
 export default PatientAppointments;
