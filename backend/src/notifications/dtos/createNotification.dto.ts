@@ -33,7 +33,7 @@ class NotificationContentDto {
   })
   @IsString()
   @IsOptional()
-  icon?: string =
+  image?: string =
     'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png'
 }
 
@@ -75,6 +75,28 @@ class NotificationDataDto {
   appointmentId?: string
 }
 
+// DTO para el campo 'webpush.fcm_options'
+class WebpushFcmOptionsDto {
+  @ApiPropertyOptional({
+    example: 'https://dental-rain-maker.vercel.app/',
+    description:
+      'Enlace que se abrirá al hacer clic en la notificación (opcional)',
+  })
+  @IsString()
+  @IsOptional()
+  link?: string = 'https://dental-rain-maker.vercel.app/'
+}
+
+class WebpushDto {
+  @ApiProperty({
+    type: WebpushFcmOptionsDto,
+    description: 'Opciones específicas de FCM para webpush',
+  })
+  @ValidateNested()
+  @Type(() => WebpushFcmOptionsDto)
+  fcm_options: WebpushFcmOptionsDto
+}
+
 export class CreateNotificationDto {
   @ApiProperty({
     type: NotificationContentDto,
@@ -100,6 +122,15 @@ export class CreateNotificationDto {
   @ValidateNested()
   @Type(() => NotificationDataDto)
   data?: NotificationDataDto
+
+  @ApiPropertyOptional({
+    type: WebpushDto,
+    description: 'Configuraciones de webpush (opcional)',
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => WebpushDto)
+  webpush?: WebpushDto
 
   @ApiProperty({
     example: '2025-01-10T10:00:00.000Z',
