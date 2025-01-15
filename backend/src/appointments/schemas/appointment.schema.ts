@@ -152,6 +152,20 @@ export class Appointment {
   })
   broken: boolean
 
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  pending: boolean
+
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  paid: boolean
+
   // Relación con el esquema User
   @Prop({
     type: String,
