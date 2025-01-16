@@ -27,7 +27,7 @@ export class AppointmentsController {
 
   @HttpCode(200)
   @Post()
-  @Permissions('ALL_ACCESS')
+  @Permissions('ALL_ACCESS', 'CREATE_APPOINTMENT')
   async create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentsService.create(createAppointmentDto)
   }
