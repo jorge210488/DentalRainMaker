@@ -7,13 +7,8 @@ import { PatientProfile } from '@/app/patientDashboard/profile/page'
 export default function EditProfileForm({ onClose }: { onClose: () => void }) {
   const { register, formState, handleSubmit } = useForm<PatientProfile>()
 
-  const onSubmit: SubmitHandler<PatientProfile> = async (data) => {
-    try {
-    } catch (error) {}
-  }
-
   return (
-    <form onSubmit={} className='grid gap-4 py-4'>
+    <form className='grid gap-4 py-4'>
       <div className='grid gap-2'>
         <Label htmlFor='given_name'>Given Name</Label>
         <Input

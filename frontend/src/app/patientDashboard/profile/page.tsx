@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { DashboardShell } from '@/components/patientDashboard/dashboard-shell'
 import EditProfileForm from '@/components/patientDashboard/formsPatientProfile/editProfileForm'
 import { Separator } from '@/components/ui/separator'
 import { useForm } from 'react-hook-form'
@@ -50,110 +51,114 @@ export default function PatientProfile() {
   const formEdit = useForm<PatientProfile>()
 
   return (
-    <div className='container mx-auto max-w-4xl py-6'>
-      <div className='mb-6 flex items-center justify-between'>
-        <div>
-          <h1 className='text-3xl font-bold tracking-tight'>Patient Profile</h1>
-          <p className='text-muted-foreground'>
-            View and manage patient information
-          </p>
+    <DashboardShell>
+      <div className='container mx-auto max-w-4xl py-6'>
+        <div className='mb-6 flex items-center justify-between'>
+          <div>
+            <h1 className='text-3xl font-bold tracking-tight'>
+              Patient Profile
+            </h1>
+            <p className='text-muted-foreground'>
+              View and manage patient information
+            </p>
+          </div>
+          <Dialog open={isEditing} onOpenChange={setIsEditing}>
+            <DialogTrigger asChild>
+              <Button>Edit Profile</Button>
+            </DialogTrigger>
+            <DialogContent className='max-w-2xl'>
+              <DialogHeader>
+                <DialogTitle>Edit Patient Information</DialogTitle>
+              </DialogHeader>
+              <EditProfileForm onClose={() => setIsEditing(false)} />
+            </DialogContent>
+          </Dialog>
         </div>
-        <Dialog open={isEditing} onOpenChange={setIsEditing}>
-          <DialogTrigger asChild>
-            <Button>Edit Profile</Button>
-          </DialogTrigger>
-          <DialogContent className='max-w-2xl'>
-            <DialogHeader>
-              <DialogTitle>Edit Patient Information</DialogTitle>
-            </DialogHeader>
-            <EditProfileForm onClose={() => setIsEditing(false)} />
-          </DialogContent>
-        </Dialog>
-      </div>
 
-      <div className='grid gap-6'>
-        <Card>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='grid gap-4'>
-              <div className='flex items-center justify-between'>
-                <div>
-                  <p className='text-2xl font-semibold'>Jorge Martínez</p>
-                  <p className='text-muted-foreground text-sm'>
-                    jorge@email.com
-                  </p>
+        <div className='grid gap-6'>
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal Information</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className='grid gap-4'>
+                <div className='flex items-center justify-between'>
+                  <div>
+                    <p className='text-2xl font-semibold'>Jorge Martínez</p>
+                    <p className='text-muted-foreground text-sm'>
+                      jorge@email.com
+                    </p>
+                  </div>
+                  <Badge variant={getStateVariant('ACTIVE')}>Active</Badge>
                 </div>
-                <Badge variant={getStateVariant('ACTIVE')}>Active</Badge>
-              </div>
-              <Separator />
-              <div className='grid gap-2 text-sm'>
-                <div className='grid grid-cols-2 gap-1'>
-                  <p className='text-muted-foreground'>Created</p>
-                  <p>{format(new Date('2025-01-08T16:59:23.916Z'), 'PPP')}</p>
+                <Separator />
+                <div className='grid gap-2 text-sm'>
+                  <div className='grid grid-cols-2 gap-1'>
+                    <p className='text-muted-foreground'>Created</p>
+                    <p>{format(new Date('2025-01-08T16:59:23.916Z'), 'PPP')}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className='grid gap-6 md:grid-cols-2'>
-          <Card>
-            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-base font-semibold'>
-                Contact Phone Numbers
-              </CardTitle>
-              <Dialog open={isAdding} onOpenChange={setIsAdding}>
-                <DialogTrigger asChild>
-                  <Button variant='ghost' size='icon'>
-                    <Plus className='h-4 w-4' />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className='max-w-2xl'>
-                  <DialogHeader>
-                    <DialogTitle>Add phone numbers</DialogTitle>
-                  </DialogHeader>
-                  <AddPhone />
-                </DialogContent>
-              </Dialog>
-            </CardHeader>
-            <CardContent>
-              <EmptyState icon={Phone} text='No phone numbers added' />
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-base font-semibold'>
-                Email Addresses
-              </CardTitle>
+          <div className='grid gap-6 md:grid-cols-2'>
+            <Card>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-base font-semibold'>
+                  Contact Phone Numbers
+                </CardTitle>
+                <Dialog open={isAdding} onOpenChange={setIsAdding}>
+                  <DialogTrigger asChild>
+                    <Button variant='ghost' size='icon'>
+                      <Plus className='h-4 w-4' />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className='max-w-2xl'>
+                    <DialogHeader>
+                      <DialogTitle>Add phone numbers</DialogTitle>
+                    </DialogHeader>
+                    <AddPhone />
+                  </DialogContent>
+                </Dialog>
+              </CardHeader>
+              <CardContent>
+                <EmptyState icon={Phone} text='No phone numbers added' />
+              </CardContent>
+            </Card>
 
-              <Button variant='ghost' size='icon'>
-                <Plus className='h-4 w-4' />
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <EmptyState icon={Mail} text='No additional emails added' />
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-base font-semibold'>
+                  Email Addresses
+                </CardTitle>
 
-          <Card className='md:col-span-2'>
-            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-base font-semibold'>
-                Addresses
-              </CardTitle>
-              <Button variant='ghost' size='icon'>
-                <Plus className='h-4 w-4' />
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <EmptyState icon={MapPin} text='No addresses added' />
-            </CardContent>
-          </Card>
+                <Button variant='ghost' size='icon'>
+                  <Plus className='h-4 w-4' />
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <EmptyState icon={Mail} text='No additional emails added' />
+              </CardContent>
+            </Card>
+
+            <Card className='md:col-span-2'>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-base font-semibold'>
+                  Addresses
+                </CardTitle>
+                <Button variant='ghost' size='icon'>
+                  <Plus className='h-4 w-4' />
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <EmptyState icon={MapPin} text='No addresses added' />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </DashboardShell>
   )
 }
 
