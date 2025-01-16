@@ -58,6 +58,15 @@ export class AppointmentsController {
   }
 
   @HttpCode(200)
+  @Get('doctor/:id')
+  @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
+  async getAppointmentByDoctorId(
+    @Param('id') doctor_id: string,
+  ): Promise<AppointmentDocument[]> {
+    return this.appointmentsService.getAppointmentByDoctorId(doctor_id)
+  }
+
+  @HttpCode(200)
   @Put(':id')
   @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT')
   async updateAppointment(
