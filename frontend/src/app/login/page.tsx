@@ -12,6 +12,7 @@ import { images } from '../../assets/index'
 import { useRouter } from 'next/navigation'
 import { LoginFormData } from '../types/auth'
 import { signIn, useSession } from 'next-auth/react'
+import Swal from 'sweetalert2'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -24,14 +25,39 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     const { email, password } = data
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      provider: 'local', // Proveedor definido en authOptions
-    })
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        provider: 'local',
+        redirect: false,
+      })
 
-    if (!result?.ok) {
-      console.error('Error al iniciar sesión:', result?.error)
+      if (result?.ok) {
+        // Login exitoso
+        console.log('Login successful:', result)
+        await Swal.fire({
+          title: 'Login Successful!',
+          text: 'You have been successfully logged in.',
+          icon: 'success',
+          confirmButtonText: 'Continue',
+        })
+
+        router.push(result.url || '/dashboard/patient/home')
+      } else {
+        // Error en el inicio de sesión
+        console.error('Login error:', result?.error)
+        throw new Error(result?.error || 'Invalid credentials')
+      }
+    } catch (error: any) {
+      // Manejo del error
+      console.error('Error during login:', error)
+      Swal.fire({
+        title: 'Login Failed',
+        text: 'Invalid email or password.',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+      })
     }
   }
 
