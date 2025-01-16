@@ -10,6 +10,8 @@ const PatientHome: React.FC = () => {
 
   useEffect(() => {
       if (status === 'authenticated') {
+        console.log('User:', session?.user);
+        
         console.log('Token:', session?.user?.token)
         console.log('User ID:', session?.user?.userId)
         console.log('User Type:', session?.user?.type)
@@ -18,6 +20,7 @@ const PatientHome: React.FC = () => {
         console.log('No session available')
       }
     }, [status, session])
+
 
 
   return (
@@ -47,7 +50,7 @@ const PatientHome: React.FC = () => {
         </div>
 
       {/* Upcoming Appointments */}  
-      <UpcomingAppointments />
+      {/* <UpcomingAppointments /> */}
       
 
       </main>
