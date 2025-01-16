@@ -50,6 +50,8 @@ export class TasksService {
         notification: {
           title: 'Complete your profile!',
           body: 'Your profile is incomplete. Please update it to enjoy full features.',
+          image:
+            'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png',
         },
         data: {
           type: NotificationType.REMINDER,

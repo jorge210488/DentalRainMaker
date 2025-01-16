@@ -10,7 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
-import { AuthGuard } from '../guards/auth.guard'
 import { RolesGuard } from '../guards/role.guard'
 import { PermissionsGuard } from '../guards/permission.guard'
 import { Permissions } from '../decorators/permissions.decorator'
@@ -22,7 +21,7 @@ import { Public } from '../decorators/public.decorator'
 @ApiTags('appointment-type')
 @ApiBearerAuth()
 @Controller('appointment-type')
-@UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+@UseGuards(RolesGuard, PermissionsGuard)
 export class AppointmentTypeController {
   constructor(
     private readonly appointmentTypeService: AppointmentTypeService,
@@ -30,9 +29,8 @@ export class AppointmentTypeController {
 
   @ApiBearerAuth()
   @HttpCode(200)
-  @UseGuards(RolesGuard, PermissionsGuard)
   @Post()
-  @Permissions('ALL_ACCESS')
+  @Permissions('ALL_ACCESS', 'CREATE_APPOINTMENT_TYPE')
   async create(@Body() createAppointmentTypeDto: CreateAppointmentTypeDto) {
     return this.appointmentTypeService.create(createAppointmentTypeDto)
   }
@@ -40,7 +38,7 @@ export class AppointmentTypeController {
   @Public()
   @HttpCode(200)
   @Get()
-  @Permissions('ALL_ACCESS')
+  @Permissions('ALL_ACCESS', 'READ_ALL_APPOINTMENTS_TYPE')
   async findAll() {
     return this.appointmentTypeService.findAll()
   }
@@ -48,7 +46,7 @@ export class AppointmentTypeController {
   @Public()
   @HttpCode(200)
   @Get(':id')
-  @Permissions('ALL_ACCESS')
+  @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT_TYPE')
   async findById(@Param('id') id: string) {
     return this.appointmentTypeService.findById(id)
   }
@@ -56,8 +54,7 @@ export class AppointmentTypeController {
   @ApiBearerAuth()
   @HttpCode(200)
   @Put(':id')
-  @UseGuards(RolesGuard, PermissionsGuard)
-  @Permissions('ALL_ACCESS')
+  @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT_TYPE')
   async update(
     @Param('id') id: string,
     @Body() updateAppointmentTypeDto: UpdateAppointmentTypeDto,
@@ -68,8 +65,7 @@ export class AppointmentTypeController {
   @ApiBearerAuth()
   @HttpCode(204)
   @Delete(':id')
-  @UseGuards(RolesGuard, PermissionsGuard)
-  @Permissions('ALL_ACCESS')
+  @Permissions('ALL_ACCESS', 'DELETE_APPOINTMENT_TYPE')
   async deleteAppointmentType(@Param('id') id: string) {
     return this.appointmentTypeService.delete(id)
   }

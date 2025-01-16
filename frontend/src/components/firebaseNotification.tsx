@@ -5,7 +5,10 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging'
 import { initializeApp } from 'firebase/app'
 import { saveFirebaseTokenToServer } from '@/server/saveFirebaseToken'
 import { useSession } from 'next-auth/react'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
+// Configuración de Firebase
 const firebaseConfig = {
   apiKey: 'AIzaSyAfP4ggJyuJEMXsX0uNUJ2foinqVFh75qs',
   authDomain: 'dental-rain-maker-e09be.firebaseapp.com',
@@ -17,7 +20,37 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 
-const SaveFirebaseToken = () => {
+// Componente de notificación personalizado
+const NotificationContent = ({
+  title,
+  body,
+  imageUrl,
+}: {
+  title: string
+  body: string
+  imageUrl: string
+}) => {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <img
+        src={imageUrl}
+        alt='Notification'
+        style={{
+          width: '100px',
+          height: '50px',
+          borderRadius: '8px',
+          marginRight: '10px',
+        }}
+      />
+      <div>
+        <h4 style={{ margin: 0 }}>{title}</h4>
+        <p style={{ margin: 0 }}>{body}</p>
+      </div>
+    </div>
+  )
+}
+
+const FirebaseNotification = () => {
   const { data: session } = useSession()
 
   useEffect(() => {
@@ -39,24 +72,10 @@ const SaveFirebaseToken = () => {
       }
     }
 
-    const requestPermission = async () => {
-      const permission = await Notification.requestPermission()
-      if (permission !== 'granted') {
-        console.error('Permiso de notificaciones no concedido.')
-        throw new Error('Permiso de notificaciones no concedido')
-      }
-      console.log('Permiso de notificaciones concedido.')
-    }
-
     const saveToken = async () => {
       try {
-        // Registra el Service Worker
         const registration = await registerServiceWorker()
 
-        // Solicita permisos para notificaciones
-        await requestPermission()
-
-        // Obtiene el token de Firebase Messaging
         const messaging = getMessaging(app)
         const token = await getToken(messaging, {
           vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
@@ -66,7 +85,6 @@ const SaveFirebaseToken = () => {
         if (token) {
           console.log('Token de Firebase obtenido:', token)
 
-          // Enviar el token al servidor
           if (session?.user?.userId && session?.user?.token) {
             await saveFirebaseTokenToServer(
               session.user.userId,
@@ -89,23 +107,27 @@ const SaveFirebaseToken = () => {
     // Escuchar notificaciones en primer plano
     const messaging = getMessaging(app)
     onMessage(messaging, (payload) => {
-      console.log('Message received in foreground:', payload)
+      const { title, body, image } = payload.notification || {}
+      console.log('Foreground notification received:', title, body)
 
-      if (payload.notification) {
-        const { title, body } = payload.notification
-        console.log('Notification received:', title, body)
-
-        // Mostrar notificación (puedes personalizar esta parte)
-        alert(`Notification: ${title}\n${body}`)
-      } else {
-        console.warn('Notification payload is undefined or missing properties.')
-      }
+      // Llamar al toast con un contenido personalizado
+      toast.info(
+        <NotificationContent
+          title={title || ''}
+          body={body || ''}
+          imageUrl={image || ''}
+        />,
+      )
     })
 
     saveToken()
   }, [session])
 
-  return null
+  return (
+    <>
+      <ToastContainer />
+    </>
+  )
 }
 
-export default SaveFirebaseToken
+export default FirebaseNotification
