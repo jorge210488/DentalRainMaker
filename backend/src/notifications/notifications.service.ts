@@ -46,10 +46,11 @@ export class NotificationsService {
   async sendPushNotification(
     notificationDto: CreateNotificationDto,
   ): Promise<void> {
-    const { userId, notification, data } = notificationDto
+    const { userId, notification, data, webpush } = notificationDto
 
-    // Extraer `title` y `body` desde `notification`
-    const { title, body } = notification
+    const { title, body, image } = notification
+    const link =
+      webpush?.fcm_options?.link || 'https://dental-rain-maker.vercel.app/'
 
     // Verificar que `data.type` sea válido
     if (!data || !data.type) {
@@ -75,12 +76,16 @@ export class NotificationsService {
           notification: {
             title,
             body,
+            image,
           },
-          data: {
-            ...data, // Enviar todos los datos adicionales (incluido `type`)
+          webpush: {
+            fcmOptions: {
+              link, // El enlace ahora está correctamente configurado
+            },
           },
-          token, // Anexar el token del dispositivo aquí
+          token,
         }
+
         console.log('Asi envio el mensaje a firebaseAdmin', message)
 
         const response = await this.firebaseAdmin
@@ -111,7 +116,7 @@ export class NotificationsService {
 
     // Establecer ventana de tiempo de 1 semana atrás
     const timeWindow = new Date()
-    timeWindow.setDate(timeWindow.getDate() - 7)
+    timeWindow.setDate(timeWindow.getDate() - 1)
 
     // Buscar notificación existente en la ventana de tiempo
     const existingNotification = await this.notificationModel.findOne({
