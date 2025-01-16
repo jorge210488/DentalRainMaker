@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -12,9 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import EditProfileForm from '@/components/patientDashboard/formsPatientProfile/editProfileForm'
 import { Separator } from '@/components/ui/separator'
+import { useForm } from 'react-hook-form'
 import { Building2, Mail, MapPin, Phone, Plus } from 'lucide-react'
 
 interface Address {
@@ -24,7 +24,7 @@ interface Address {
   postal_code?: string
 }
 
-interface PatientProfile {
+export interface PatientProfile {
   name: string
   given_name: string
   family_name: string
@@ -36,8 +36,18 @@ interface PatientProfile {
   createdAt: string
 }
 
+const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+  // Reemplazar cualquier carácter que no sea un número
+  event.target.value = event.target.value.replace(/[^0-9]/g, '')
+}
+
 export default function PatientProfile() {
   const [isEditing, setIsEditing] = useState(false)
+  const [isAdding, setIsAdding] = useState(false)
+  const [isAddingEmail, setIsAddingEmail] = useState(false)
+  const [isAddingAddress, setIsAddingAddress] = useState(false)
+
+  const formEdit = useForm<PatientProfile>()
 
   return (
     <div className='container mx-auto max-w-4xl py-6'>
@@ -94,9 +104,19 @@ export default function PatientProfile() {
               <CardTitle className='text-base font-semibold'>
                 Contact Phone Numbers
               </CardTitle>
-              <Button variant='ghost' size='icon'>
-                <Plus className='h-4 w-4' />
-              </Button>
+              <Dialog open={isAdding} onOpenChange={setIsAdding}>
+                <DialogTrigger asChild>
+                  <Button variant='ghost' size='icon'>
+                    <Plus className='h-4 w-4' />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className='max-w-2xl'>
+                  <DialogHeader>
+                    <DialogTitle>Add phone numbers</DialogTitle>
+                  </DialogHeader>
+                  <AddPhone />
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
               <EmptyState icon={Phone} text='No phone numbers added' />
@@ -108,6 +128,7 @@ export default function PatientProfile() {
               <CardTitle className='text-base font-semibold'>
                 Email Addresses
               </CardTitle>
+
               <Button variant='ghost' size='icon'>
                 <Plus className='h-4 w-4' />
               </Button>
@@ -136,27 +157,13 @@ export default function PatientProfile() {
   )
 }
 
-function EditProfileForm({ onClose }: { onClose: () => void }) {
+function AddPhone() {
   return (
-    <form className='grid gap-4 py-4'>
-      <div className='grid gap-2'>
-        <Label htmlFor='given_name'>Given Name</Label>
-        <Input id='given_name' defaultValue='Jorge' />
-      </div>
-      <div className='grid gap-2'>
-        <Label htmlFor='family_name'>Family Name</Label>
-        <Input id='family_name' defaultValue='Martínez' />
-      </div>
-      <div className='grid gap-2'>
-        <Label htmlFor='email'>Primary Email</Label>
-        <Input id='email' type='email' defaultValue='jorge@email.com' />
-      </div>
-      <div className='flex justify-end gap-2'>
-        <Button variant='outline' type='button' onClick={onClose}>
-          Cancel
-        </Button>
-        <Button type='submit'>Save Changes</Button>
-      </div>
+    <form>
+      <fieldset>
+        <legend>Input here the phone number you want to add</legend>
+        <input onInput={handleInput} />
+      </fieldset>
     </form>
   )
 }

@@ -21,34 +21,34 @@ export function DashboardShell({ children, className }: DashboardShellProps) {
 
   const routes = [
     {
-      href: '/dashboard',
+      href: '/patientDashboard',
       label: 'Dashboard',
       icon: Home,
       active: pathname === '/dashboard',
     },
     {
-      href: '/dashboard/appointments',
+      href: '/patientDashboard/appointments',
       label: 'Appointments',
       icon: Calendar,
-      active: pathname === '/dashboard/appointments',
+      active: pathname === '/patientDashboard/appointments',
     },
     {
-      href: '/dashboard/messages',
+      href: '/patientDashboard/messages',
       label: 'Messages',
       icon: MessageSquare,
-      active: pathname === '/dashboard/messages',
+      active: pathname === '/patientDashboard/messages',
     },
     {
-      href: '/dashboard/records',
+      href: '/patientDashboard/records',
       label: 'Records',
       icon: FileText,
-      active: pathname === '/dashboard/records',
+      active: pathname === '/patientDashboard/records',
     },
     {
-      href: '/dashboard/profile',
+      href: '/patientDashboard/profile',
       label: 'Profile',
       icon: User,
-      active: pathname === '/dashboard/profile',
+      active: pathname === '/patientDashboard/profile',
     },
   ]
 
