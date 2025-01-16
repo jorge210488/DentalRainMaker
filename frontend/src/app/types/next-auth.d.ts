@@ -6,6 +6,7 @@ declare module 'next-auth' {
     id_token?: string // Token de acceso devuelto por el backend
     user_id?: string // ID único del usuario
     user_type?: string // Tipo de usuario (e.g., PATIENT)
+    user_views?: string[] // Vistas asociadas al usuario
   }
 
   // Interfaz para el token JWT
@@ -19,6 +20,7 @@ declare module 'next-auth' {
     email?: string // Correo electrónico del usuario
     given_name?: string // Nombre de pila
     family_name?: string // Apellido
+    views?: string[] // Vistas asociadas al usuario
   }
 
   // Interfaz para la sesión
@@ -33,6 +35,7 @@ declare module 'next-auth' {
       email?: string // Correo electrónico del usuario
       given_name?: string // Nombre de pila
       family_name?: string // Apellido
+      views?: string[] // Vistas asociadas al usuario
     }
   }
 

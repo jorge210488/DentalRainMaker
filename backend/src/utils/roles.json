@@ -1,7 +1,8 @@
 [
   {
     "name": "ADMIN",
-    "permissions": ["ALL_ACCESS"]
+    "permissions": ["ALL_ACCESS"],
+    "views": ["ALL_VIEWS"]
   },
   {
     "name": "PATIENT",
@@ -12,6 +13,7 @@
       "READ_OWN_APPOINTMENT",
       "CREATE_APPOINTMENT",
       "UPDATE_APPOINTMENT"
-    ]
+    ],
+    "views": ["USER_PROFILE", "USER_APPOINTMENTS"]
   }
 ]

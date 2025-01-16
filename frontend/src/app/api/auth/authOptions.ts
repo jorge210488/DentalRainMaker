@@ -43,6 +43,7 @@ export const authOptions: AuthOptions = {
             id_token: data.token,
             user_id: data.userId,
             user_type: data.type,
+            user_views: data.views,
           }
         } catch (error) {
           console.error('Error during local login:', error)
@@ -105,6 +106,7 @@ export const authOptions: AuthOptions = {
           account.id_token = data.token
           account.user_id = data.userId
           account.user_type = data.type
+          account.user_views = data.views
 
           console.log('User signed in successfully', data)
         } catch (error) {
@@ -121,6 +123,7 @@ export const authOptions: AuthOptions = {
         token.accessToken = user?.id_token // Consistencia con GoogleProvider
         token.userId = user?.user_id
         token.type = user?.user_type
+        token.views = user?.user_views
       }
 
       if (account && account.provider === 'google') {
@@ -128,6 +131,7 @@ export const authOptions: AuthOptions = {
         token.accessToken = account.id_token
         token.userId = account.user_id
         token.type = account.user_type
+        token.views = account.user_views
       }
 
       if (profile) {
@@ -151,12 +155,29 @@ export const authOptions: AuthOptions = {
         session.user.token = token.accessToken as string
         session.user.userId = token.userId as string
         session.user.type = token.type as string
+        session.user.views = token.views as string[]
       }
 
       return session
     },
     async redirect({ url, baseUrl }) {
-      return '/home'
+      // Si viene de iniciar sesión, redirige al dashboard
+      if (url === '/dashboard/patient/home') {
+        return '/dashboard/patient/home'
+      }
+
+      // Si viene de cerrar sesión, redirige al login
+      if (url === '/login') {
+        return '/login'
+      }
+
+      // Permite redirecciones dentro del dominio base
+      if (url.startsWith(baseUrl)) {
+        return url
+      }
+
+      // Redirección predeterminada para otros casos
+      return '/dashboard/patient/home'
     },
   },
 }

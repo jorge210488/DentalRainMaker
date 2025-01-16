@@ -32,11 +32,14 @@ export class AppointmentsService {
   async create(
     createAppointmentDto: CreateAppointmentDto,
   ): Promise<Appointment> {
-    // Validar si el contact_id existe en la colección User
     const [user, doctor, clinic, appointmentType] = await Promise.all([
       this.userModel.findById(createAppointmentDto.contact_id).exec(),
-      this.userModel.findById(createAppointmentDto.doctor_id).exec(),
-      this.clinicModel.findById(createAppointmentDto.clinic_id).exec(),
+      this.userModel
+        .findById(createAppointmentDto.additional_data.doctor_id)
+        .exec(),
+      this.clinicModel
+        .findById(createAppointmentDto.additional_data.clinic_id)
+        .exec(),
       this.appointmentTypeModel
         .findById(createAppointmentDto.appointment_type_id)
         .exec(),
@@ -53,12 +56,12 @@ export class AppointmentsService {
     }
     if (!doctor) {
       throw new NotFoundException(
-        `Doctor with ID ${createAppointmentDto.contact_id} not found`,
+        `Doctor with ID ${createAppointmentDto.additional_data.doctor_id} not found`,
       )
     }
     if (!clinic) {
       throw new NotFoundException(
-        `Clinic with ID ${createAppointmentDto.clinic_id} not found`,
+        `Clinic with ID ${createAppointmentDto.additional_data.clinic_id} not found`,
       )
     }
     if (!appointmentType) {
@@ -67,7 +70,31 @@ export class AppointmentsService {
       )
     }
 
-    const appointment = new this.appointmentModel(createAppointmentDto)
+    const name = `Cita de ${user.name} con ${doctor.name}`
+
+    const contact = {
+      name: user.name,
+      remote_id: user.remote_id || 'null',
+      given_name: user.given_name,
+      family_name: user.family_name,
+    }
+
+    const additional_data = {
+      doctor_id: doctor._id,
+      doctor_name: doctor.name,
+      clinic_id: clinic._id,
+      clinic_name: clinic.clinic_name,
+      paid: false,
+    }
+
+    const newAppointment = new this.appointmentModel({
+      ...createAppointmentDto,
+      name,
+      contact,
+      additional_data,
+    })
+
+    const appointment = new this.appointmentModel(newAppointment)
     return appointment.save()
   }
 
@@ -81,6 +108,32 @@ export class AppointmentsService {
       throw new NotFoundException(`Appointment with ID "${_id}" not found`)
     }
     return appointment
+  }
+
+  async getAppointmentByUserId(
+    contact_id: string,
+  ): Promise<AppointmentDocument[]> {
+    const appointments = await this.appointmentModel.find({ contact_id }).exec()
+    if (!appointments || appointments.length === 0) {
+      throw new NotFoundException(
+        `Appointments for User ID "${contact_id}" not found`,
+      )
+    }
+    return appointments
+  }
+
+  async getAppointmentByDoctorId(
+    doctor_id: string,
+  ): Promise<AppointmentDocument[]> {
+    const appointments = await this.appointmentModel
+      .find({ 'additional_data.doctor_id': doctor_id })
+      .exec()
+    if (!appointments || appointments.length === 0) {
+      throw new NotFoundException(
+        `Appointments for Doctor ID "${doctor_id}" not found`,
+      )
+    }
+    return appointments
   }
 
   async updateAppointment(
@@ -113,7 +166,6 @@ export class AppointmentsService {
     if (!appointment) {
       throw new NotFoundException(`Appointment with ID ${_id} not found`)
     }
-
     // Actualizar el estado
     appointment[field] = value
     return await appointment.save()

@@ -1,105 +1,173 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-type Cita = {
+const today = new Date().toISOString().split('T')[0]
+
+type Appointment = {
   id: number
-  especialidad: string
-  doctora: string
-  paciente: string
-  fecha: string
-  hora: string
-  ubicacion: string
-  consultorio: string
-  tipo: 'Presencial' | 'Virtual'
-  estadoPago: 'Pendiente' | 'Pagado'
+  specialty: string
+  doctor: string
+  patient: string
+  date: string
+  time: string
+  location: string
+  office: string
+  type: 'In-person' | 'Virtual'
+  paymentStatus: 'Pending' | 'Paid'
 }
 
-const citas: Cita[] = [
+const appointments: Appointment[] = [
   {
     id: 1,
-    especialidad: 'Odontología',
-    doctora: 'Dra. Flora Emperatriz Zuñiga',
-    paciente: 'Jose Antonio Rojas Huaman',
-    fecha: 'Lunes - 13 de enero',
-    hora: '15:20hs',
-    ubicacion: 'Centro Clínico Chacarilla',
-    consultorio: 'Consultorio 37',
-    tipo: 'Presencial',
-    estadoPago: 'Pendiente',
+    specialty: 'Dentistry',
+    doctor: 'Dr. Flora Emperatriz Zuñiga',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-11',
+    time: '3:20 PM',
+    location: 'Chacarilla Clinical Center',
+    office: 'Office 37',
+    type: 'In-person',
+    paymentStatus: 'Paid',
   },
   {
     id: 2,
-    especialidad: 'Pediatría',
-    doctora: 'Dra. Mariana Pérez',
-    paciente: 'Maria Fernanda Gómez',
-    fecha: 'Miércoles - 15 de enero',
-    hora: '10:00hs',
-    ubicacion: 'Centro Clínico San Borja',
-    consultorio: 'Consultorio 12',
-    tipo: 'Virtual',
-    estadoPago: 'Pagado',
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-13',
+    time: '10:00 AM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 12',
+    type: 'Virtual',
+    paymentStatus: 'Paid',
+  },
+  {
+    id: 3,
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-15',
+    time: '10:00 AM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 12',
+    type: 'In-person',
+    paymentStatus: 'Paid',
+  },
+  {
+    id: 4,
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-16',
+    time: '10:00 AM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 12',
+    type: 'Virtual',
+    paymentStatus: 'Pending',
+  },
+  {
+    id: 5,
+    specialty: 'Dentistry',
+    doctor: 'Dr. Mariana Pérez',
+    patient: 'Jose Antonio Rojas Huaman',
+    date: '2025-01-18',
+    time: '12:00 PM',
+    location: 'San Borja Clinical Center',
+    office: 'Office 14',
+    type: 'In-person',
+    paymentStatus: 'Pending',
   },
 ]
 
-const HomePage = () => {
-  const [filtro, setFiltro] = useState<'Todos' | 'Presencial' | 'Virtual'>(
-    'Todos',
+const AppointmentsPage = () => {
+  const [primaryFilter, setPrimaryFilter] = useState<'History' | 'Upcoming'>(
+    'Upcoming',
   )
+  const [secondaryFilter, setSecondaryFilter] = useState<
+    'All' | 'In-person' | 'Virtual'
+  >('All')
+  const router = useRouter()
 
-  const citasFiltradas = citas.filter((cita) =>
-    filtro === 'Todos' ? true : cita.tipo === filtro,
-  )
+  const filteredAppointments = appointments.filter((appointment) => {
+    const isPrimaryMatch =
+      primaryFilter === 'History'
+        ? new Date(appointment.date) < new Date(today)
+        : new Date(appointment.date) >= new Date(today)
+
+    const isSecondaryMatch =
+      secondaryFilter === 'All' || appointment.type === secondaryFilter
+
+    return isPrimaryMatch && isSecondaryMatch
+  })
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
-      {/* Sidebar */}
-      <aside className='fixed left-0 top-0 flex h-full w-20 flex-col items-center bg-white py-4 shadow-md'>
-        <div className='mb-8 h-8 w-8 rounded-full bg-green-500' />
-        <div className='flex flex-col gap-6'>
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-          <div className='h-6 w-6 rounded-md bg-gray-300' />
-        </div>
-      </aside>
-
       {/* Main content */}
       <main className='ml-24'>
         {/* Header */}
         <header className='mb-6 flex items-center justify-between'>
-          <h1 className='text-2xl font-bold'>Mis citas</h1>
-          <button className='rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600'>
-            + Sacar cita
+          <h1 className='text-2xl font-bold'>My Appointments</h1>
+          <button
+            onClick={() =>
+              router.push('/dashboard/patient/scheduled-appointment')
+            }
+            className='rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600'
+          >
+            + Schedule Appointment
           </button>
         </header>
 
-        {/* Filtros */}
+        {/* Primary filters */}
         <div className='mb-4 flex items-center gap-4'>
           <button
-            onClick={() => setFiltro('Todos')}
+            onClick={() => setPrimaryFilter('History')}
             className={`rounded-lg px-4 py-2 ${
-              filtro === 'Todos'
+              primaryFilter === 'History'
                 ? 'bg-green-600 text-white'
                 : 'text-gray-500 hover:text-gray-800'
             }`}
           >
-            Todos
+            History
           </button>
           <button
-            onClick={() => setFiltro('Presencial')}
+            onClick={() => setPrimaryFilter('Upcoming')}
             className={`rounded-lg px-4 py-2 ${
-              filtro === 'Presencial'
+              primaryFilter === 'Upcoming'
                 ? 'bg-green-600 text-white'
                 : 'text-gray-500 hover:text-gray-800'
             }`}
           >
-            Presencial
+            Upcoming
+          </button>
+        </div>
+
+        {/* Secondary filters */}
+        <div className='mb-4 flex items-center gap-4'>
+          <button
+            onClick={() => setSecondaryFilter('All')}
+            className={`rounded-lg px-4 py-2 ${
+              secondaryFilter === 'All'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            All
           </button>
           <button
-            onClick={() => setFiltro('Virtual')}
+            onClick={() => setSecondaryFilter('In-person')}
             className={`rounded-lg px-4 py-2 ${
-              filtro === 'Virtual'
+              secondaryFilter === 'In-person'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            In-person
+          </button>
+          <button
+            onClick={() => setSecondaryFilter('Virtual')}
+            className={`rounded-lg px-4 py-2 ${
+              secondaryFilter === 'Virtual'
                 ? 'bg-green-600 text-white'
                 : 'text-gray-500 hover:text-gray-800'
             }`}
@@ -108,45 +176,43 @@ const HomePage = () => {
           </button>
         </div>
 
-        {/* Lista de citas */}
+        {/* Appointment list */}
         <div className='space-y-4'>
-          {citasFiltradas.map((cita) => (
+          {filteredAppointments.map((appointment) => (
             <div
-              key={cita.id}
+              key={appointment.id}
               className='flex items-center justify-between rounded-lg bg-white p-4 shadow-md'
             >
               <div>
                 <p
                   className={`text-sm ${
-                    cita.estadoPago === 'Pendiente'
+                    appointment.paymentStatus === 'Pending'
                       ? 'text-red-500'
                       : 'text-green-500'
                   }`}
                 >
-                  {cita.estadoPago === 'Pendiente'
-                    ? 'Pago pendiente'
-                    : 'Pagado'}
+                  {appointment.paymentStatus === 'Pending'
+                    ? 'Payment pending'
+                    : 'Paid'}
                 </p>
-                <h2 className='text-lg font-bold'>{cita.doctora}</h2>
-                <p className='text-sm text-gray-600'>{cita.especialidad}</p>
+                <h2 className='text-lg font-bold'>{appointment.doctor}</h2>
+                <p className='text-sm text-gray-600'>{appointment.specialty}</p>
                 <p className='text-sm text-gray-600'>
-                  Paciente: {cita.paciente}
-                </p>
-                <p className='text-sm text-gray-600'>
-                  {cita.fecha} - {cita.hora}
+                  Patient: {appointment.patient}
                 </p>
                 <p className='text-sm text-gray-600'>
-                  {cita.ubicacion} - {cita.consultorio}
+                  {appointment.date} - {appointment.time}
+                </p>
+                <p className='text-sm text-gray-600'>
+                  {appointment.location} - {appointment.office}
                 </p>
               </div>
               <div className='flex flex-col items-end gap-2'>
-                <button className='text-green-600 hover:underline'>
-                  Reprogramar
-                </button>
-                <button className='text-red-600 hover:underline'>Anular</button>
-                {cita.estadoPago === 'Pendiente' && (
+                {/* <button className="text-green-600 hover:underline">Reschedule</button>
+                <button className="text-red-600 hover:underline">Cancel</button> */}
+                {appointment.paymentStatus === 'Pending' && (
                   <button className='rounded-lg border border-green-600 px-4 py-1 text-green-600 hover:bg-green-100'>
-                    Pagar
+                    Pay
                   </button>
                 )}
               </div>
@@ -158,4 +224,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default AppointmentsPage

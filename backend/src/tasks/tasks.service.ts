@@ -47,18 +47,27 @@ export class TasksService {
     for (const user of usersWithIncompleteProfiles) {
       const notificationDto: CreateNotificationDto = {
         userId: user._id,
-        type: NotificationType.REMINDER,
-        title: 'Complete your profile!',
-        body: 'Your profile is incomplete. Please update it to enjoy full features.',
-        data: { action: 'profile_completion' },
+        notification: {
+          title: 'Complete your profile!',
+          body: 'Your profile is incomplete. Please update it to enjoy full features.',
+          image:
+            'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png',
+        },
+        data: {
+          type: NotificationType.REMINDER,
+        },
       }
 
       try {
+        // Enviar notificación push
         await this.notificationsService.sendPushNotification(notificationDto)
+
+        // Guardar la notificación en la base de datos
         await this.notificationsService.createNotification(
           notificationDto,
           true,
         )
+
         this.logger.log(`Notification sent to user ${user._id}`)
       } catch (error) {
         this.logger.error(
