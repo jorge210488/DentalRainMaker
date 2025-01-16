@@ -7,7 +7,7 @@ interface AppointmentCardProps {
     additional_data: {
         doctor_name:string;
         clinic_name:string;
-        room_number:string;
+        // room_number:string;
         paid:boolean;
     };  
   }
@@ -35,7 +35,7 @@ const AppointmentCard: React.FC <AppointmentCardProps>= ({
                 <h4 className="text-lg font-bold">{additional_data.doctor_name}</h4>
                 <p className="text-sm text-gray-600">{start_time.toLocaleString()}</p>
                 <p className="text-sm text-gray-600">{additional_data.clinic_name}</p>
-                <p className="text-sm text-gray-600">{additional_data.room_number}</p>
+                {/* <p className="text-sm text-gray-600">{additional_data.room_number}</p> */}
             </div>
             <div className="flex flex-col items-end gap-2">
                 {/* <button className="text-green-600 hover:underline">Reschedule</button>
