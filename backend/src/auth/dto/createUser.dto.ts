@@ -121,4 +121,13 @@ export class CreateUserDto {
     example: 'PATIENT',
   })
   type: string = 'PATIENT'
+
+  @IsOptional()
+  @IsString({ message: 'El remote_id debe ser una cadena de texto' })
+  @ApiProperty({
+    description:
+      'Un identificador remoto opcional para el usuario en sistemas externos',
+    example: 'remote_12345',
+  })
+  remote_id?: string
 }
