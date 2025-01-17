@@ -99,7 +99,7 @@ const AppointmentsDateTime = () => {
         <div className='mb-8 flex items-center justify-center gap-6'>
           <div
             onClick={() =>
-              router.push('/dashboard/patient/scheduled-appointment/virtual')
+              router.push('/dashboard/patient/scheduled-appointment/in-person')
             }
             className='flex cursor-pointer items-center'
           >
@@ -111,7 +111,7 @@ const AppointmentsDateTime = () => {
           <div
             onClick={() =>
               router.push(
-                '/dashboard/patient/scheduled-appointment/virtual/search-date',
+                '/dashboard/patient/scheduled-appointment/in-person/search-date',
               )
             }
             className='flex cursor-pointer items-center'
@@ -186,7 +186,7 @@ const AppointmentsDateTime = () => {
           disabled={!selectedSlot}
           onClick={() =>
             router.push(
-              '/dashboard/patient/scheduled-appointment/virtual/confirm',
+              '/dashboard/patient/scheduled-appointment/in-person/confirm',
             )
           }
           className={`rounded-lg px-6 py-2 ${
