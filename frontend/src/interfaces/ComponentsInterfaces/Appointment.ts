@@ -1,24 +1,51 @@
-export interface IAppointment {
-    _id: string;
+interface Provider {
     name: string;
+    remote_id: string;
+    type: string;
+    display_name: string;
+}
+
+interface Resource {
+    name: string;
+    remote_id: string;
+    type: string;
+    display_name: string;
+}
+
+export interface IAppointment {
+    name: string;
+    remote_id: string;
     contact_id: string;
-    location: string;
-    start_time:Date;
-    end_time:Date
+    contact: {
+        name: string;
+        remote_id: string;
+        given_name: string;
+        family_name: string;
+    };
+    location?: string;
+    start_time:string;
+    end_time?:string;
+    wall_start_time?:string;
+    wall_end_time?:string;
+    time_zone?:string;
+    providers?: Provider[];
+    scheduler?:{
+        name:string;
+        remote_id:string;
+        type:string;
+        display_name:string;
+    };
     appointment_type_id:string;
+    operatory?:string;
+    resources?:Resource[];
     short_description?:string;
     notes?:string;
     confirmed?:boolean;
     cancelled?:boolean;
     completed?:boolean;
     broken?:boolean;
-    providers?:Array<string>;
-    scheduler?:Array<string>;
-    additional_data: {
-        doctor_name:string;
-        clinic_name:string;
-        // room_number:string;
-        paid:boolean;
-    };  
+    additional_data?: {};  
+    create_time?:string;
+    update_time?:string;
     
 }

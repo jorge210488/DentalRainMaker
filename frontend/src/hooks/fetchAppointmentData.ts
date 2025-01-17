@@ -1,7 +1,7 @@
 'use client'
 
 import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
-import { getAppointments } from '@/server/Appointment/getAppoinments'
+import { getAppointments } from '@/server/Appointment/appoinmentsApi'
 import { useEffect, useState } from 'react'
 
 const useAppointmentData = () => {

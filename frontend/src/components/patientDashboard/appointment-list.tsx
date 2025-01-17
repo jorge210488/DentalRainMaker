@@ -7,26 +7,43 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Calendar, Clock, Video } from 'lucide-react'
+import { useEffect, useState } from 'react';
+import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment';
+import { getUserAppointments } from '@/server/User/getUserAppointments';
 
 export function AppointmentList() {
-  const appointments = [
-    {
-      id: 1,
-      date: 'March 15, 2024',
-      time: '10:00 AM',
-      type: 'Regular Checkup',
-      doctor: 'Dr. Smith',
-      isVirtual: false,
-    },
-    {
-      id: 2,
-      date: 'March 28, 2024',
-      time: '2:30 PM',
-      type: 'Virtual Consultation',
-      doctor: 'Dr. Johnson',
-      isVirtual: true,
-    },
-  ]
+
+  const [userAppointments, setUserAppointments] = useState<IAppointment[]>([]);
+
+  useEffect(() => {
+    const fetchUserAppointments = async () => {
+      try {
+        const response = await getUserAppointments(session.user.userId, session.user.token);
+        setUserAppointments(response);
+      } catch (error) {
+        console.error("Error fetching user appointments:", error);
+      }
+    };
+    fetchUserAppointments();
+  }, [session, status]);
+  // const appointments = [
+  //   {
+  //     id: 1,
+  //     date: 'March 15, 2024',
+  //     time: '10:00 AM',
+  //     type: 'Regular Checkup',
+  //     doctor: 'Dr. Smith',
+  //     isVirtual: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     date: 'March 28, 2024',
+  //     time: '2:30 PM',
+  //     type: 'Virtual Consultation',
+  //     doctor: 'Dr. Johnson',
+  //     isVirtual: true,
+  //   },
+  // ]
 
   return (
     <Card>
