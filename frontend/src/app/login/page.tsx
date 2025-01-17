@@ -43,7 +43,7 @@ export default function LoginForm() {
           confirmButtonText: 'Continue',
         })
 
-        router.push(result.url || '/dashboard/patient/home')
+        router.push(result.url || '/patientDashboard')
       } else {
         // Error en el inicio de sesión
         console.error('Login error:', result?.error)

@@ -163,8 +163,8 @@ export const authOptions: AuthOptions = {
     async redirect({ url, baseUrl }) {
 
       // Si viene de iniciar sesión, redirige al dashboard
-      if (url === '/dashboard/patient/home') {
-        return '/dashboard/patient/home'
+      if (url === '/patientDashboard') {
+        return '/patientDashboard'
       }
 
       // Si viene de cerrar sesión, redirige al login
@@ -178,7 +178,7 @@ export const authOptions: AuthOptions = {
       }
 
       // Redirección predeterminada para otros casos
-      return '/dashboard/patient/home'
+      return '/patientDashboard'
 
     },
   },

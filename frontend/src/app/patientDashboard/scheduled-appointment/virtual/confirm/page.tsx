@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 
 const AppointmentConfirmation = () => {
   const appointmentDetails = {
-    type: 'Virtual',
+    type: 'In-person',
     day: 'Thursday',
     date: '01/23/2025',
     time: '3:00 PM',
@@ -22,7 +22,7 @@ const AppointmentConfirmation = () => {
         <div className='mb-8 flex items-center justify-center gap-6'>
           <div
             onClick={() =>
-              router.push('/dashboard/patient/scheduled-appointment/virtual')
+              router.push('/dashboard/patient/scheduled-appointment/in-person')
             }
             className='flex cursor-pointer items-center'
           >
@@ -34,7 +34,7 @@ const AppointmentConfirmation = () => {
           <div
             onClick={() =>
               router.push(
-                '/dashboard/patient/scheduled-appointment/virtual/search-date',
+                '/dashboard/patient/scheduled-appointment/in-person/search-date',
               )
             }
             className='flex cursor-pointer items-center'
@@ -47,7 +47,7 @@ const AppointmentConfirmation = () => {
           <div
             onClick={() =>
               router.push(
-                '/dashboard/patient/scheduled-appointment/virtual/confirm',
+                '/dashboard/patient/scheduled-appointment/in-person/confirm',
               )
             }
             className='flex cursor-pointer items-center'
