@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { PatientProfile } from '@/app/patientDashboard/profile/page'
 
 export default function EditProfileForm({ onClose }: { onClose: () => void }) {

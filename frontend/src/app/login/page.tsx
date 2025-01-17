@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
@@ -11,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { images } from '../../assets/index'
 import { useRouter } from 'next/navigation'
 import { LoginFormData } from '../types/auth'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import Swal from 'sweetalert2'
 
 export default function LoginForm() {

@@ -16,7 +16,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 interface DashboardShellProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function DashboardShell({ children, className }: DashboardShellProps) {
+export function DashboardShell({ children }: DashboardShellProps) {
   const pathname = usePathname()
 
   const routes = [

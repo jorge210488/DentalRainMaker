@@ -53,7 +53,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ account, profile }) {
       if (account && profile) {
         const userPayload = {
           name: profile.name,
@@ -76,7 +76,7 @@ export const authOptions: AuthOptions = {
 
           console.log('User registered successfully')
         } catch (err) {
-          console.error('User already registered or registration failed')
+          console.error('User already registered or registration failed', err)
         }
 
         try {
@@ -110,7 +110,7 @@ export const authOptions: AuthOptions = {
 
           console.log('User signed in successfully', data)
         } catch (error) {
-          console.error('Sign-in failed or Firebase token save failed')
+          console.error('Sign-in failed or Firebase token save failed', error)
           return false // Prevent sign-in
         }
       }
