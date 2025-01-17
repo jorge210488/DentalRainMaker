@@ -3,7 +3,7 @@ import React from 'react';
 
 interface AppointmentCardProps {
     _id: string;
-    start_time: Date;
+    // start_time: Date;
     additional_data: {
         doctor_name:string;
         clinic_name:string;
@@ -14,7 +14,7 @@ interface AppointmentCardProps {
 
 const AppointmentCard: React.FC <AppointmentCardProps>= ({
     _id,
-    start_time,
+    // start_time,
     additional_data
 }) => {
 
@@ -33,7 +33,7 @@ const AppointmentCard: React.FC <AppointmentCardProps>= ({
                     {additional_data.paid ? "paid" : "pending payment"}
                 </p>
                 <h4 className="text-lg font-bold">{additional_data.doctor_name}</h4>
-                <p className="text-sm text-gray-600">{start_time.toLocaleString()}</p>
+                {/* <p className="text-sm text-gray-600">{start_time.toLocaleString()}</p> */}
                 <p className="text-sm text-gray-600">{additional_data.clinic_name}</p>
                 {/* <p className="text-sm text-gray-600">{additional_data.room_number}</p> */}
             </div>

@@ -2,7 +2,6 @@
 
 import React,{ useEffect} from 'react';
 import { useSession } from 'next-auth/react';
-import AppointmentCard from '@/components/MainComponents/AppointmentCard/AppointmentCard';
 import UpcomingAppointments from './UpcomingAppointments';
 
 const PatientHome: React.FC = () => {
