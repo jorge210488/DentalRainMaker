@@ -34,6 +34,12 @@ export class Credential {
     },
   })
   providerId: string
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  remote_id?: string
 }
 
 export const CredentialSchema = SchemaFactory.createForClass(Credential)
