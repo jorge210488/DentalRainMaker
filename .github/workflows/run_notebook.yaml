@@ -23,12 +23,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Debug environment variables
+      run: |
+        echo "MONGO_URI=${{ secrets.MONGO_URI }}"  # Para asegurarnos de que se está configurando
+
     - name: Run notebook
       env:
         MONGO_URI: ${{ secrets.MONGO_URI }}
       run: |
         jupyter nbconvert --to notebook --execute dental_data_pipeline.ipynb \
           --output executed_notebook.ipynb
+
+    - name: Check CSV generation
+      run: |
+        ls -l datasets_BI/  # Verificar que los archivos CSV se generaron
+        cat datasets_BI/*.csv | head -n 10  # Mostrar las primeras líneas de los CSV para depuración
 
     - name: Commit updated CSVs
       run: |
