@@ -154,11 +154,11 @@ export class Appointment {
     required: false,
   })
   additional_data?: {
-    doctor_id: string,
-    doctor_name: string,
-    clinic_id: string,
-    clinic_name: string,
-    paid: boolean,
+    doctor_id: string
+    doctor_name: string
+    clinic_id: string
+    clinic_name: string
+    paid: boolean
   }
 }
 

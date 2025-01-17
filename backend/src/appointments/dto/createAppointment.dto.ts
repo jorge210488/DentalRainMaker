@@ -216,7 +216,6 @@ export class CreateAppointmentDto {
   @IsOptional()
   broken?: boolean
 
-
   // @ApiProperty({
   //   description: 'ID of the doctor',
   //   example: '61b7d88a78989f2b1c5e4d45',
@@ -255,14 +254,10 @@ export class CreateAppointmentDto {
   @IsObject()
   @IsOptional()
   additional_data?: {
-    doctor_id: string,
-    doctor_name: string,
-    clinic_id: string,
-    clinic_name: string,
-    paid: boolean,
+    doctor_id: string
+    doctor_name: string
+    clinic_id: string
+    clinic_name: string
+    paid: boolean
   }
-
-
 }
-
-  

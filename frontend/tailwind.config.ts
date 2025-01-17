@@ -18,12 +18,12 @@ export default {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
   			},
-			fontFamily: {
-			  sans: {
-				DEFAULT: 'Lalezar',
-				sans: 'sans-serif',
-			  },
-			},
+  			fontFamily: {
+  				sans: {
+  					DEFAULT: 'Lalezar',
+  					sans: 'sans-serif'
+  				}
+  			},
   			popover: {
   				DEFAULT: 'hsl(var(--popover))',
   				foreground: 'hsl(var(--popover-foreground))'

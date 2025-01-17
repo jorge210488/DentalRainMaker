@@ -32,11 +32,14 @@ export class AppointmentsService {
   async create(
     createAppointmentDto: CreateAppointmentDto,
   ): Promise<Appointment> {
-    
     const [user, doctor, clinic, appointmentType] = await Promise.all([
       this.userModel.findById(createAppointmentDto.contact_id).exec(),
-      this.userModel.findById(createAppointmentDto.additional_data.doctor_id).exec(),
-      this.clinicModel.findById(createAppointmentDto.additional_data.clinic_id).exec(),
+      this.userModel
+        .findById(createAppointmentDto.additional_data.doctor_id)
+        .exec(),
+      this.clinicModel
+        .findById(createAppointmentDto.additional_data.clinic_id)
+        .exec(),
       this.appointmentTypeModel
         .findById(createAppointmentDto.appointment_type_id)
         .exec(),
@@ -107,20 +110,30 @@ export class AppointmentsService {
     return appointment
   }
 
-  async getAppointmentByUserId(contact_id: string): Promise<AppointmentDocument[]> {
-    const appointments = await this.appointmentModel.find({ contact_id }).exec();
+  async getAppointmentByUserId(
+    contact_id: string,
+  ): Promise<AppointmentDocument[]> {
+    const appointments = await this.appointmentModel.find({ contact_id }).exec()
     if (!appointments || appointments.length === 0) {
-      throw new NotFoundException(`Appointments for User ID "${contact_id}" not found`);
+      throw new NotFoundException(
+        `Appointments for User ID "${contact_id}" not found`,
+      )
     }
-    return appointments;
+    return appointments
   }
 
-  async getAppointmentByDoctorId(doctor_id: string): Promise<AppointmentDocument[]> {
-    const appointments = await this.appointmentModel.find({ 'additional_data.doctor_id':doctor_id }).exec();
+  async getAppointmentByDoctorId(
+    doctor_id: string,
+  ): Promise<AppointmentDocument[]> {
+    const appointments = await this.appointmentModel
+      .find({ 'additional_data.doctor_id': doctor_id })
+      .exec()
     if (!appointments || appointments.length === 0) {
-      throw new NotFoundException(`Appointments for Doctor ID "${doctor_id}" not found`);
+      throw new NotFoundException(
+        `Appointments for Doctor ID "${doctor_id}" not found`,
+      )
     }
-    return appointments;
+    return appointments
   }
 
   async updateAppointment(
@@ -140,7 +153,7 @@ export class AppointmentsService {
 
   async updateStatusAppointment(
     _id: string,
-    field: 'confirmed' | 'cancelled' | 'completed' | 'broken' ,
+    field: 'confirmed' | 'cancelled' | 'completed' | 'broken',
     value: boolean,
   ): Promise<AppointmentDocument> {
     // Validar el campo
@@ -153,7 +166,6 @@ export class AppointmentsService {
     if (!appointment) {
       throw new NotFoundException(`Appointment with ID ${_id} not found`)
     }
-
     // Actualizar el estado
     appointment[field] = value
     return await appointment.save()
