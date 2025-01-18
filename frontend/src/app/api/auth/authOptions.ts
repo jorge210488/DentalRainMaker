@@ -163,19 +163,19 @@ export const authOptions: AuthOptions = {
     async redirect({ url, baseUrl }) {
 
       // Si viene de iniciar sesión, redirige al dashboard
-      if (url === '/patientDashboard') {
-        return '/patientDashboard'
-      }
+      // if (url === '/patientDashboard') {
+      //   return '/patientDashboard'
+      // }
 
-      // Si viene de cerrar sesión, redirige al login
-      if (url === '/login') {
-        return '/login'
-      }
+      // // Si viene de cerrar sesión, redirige al login
+      // if (url === '/login') {
+      //   return '/login'
+      // }
 
-      // Permite redirecciones dentro del dominio base
-      if (url.startsWith(baseUrl)) {
-        return url
-      }
+      // // Permite redirecciones dentro del dominio base
+      // if (url.startsWith(baseUrl)) {
+      //   return url
+      // }
 
       // Redirección predeterminada para otros casos
       return '/patientDashboard'

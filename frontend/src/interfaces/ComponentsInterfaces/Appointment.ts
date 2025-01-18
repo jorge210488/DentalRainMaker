@@ -11,7 +11,7 @@ interface Resource {
     type: string;
     display_name: string;
 }
-
+//HAY QUE CAMBIAR ESTA INTERFACE PARA QUE SEA PROPIA DE LA RESPUESTA DEL BACKEND Y USARLA EN EL FRONTEND
 export interface IAppointment {
     name: string;
     remote_id: string;

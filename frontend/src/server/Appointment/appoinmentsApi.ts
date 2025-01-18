@@ -1,9 +1,10 @@
-export const fetchUserAppointments = async (userId: string) => {
+export const fetchUserAppointments = async (userId: string, token:string) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/user/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
       },
     })
 

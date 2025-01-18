@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Card,
   CardContent,
@@ -7,43 +9,26 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Calendar, Clock, Video } from 'lucide-react'
-import { useEffect, useState } from 'react';
-import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment';
-import { getUserAppointments } from '@/server/User/getUserAppointments';
 
 export function AppointmentList() {
 
-  const [userAppointments, setUserAppointments] = useState<IAppointment[]>([]);
-
-  useEffect(() => {
-    const fetchUserAppointments = async () => {
-      try {
-        const response = await getUserAppointments(session.user.userId, session.user.token);
-        setUserAppointments(response);
-      } catch (error) {
-        console.error("Error fetching user appointments:", error);
-      }
-    };
-    fetchUserAppointments();
-  }, [session, status]);
-  // const appointments = [
-  //   {
-  //     id: 1,
-  //     date: 'March 15, 2024',
-  //     time: '10:00 AM',
-  //     type: 'Regular Checkup',
-  //     doctor: 'Dr. Smith',
-  //     isVirtual: false,
-  //   },
-  //   {
-  //     id: 2,
-  //     date: 'March 28, 2024',
-  //     time: '2:30 PM',
-  //     type: 'Virtual Consultation',
-  //     doctor: 'Dr. Johnson',
-  //     isVirtual: true,
-  //   },
-  // ]
+  const appointments = [
+    {
+      remote_id: 233,
+      date: 'March 28, 2024',
+      time: '2:30 PM',
+      type: 'Virtual Consultation',
+      doctor: 'Dr. Johnson',
+    },
+    {
+      remote_id: 2,
+      date: 'March 28, 2024',
+      time: '2:30 PM',
+      type: 'Virtual Consultation',
+      doctor: 'Dr. Walker',
+  
+    },
+  ]
 
   return (
     <Card>
@@ -55,7 +40,7 @@ export function AppointmentList() {
         <div className='space-y-4'>
           {appointments.map((appointment) => (
             <div
-              key={appointment.id}
+              key={appointment.remote_id}
               className='flex items-center justify-between rounded-lg border p-4'
             >
               <div className='space-y-1'>
