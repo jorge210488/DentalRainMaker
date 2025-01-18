@@ -7,6 +7,8 @@ import {
   Matches,
   Validate,
   ValidateIf,
+  IsArray,
+  IsUUID,
 } from 'class-validator'
 import { MatchPassword } from '../decorators/match.decorator'
 import { ApiProperty } from '@nestjs/swagger'
@@ -130,4 +132,17 @@ export class CreateUserDto {
     example: 'remote_12345',
   })
   remote_id?: string
+
+  @IsOptional()
+  @IsString({ message: 'El clinic_id debe ser una cadena de texto' })
+  @IsUUID(4, { each: true })
+  @ApiProperty({
+    example: [
+      '550e8400-e29b-41d4-a716-446655440000',
+      '550e8400-e29b-41d4-a716-446655440001',
+    ],
+    description: 'Identificador de la clinica en (UUID format)',
+    required: false,
+  })
+  clinic_id: string
 }

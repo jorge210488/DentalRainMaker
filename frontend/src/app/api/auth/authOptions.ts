@@ -161,7 +161,6 @@ export const authOptions: AuthOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-
       // Si viene de iniciar sesión, redirige al dashboard
       if (url === '/patientDashboard') {
         return '/patientDashboard'
@@ -179,7 +178,6 @@ export const authOptions: AuthOptions = {
 
       // Redirección predeterminada para otros casos
       return '/patientDashboard'
-
     },
   },
 }

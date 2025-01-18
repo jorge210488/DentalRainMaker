@@ -10,5 +10,6 @@ import { ClinicsModule } from 'src/clinics/clinics.module'
   imports: [HttpModule, ConfigModule, ClinicsModule],
   providers: [ContactsService, ClinicConfigService],
   controllers: [ContactsController],
+  exports: [ContactsService],
 })
 export class ContactsModule {}

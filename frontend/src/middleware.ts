@@ -24,7 +24,9 @@ export async function middleware(request: NextRequest) {
   }
 
   if (session && pathname === '/login') {
-    return NextResponse.redirect(new URL('/patientDashboard', request.url))
+    return NextResponse.redirect(
+      new URL('/dashboard/patient/home', request.url),
+    )
   }
 
   return NextResponse.next()
