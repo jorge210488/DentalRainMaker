@@ -63,6 +63,7 @@ export const authOptions: AuthOptions = {
           provider: 'google',
           providerId: account.providerAccountId,
           type: 'PATIENT', // Default type
+          clinic_id: 'e532e9e5-5203-4695-9777-3e319943e431',
         }
 
         try {
@@ -161,7 +162,6 @@ export const authOptions: AuthOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-
       // Si viene de iniciar sesión, redirige al dashboard
       if (url === '/patientDashboard') {
         return '/patientDashboard'
@@ -179,7 +179,6 @@ export const authOptions: AuthOptions = {
 
       // Redirección predeterminada para otros casos
       return '/patientDashboard'
-
     },
   },
 }
