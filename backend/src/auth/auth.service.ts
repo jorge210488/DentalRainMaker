@@ -46,18 +46,56 @@ export class AuthService {
     // Verificar si el email ya existe en la clínica
     const contactsResponse = await this.contactsService.getContacts(clinic_id)
 
+    let remoteId: string
+
     if (contactsResponse?.contacts) {
-      const contactExists = contactsResponse.contacts.some(
+      const contactExists = contactsResponse.contacts.find(
         (contact) => contact.primary_email_address === email,
       )
 
       if (contactExists) {
         console.log(
-          `The email ${email} is already registered in clinic ${clinic_id}. Aborting user creation.`,
+          `The email ${email} is already registered in clinic ${clinic_id}. Using existing contact.`,
         )
-        throw new BadRequestException(
-          `Email ${email} is already registered in clinic ${clinic_id}.`,
-        )
+        remoteId = contactExists.remote_id // Usar el remote_id existente
+      } else {
+        // Si no existe, crear el contacto
+        const combinedName =
+          provider === 'local' ? `${given_name} ${family_name}` : name
+
+        const contactData = {
+          name: combinedName,
+          given_name,
+          family_name,
+          email_addresses: [
+            {
+              address: email,
+            },
+          ],
+          type: type || 'PATIENT', // Default to 'PATIENT' if type is not provided
+        }
+
+        try {
+          const contactResponse = await this.contactsService.createContact(
+            clinic_id,
+            contactData,
+          )
+
+          remoteId = contactResponse?.remote_id
+          if (!remoteId) {
+            console.warn(
+              `Contact created in clinic ${clinic_id}, but no remote_id was returned.`,
+            )
+          }
+        } catch (error) {
+          console.error(
+            `Failed to create contact in clinic ${clinic_id}: ${error.message}`,
+          )
+          throw new HttpException(
+            `Failed to create contact in clinic ${clinic_id}.`,
+            HttpStatus.BAD_GATEWAY,
+          )
+        }
       }
     } else {
       console.warn(
@@ -76,48 +114,9 @@ export class AuthService {
 
     // Verificar y asignar el rol correspondiente
     const role = await this.roleModel.findOne({ name: type || 'PATIENT' })
+    console.log('Fetched role:', role)
     if (!role) {
       throw new BadRequestException(`Role ${type || 'PATIENT'} not found.`)
-    }
-
-    const combinedName =
-      provider === 'local' ? `${given_name} ${family_name}` : name
-
-    // Datos del contacto a crear
-    const contactData = {
-      name: combinedName,
-      given_name,
-      family_name,
-      email_addresses: [
-        {
-          address: email,
-        },
-      ],
-      type: type || 'PATIENT', // Default to 'PATIENT' if type is not provided
-    }
-
-    let contactResponse
-    let remoteId: string
-    try {
-      contactResponse = await this.contactsService.createContact(
-        clinic_id,
-        contactData,
-      )
-
-      remoteId = contactResponse?.remote_id
-      if (!remoteId) {
-        console.warn(
-          `Contact created in clinic ${clinic_id}, but no remote_id was returned.`,
-        )
-      }
-    } catch (error) {
-      console.error(
-        `Failed to create contact in clinic ${clinic_id}: ${error.message}`,
-      )
-      throw new HttpException(
-        `Failed to create contact in clinic ${clinic_id}.`,
-        HttpStatus.BAD_GATEWAY,
-      )
     }
 
     // Guardar las credenciales, incluyendo el remote_id
@@ -126,23 +125,24 @@ export class AuthService {
       password: generatedPassword,
       provider,
       providerId,
-      remote_id: remoteId, // Guardar el remote_id retornado
+      remote_id: remoteId, // Usar el remote_id existente o recién creado
       clinic_id,
       type: role._id,
     })
+    console.log('Credential to be saved:', credential)
     await credential.save()
 
     // Enviar correo de bienvenida
     await this.nodemailerService.sendRegistrationEmail(
       email,
       'Welcome to Dental Rain Maker',
-      combinedName,
+      provider === 'local' ? `${given_name} ${family_name}` : name,
       type,
     )
 
     return {
       message: 'User successfully created',
-      contact: contactResponse,
+      contact: remoteId ? { remote_id: remoteId } : null,
       credential: {
         email: credential.email,
         remote_id: credential.remote_id,
@@ -162,7 +162,7 @@ export class AuthService {
       .findOne({ email })
       .populate('type') // Incluye los datos del esquema `Role`
       .exec()
-
+    console.log('Saved credential with populated type:', credential)
     if (!credential) {
       throw new NotFoundException('User not found. Please register first.')
     }
@@ -201,6 +201,7 @@ export class AuthService {
       user_id: credential.remote_id,
       type: credential.type.name,
       email: credential.email,
+      clinic_id: credential.clinic_id,
       views: credential.type.views || [],
     })
 

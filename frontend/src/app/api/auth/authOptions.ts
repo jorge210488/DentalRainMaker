@@ -63,6 +63,7 @@ export const authOptions: AuthOptions = {
           provider: 'google',
           providerId: account.providerAccountId,
           type: 'PATIENT', // Default type
+          clinic_id: 'e532e9e5-5203-4695-9777-3e319943e431',
         }
 
         try {

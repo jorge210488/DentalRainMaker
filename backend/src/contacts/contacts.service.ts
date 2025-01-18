@@ -71,4 +71,33 @@ export class ContactsService {
       )
     }
   }
+
+  async getContactById(clinicId: string, remoteId: string): Promise<any> {
+    try {
+      const { url: baseUrl, headers } = await this.getRequestConfig(clinicId)
+
+      const contactUrl = `${baseUrl}/${remoteId}`
+
+      const response = await lastValueFrom(
+        this.httpService.get(contactUrl, { headers }),
+      )
+
+      if (!response.data) {
+        throw new HttpException('Contact not found.', HttpStatus.NOT_FOUND)
+      }
+
+      return response.data
+    } catch (error) {
+      console.error('Error fetching contact by remote_id:', error)
+
+      if (error.response?.status === 404) {
+        throw new HttpException('Contact not found.', HttpStatus.NOT_FOUND)
+      }
+
+      throw new HttpException(
+        'Failed to fetch contact from Kolla.',
+        HttpStatus.BAD_GATEWAY,
+      )
+    }
+  }
 }

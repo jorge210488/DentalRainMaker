@@ -137,10 +137,7 @@ export class CreateUserDto {
   @IsString({ message: 'El clinic_id debe ser una cadena de texto' })
   @IsUUID(4, { each: true })
   @ApiProperty({
-    example: [
-      '550e8400-e29b-41d4-a716-446655440000',
-      '550e8400-e29b-41d4-a716-446655440001',
-    ],
+    example: 'e532e9e5-5203-4695-9777-3e319943e431',
     description: 'Identificador de la clinica en (UUID format)',
     required: false,
   })
