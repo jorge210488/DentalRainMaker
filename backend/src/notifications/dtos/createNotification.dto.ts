@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsISO8601,
   ValidateNested,
+  IsUUID,
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { NotificationType } from '../enums/notifications.enum'
@@ -111,7 +112,15 @@ export class CreateNotificationDto {
     description: 'ID del usuario al que pertenece la notificación',
   })
   @IsString()
-  userId: string
+  remote_id: string
+
+  @IsString({ message: 'El clinic_id debe ser una cadena de texto' })
+  @IsUUID(4, { each: true })
+  @ApiProperty({
+    example: 'e532e9e5-5203-4695-9777-3e319943e431',
+    description: 'Identificador de la clinica en (UUID format)',
+  })
+  clinic_id: string
 
   @ApiProperty({
     type: NotificationDataDto,
