@@ -7,6 +7,7 @@ declare module 'next-auth' {
     user_id?: string // ID único del usuario
     user_type?: string // Tipo de usuario (e.g., PATIENT)
     user_views?: string[] // Vistas asociadas al usuario
+    user_clinicId?: string // ID único de la clinica del usuario
   }
 
   // Interfaz para el token JWT
@@ -21,6 +22,7 @@ declare module 'next-auth' {
     given_name?: string // Nombre de pila
     family_name?: string // Apellido
     views?: string[] // Vistas asociadas al usuario
+    clinicId?: string // ID único de la clinica del usuario
   }
 
   // Interfaz para la sesión
@@ -36,6 +38,7 @@ declare module 'next-auth' {
       given_name?: string // Nombre de pila
       family_name?: string // Apellido
       views?: string[] // Vistas asociadas al usuario
+      clinicId?: string // ID único de la clinica del usuario
     }
   }
 

@@ -51,12 +51,12 @@ export class TasksService {
         const incompleteProfiles = contacts.filter((contact) => {
           return (
             !contact.addresses ||
-            contact.addresses.length === 0 || // Si no tiene direcciones
+            contact.addresses.length === 0 ||
             !contact.phone_numbers ||
-            contact.phone_numbers.length === 0 || // Si no tiene números de teléfono
-            !contact.gender || // Si falta el género
-            !contact.birth_date || // Si falta la fecha de nacimiento
-            !contact.additional_data?.ImageFolder // Si falta la imagen en los datos adicionales
+            contact.phone_numbers.length === 0 ||
+            !contact.gender ||
+            !contact.birth_date ||
+            !contact.additional_data?.ImageFolder
           )
         })
 
