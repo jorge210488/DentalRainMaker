@@ -104,17 +104,24 @@ export const authOptions: AuthOptions = {
           }
 
           const data = await response.json()
+          // Decodificar el token
+          const decodedToken = jwt.decode(data.token) as jwt.JwtPayload | null
 
-          const decodedToken = jwt.decode(data.token)
+          if (!decodedToken || typeof decodedToken !== 'object') {
+            throw new Error(
+              'Failed to decode token or token is not a valid object',
+            )
+          }
 
           console.log('Decoded Token:', decodedToken)
 
           account.id_token = data.token
-          account.user_id = data.userId
-          account.user_type = data.type
-          account.user_views = data.views
+          account.user_id = decodedToken.user_id
+          account.user_type = decodedToken.type
+          account.user_views = decodedToken.views
+          account.user_clinicId = decodedToken.clinic_id
 
-          console.log('User signed in successfully', data)
+          console.log('User signed in successfully', decodedToken)
         } catch (error) {
           console.error('Sign-in failed or Firebase token save failed', error)
           return false // Prevent sign-in
@@ -130,6 +137,7 @@ export const authOptions: AuthOptions = {
         token.userId = user?.user_id
         token.type = user?.user_type
         token.views = user?.user_views
+        token.clinicId = user?.user_clinicId
       }
 
       if (account && account.provider === 'google') {
@@ -138,6 +146,7 @@ export const authOptions: AuthOptions = {
         token.userId = account.user_id
         token.type = account.user_type
         token.views = account.user_views
+        token.clinicId = account.user_clinicId
       }
 
       if (profile) {
@@ -162,6 +171,7 @@ export const authOptions: AuthOptions = {
         session.user.userId = token.userId as string
         session.user.type = token.type as string
         session.user.views = token.views as string[]
+        session.user.clinicId = token.clinicId as string
       }
 
       return session

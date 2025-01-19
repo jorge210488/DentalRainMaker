@@ -152,9 +152,7 @@ export class AuthService {
   }
 
   // Método para iniciar sesión
-  async signin(
-    userData: LoginUserDto,
-  ): Promise<{ token: string; userId: string; type: string; views: string[] }> {
+  async signin(userData: LoginUserDto): Promise<{ token: string }> {
     const { email, provider, providerId, password } = userData
 
     // Busca las credenciales
@@ -207,9 +205,6 @@ export class AuthService {
 
     return {
       token,
-      userId: credential.remote_id,
-      type: credential.type.name,
-      views: credential.type.views || [],
     }
   }
 }

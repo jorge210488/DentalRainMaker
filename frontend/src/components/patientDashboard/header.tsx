@@ -32,6 +32,7 @@ export default function Header() {
       console.log('User ID:', session?.user?.userId)
       console.log('User Type:', session?.user?.type)
       console.log('User Views:', session?.user?.views)
+      console.log('Clinic ID:', session?.user?.clinicId)
     } else if (status === 'unauthenticated') {
       console.log('No session available')
     } else if (status === 'loading') {
