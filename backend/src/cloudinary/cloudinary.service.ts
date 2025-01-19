@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common'
 import { UploadApiResponse, v2 } from 'cloudinary'
 import * as toStream from 'buffer-to-stream'
-import { User, UserDocument } from '../users/schemas/user.schema'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { CloudinaryDto } from './dto/cloudinary.dto'

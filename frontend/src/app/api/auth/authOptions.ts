@@ -1,6 +1,7 @@
 import type { AuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import jwt from 'jsonwebtoken'
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -63,7 +64,7 @@ export const authOptions: AuthOptions = {
           provider: 'google',
           providerId: account.providerAccountId,
           type: 'PATIENT', // Default type
-          clinic_id: 'e532e9e5-5203-4695-9777-3e319943e431',
+          clinic_id: 'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
         }
 
         try {
@@ -103,6 +104,10 @@ export const authOptions: AuthOptions = {
           }
 
           const data = await response.json()
+
+          const decodedToken = jwt.decode(data.token)
+
+          console.log('Decoded Token:', decodedToken)
 
           account.id_token = data.token
           account.user_id = data.userId
