@@ -13,12 +13,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { DashboardShell } from '@/components/patientDashboard/dashboard-shell'
-import EditProfileForm from '@/components/patientDashboard/formsPatientProfile/editProfileForm'
+import {
+  EditProfileForm,
+  AddPhone,
+} from '@/components/patientDashboard/formsPatientProfile'
 import { Separator } from '@/components/ui/separator'
 import { useForm } from 'react-hook-form'
 import { Building2, Mail, MapPin, Phone, Plus } from 'lucide-react'
 
-interface Address {
+export interface Address {
   street?: string
   city?: string
   state?: string
@@ -44,9 +47,9 @@ const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
 
 export default function PatientProfile() {
   const [isEditing, setIsEditing] = useState(false)
-  const [isAdding, setIsAdding] = useState(false)
-  const [isAddingEmail, setIsAddingEmail] = useState(false)
-  const [isAddingAddress, setIsAddingAddress] = useState(false)
+  const [phoneOpen, setPhoneOpen] = useState(false)
+  const [emailOpen, setEmailOpen] = useState(false)
+  const [addressOpen, setAddressOpen] = useState(false)
 
   const formEdit = useForm<PatientProfile>()
 
@@ -108,18 +111,13 @@ export default function PatientProfile() {
                 <CardTitle className='text-base font-semibold'>
                   Contact Phone Numbers
                 </CardTitle>
-                <Dialog open={isAdding} onOpenChange={setIsAdding}>
+                <Dialog open={} onOpenChange={}>
                   <DialogTrigger asChild>
                     <Button variant='ghost' size='icon'>
                       <Plus className='h-4 w-4' />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className='max-w-2xl'>
-                    <DialogHeader>
-                      <DialogTitle>Add phone numbers</DialogTitle>
-                    </DialogHeader>
-                    <AddPhone />
-                  </DialogContent>
+                  <AddPhone />
                 </Dialog>
               </CardHeader>
               <CardContent>
@@ -159,17 +157,6 @@ export default function PatientProfile() {
         </div>
       </div>
     </DashboardShell>
-  )
-}
-
-function AddPhone() {
-  return (
-    <form>
-      <fieldset>
-        <legend>Input here the phone number you want to add</legend>
-        <input onInput={handleInput} />
-      </fieldset>
-    </form>
   )
 }
 
