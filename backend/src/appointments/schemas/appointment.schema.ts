@@ -1,9 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Schema as MongooseSchema } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
-import { User } from 'src/users/schemas/user.schema'
-import { AppointmentType } from 'src/appointmentsType/schemas/appointmentType.schema'
-import { Clinic } from 'src/clinics/schemas/clinic.schema'
 
 export type AppointmentDocument = Appointment & Document
 
@@ -17,9 +14,9 @@ export class Appointment {
 
   @Prop({
     type: String,
-    required: true,
+    required: false,
   })
-  name: string
+  name?: string
 
   @Prop({
     type: String,
@@ -60,9 +57,9 @@ export class Appointment {
 
   @Prop({
     type: Date,
-    required: true,
+    required: false,
   })
-  end_time: Date
+  end_time?: Date
 
   @Prop({
     type: Date,
@@ -153,40 +150,16 @@ export class Appointment {
   broken: boolean
 
   @Prop({
-    type: Boolean,
-    required: false,
-    default: false,
-  })
-  pending: boolean
-
-  @Prop({
-    type: Boolean,
-    required: false,
-    default: false,
-  })
-  paid: boolean
-
-  // Relación con el esquema User
-  @Prop({
-    type: String,
-    ref: 'User',
-    required: true,
-  })
-  doctor_id: string
-
-  // Relación con el esquema Clinic
-  @Prop({
-    type: String,
-    ref: 'Clinic',
-    required: true,
-  })
-  clinic_id: string
-
-  @Prop({
     type: Object,
     required: false,
   })
-  additional_data?: Object
+  additional_data?: {
+    doctor_id: string
+    doctor_name: string
+    clinic_id: string
+    clinic_name: string
+    paid: boolean
+  }
 }
 
 export const AppointmentSchema = SchemaFactory.createForClass(Appointment)

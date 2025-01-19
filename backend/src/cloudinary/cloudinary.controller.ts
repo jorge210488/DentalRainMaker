@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
   Body,
+  Query,
 } from '@nestjs/common'
 import { CloudinaryService } from './cloudinary.service'
 import { FileInterceptor } from '@nestjs/platform-express'
@@ -23,6 +24,7 @@ import {
   ApiConsumes,
   ApiParam,
   ApiTags,
+  ApiQuery,
 } from '@nestjs/swagger'
 import { CloudinaryDto } from './dto/cloudinary.dto'
 
@@ -34,11 +36,18 @@ export class CloudinaryController {
   constructor(private readonly cloudinaryService: CloudinaryService) {}
 
   @Permissions('ALL_ACCESS', 'UPDATE_USER')
-  @Post('/files/uploadImage/:id')
+  @Post('/files/uploadImage')
   @UseInterceptors(FileInterceptor('image'))
-  @ApiParam({
-    name: 'id',
-    description: 'ID del recurso al cual asociar la imagen',
+  @ApiQuery({
+    name: 'clinicId',
+    description: 'ID de la clínica asociada al contacto',
+    required: true,
+    type: 'string',
+  })
+  @ApiQuery({
+    name: 'remoteId',
+    description: 'Remote ID del contacto asociado',
+    required: true,
     type: 'string',
   })
   @ApiConsumes('multipart/form-data')
@@ -57,7 +66,8 @@ export class CloudinaryController {
     },
   })
   async uploadImg(
-    @Param('id', new ParseUUIDPipe()) id: string, // Valida que el ID sea un UUID válido
+    @Query('clinicId') clinicId: string, // Obtenemos clinic_id por query
+    @Query('remoteId') remoteId: string, // Obtenemos remote_id por query
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -72,9 +82,8 @@ export class CloudinaryController {
       }),
     )
     file: Express.Multer.File,
-    @Body() dto: CloudinaryDto,
   ) {
-    return this.cloudinaryService.uploadImage(id, file, dto)
+    return this.cloudinaryService.uploadImage(clinicId, remoteId, file)
   }
 
   @Permissions('ALL_ACCESS')

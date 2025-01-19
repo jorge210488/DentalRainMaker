@@ -3,14 +3,14 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/components/userDashboard/ui/card'
+} from '@/components/patientDashboard/ui/card'
 import { Users, DollarSign, Calendar, TrendingUp } from 'lucide-react'
-import { StatsCard } from '@/components/userDashboard/stats-card'
-import { AppointmentsList } from '@/components/userDashboard/appointments-list'
-import { RevenueChart } from '@/components/userDashboard/revenue-chart'
-import { AgeDistribution } from '@/components/userDashboard/age-distribution'
-import { PredictiveAnalytics } from '@/components/userDashboard/predictive-analytics'
-import { MarketingMetrics } from '@/components/userDashboard/marketing-metrics'
+import { StatsCard } from '@/components/patientDashboard/stats-card'
+import { AppointmentsList } from '@/components/patientDashboard/appointments-list'
+import { RevenueChart } from '@/components/patientDashboard/revenue-chart'
+import { AgeDistribution } from '@/components/patientDashboard/age-distribution'
+import { PredictiveAnalytics } from '@/components/patientDashboard/predictive-analytics'
+import { MarketingMetrics } from '@/components/patientDashboard/marketing-metrics'
 
 export default function DashboardPage() {
   return (

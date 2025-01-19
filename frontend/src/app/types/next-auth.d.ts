@@ -47,4 +47,19 @@ declare module 'next-auth' {
     name?: string // Nombre completo
     picture?: string // URL de la imagen del perfil
   }
+
+  interface Account {
+    provider: string
+    type: string
+    providerAccountId: string
+    access_token?: string
+    expires_at?: number
+    refresh_token?: string
+    id_token?: string
+    oauth_token?: string
+    oauth_token_secret?: string
+    state?: {
+      clinicId?: string
+    }
+  }
 }

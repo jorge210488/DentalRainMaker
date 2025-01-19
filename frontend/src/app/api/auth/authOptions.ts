@@ -53,7 +53,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ account, profile }) {
       if (account && profile) {
         const userPayload = {
           name: profile.name,
@@ -63,6 +63,7 @@ export const authOptions: AuthOptions = {
           provider: 'google',
           providerId: account.providerAccountId,
           type: 'PATIENT', // Default type
+          clinic_id: 'e532e9e5-5203-4695-9777-3e319943e431',
         }
 
         try {
@@ -76,7 +77,7 @@ export const authOptions: AuthOptions = {
 
           console.log('User registered successfully')
         } catch (err) {
-          console.error('User already registered or registration failed')
+          console.error('User already registered or registration failed', err)
         }
 
         try {
@@ -110,7 +111,7 @@ export const authOptions: AuthOptions = {
 
           console.log('User signed in successfully', data)
         } catch (error) {
-          console.error('Sign-in failed or Firebase token save failed')
+          console.error('Sign-in failed or Firebase token save failed', error)
           return false // Prevent sign-in
         }
       }
@@ -161,7 +162,23 @@ export const authOptions: AuthOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-      return '/dashboard/patient/home'
+      // Si viene de iniciar sesión, redirige al dashboard
+      if (url === '/patientDashboard') {
+        return '/patientDashboard'
+      }
+
+      // Si viene de cerrar sesión, redirige al login
+      if (url === '/login') {
+        return '/login'
+      }
+
+      // Permite redirecciones dentro del dominio base
+      if (url.startsWith(baseUrl)) {
+        return url
+      }
+
+      // Redirección predeterminada para otros casos
+      return '/patientDashboard'
     },
   },
 }

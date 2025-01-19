@@ -17,6 +17,7 @@ export class AuthController {
   async signup(
     @Body() createUserDto: CreateUserDto,
   ): Promise<{ message: string; user: UserDocument }> {
+    console.log('Data received from frontend (signup):', createUserDto)
     const user = await this.authService.signup(createUserDto)
 
     return {
