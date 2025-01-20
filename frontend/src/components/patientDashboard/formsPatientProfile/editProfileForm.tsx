@@ -3,18 +3,47 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { PatientProfile } from '@/app/patientDashboard/profile/page'
+import { DialogHeader } from '@/components/ui/dialog'
+import { DialogTitle } from '@radix-ui/react-dialog'
+import { Dispatch, SetStateAction } from 'react'
 
-export default function EditProfileForm({ onClose }: { onClose: () => void }) {
-  const { register, formState, handleSubmit } = useForm<PatientProfile>()
+interface EmailFormProps {
+  isEditing: boolean
+  setIsEditing: Dispatch<SetStateAction<boolean>>
+  patientInfo: PatientProfile
+}
+
+export default function EditProfileForm({
+  isEditing,
+  setIsEditing,
+  patientInfo,
+}: EmailFormProps) {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    clearErrors,
+  } = useForm<PatientProfile>()
+
+  const onSubmit: SubmitHandler<PatientProfile> = (data) => {
+    console.log(data)
+  }
 
   return (
-    <form className='grid gap-4 py-4'>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='grid gap-4 py-4 font-sans'
+    >
+      <DialogHeader className='text-center text-[150%] font-bold'>
+        <DialogTitle>Edit Patient Information</DialogTitle>
+      </DialogHeader>
       <div className='grid gap-2'>
         <Label htmlFor='given_name'>Given Name</Label>
         <Input
           id='given_name'
           defaultValue=''
           {...register('given_name', {
+            required: 'Given name is required',
             minLength: {
               value: 3,
               message: 'Family name should be at least 3 characters long',
@@ -25,6 +54,11 @@ export default function EditProfileForm({ onClose }: { onClose: () => void }) {
             },
           })}
         />
+        {errors.given_name && (
+          <span className='text-sm text-red-500'>
+            {errors.given_name.message}
+          </span>
+        )}
       </div>
       <div className='grid gap-2'>
         <Label htmlFor='family_name'>Family Name</Label>
@@ -32,6 +66,7 @@ export default function EditProfileForm({ onClose }: { onClose: () => void }) {
           id='family_name'
           defaultValue=''
           {...register('family_name', {
+            required: 'Family name is required',
             minLength: {
               value: 3,
               message: 'Family name should be at least 3 characters long',
@@ -42,6 +77,11 @@ export default function EditProfileForm({ onClose }: { onClose: () => void }) {
             },
           })}
         />
+        {errors.family_name && (
+          <span className='text-sm text-red-500'>
+            {errors.family_name.message}
+          </span>
+        )}
       </div>
       <div className='grid gap-2'>
         <Label htmlFor='email'>Primary Email</Label>
@@ -50,15 +90,28 @@ export default function EditProfileForm({ onClose }: { onClose: () => void }) {
           type='email'
           defaultValue=''
           {...register('primary_email_address', {
+            required: 'Email is required',
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: 'An email address is expected to be input here',
+              message: 'Invalid email format',
             },
           })}
         />
+        {errors.primary_email_address && (
+          <span className='text-sm text-red-500'>
+            {errors.primary_email_address.message}
+          </span>
+        )}
       </div>
       <div className='flex justify-end gap-2'>
-        <Button variant='outline' type='button' onClick={onClose}>
+        <Button
+          variant='outline'
+          type='button'
+          onClick={() => {
+            clearErrors()
+            setIsEditing(!isEditing)
+          }}
+        >
           Cancel
         </Button>
         <Button type='submit'>Save Changes</Button>

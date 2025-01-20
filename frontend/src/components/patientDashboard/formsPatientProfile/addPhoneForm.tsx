@@ -1,6 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
+import { Dispatch, SetStateAction } from 'react'
 import {
   DialogContent,
   DialogHeader,
@@ -13,13 +14,13 @@ import { Label } from '@/components/ui/label'
 import { PatientProfile } from '@/app/patientDashboard/profile/page'
 
 interface PhoneDialogProps {
-  isOpen: boolean
-  setPhoneOpen: boolean
+  phoneOpen: boolean
+  setPhoneOpen: Dispatch<SetStateAction<boolean>>
   patientInfo: PatientProfile
 }
 
 export function AddPhone({
-  isOpen,
+  phoneOpen,
   setPhoneOpen,
   patientInfo,
 }: PhoneDialogProps) {
@@ -34,9 +35,9 @@ export function AddPhone({
   })
 
   return (
-    <DialogContent className='sm:max-w-[425px]'>
+    <DialogContent className='font-sans sm:max-w-[425px]'>
       <DialogHeader>
-        <DialogTitle>Add Phone Number</DialogTitle>
+        <DialogTitle className='font-bold'>Add Phone Number</DialogTitle>
       </DialogHeader>
       <form onSubmit={onSubmitForm}>
         <div className='grid gap-4 py-4'>
@@ -59,7 +60,11 @@ export function AddPhone({
           </div>
         </div>
         <DialogFooter>
-          <Button type='button' variant='outline' onClick={onClose}>
+          <Button
+            type='button'
+            variant='outline'
+            onClick={() => setPhoneOpen(!phoneOpen)}
+          >
             Cancel
           </Button>
           <Button type='submit'>Add Phone</Button>

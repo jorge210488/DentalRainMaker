@@ -58,13 +58,19 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className='flex min-h-screen w-full'>
+    <div className='flex min-h-screen w-full font-sans'>
       {/* Left side - Form */}
       <div className='flex-1 p-8 lg:p-12'>
         <div className='mx-auto max-w-md space-y-6'>
           <div className='space-y-2 text-center'>
             <h1 className='text-2xl font-bold tracking-tight'>
-              Welcome to Dental Rain Maker
+              Welcome to{' '}
+              <div className='flex flex-row items-center justify-center space-x-2 pt-2'>
+                <div className='h-8 w-9 items-center justify-center space-x-2 rounded-lg bg-blue-600'>
+                  <span className='p-4 text-xl font-bold text-white'>D</span>
+                </div>
+                <span className='text-xl font-bold'>DentalRainMaker</span>
+              </div>
             </h1>
           </div>
 

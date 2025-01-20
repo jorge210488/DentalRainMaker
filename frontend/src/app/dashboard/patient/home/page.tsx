@@ -14,7 +14,7 @@ import { MarketingMetrics } from '@/components/userDashboard/marketing-metrics'
 
 export default function DashboardPage() {
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 font-sans'>
       <div>
         <h2 className='text-2xl font-bold tracking-tight text-black'>
           Practice Overview

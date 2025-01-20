@@ -5,21 +5,17 @@ import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { DashboardShell } from '@/components/patientDashboard/dashboard-shell'
 import {
   EditProfileForm,
   AddPhone,
+  AddEmail,
+  AddAddress,
 } from '@/components/patientDashboard/formsPatientProfile'
 import { Separator } from '@/components/ui/separator'
 import { useForm } from 'react-hook-form'
-import { Building2, Mail, MapPin, Phone, Plus } from 'lucide-react'
+import { Icon, Mail, MapPin, Phone, Plus } from 'lucide-react'
 
 export interface Address {
   street?: string
@@ -55,7 +51,7 @@ export default function PatientProfile() {
 
   return (
     <DashboardShell>
-      <div className='container mx-auto max-w-4xl py-6'>
+      <div className='container mx-auto max-w-4xl py-6 font-sans'>
         <div className='mb-6 flex items-center justify-between'>
           <div>
             <h1 className='text-3xl font-bold tracking-tight'>
@@ -70,10 +66,11 @@ export default function PatientProfile() {
               <Button>Edit Profile</Button>
             </DialogTrigger>
             <DialogContent className='max-w-2xl'>
-              <DialogHeader>
-                <DialogTitle>Edit Patient Information</DialogTitle>
-              </DialogHeader>
-              <EditProfileForm onClose={() => setIsEditing(false)} />
+              <EditProfileForm
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
+                patientInfo={PatientProfile}
+              />
             </DialogContent>
           </Dialog>
         </div>
@@ -108,35 +105,67 @@ export default function PatientProfile() {
           <div className='grid gap-6 md:grid-cols-2'>
             <Card>
               <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-base font-semibold'>
-                  Contact Phone Numbers
-                </CardTitle>
-                <Dialog open={} onOpenChange={}>
+                <div className='flex w-full flex-row items-center justify-between'>
+                  <div className='flex items-center'>
+                    <div className='bg-muted pt-0.8 rounded-full'>
+                      <Phone className='text-muted-foreground h-4 w-4' />
+                    </div>
+                    <CardTitle className='ml-3 text-base font-semibold'>
+                      Contact Phone Numbers
+                    </CardTitle>
+                  </div>
+                </div>
+                <Dialog
+                  open={phoneOpen}
+                  onOpenChange={() => setPhoneOpen(!phoneOpen)}
+                >
                   <DialogTrigger asChild>
                     <Button variant='ghost' size='icon'>
                       <Plus className='h-4 w-4' />
                     </Button>
                   </DialogTrigger>
-                  <AddPhone />
+                  <AddPhone
+                    phoneOpen={phoneOpen}
+                    patientInfo={PatientProfile}
+                    setPhoneOpen={setPhoneOpen}
+                  />
                 </Dialog>
               </CardHeader>
               <CardContent>
-                <EmptyState icon={Phone} text='No phone numbers added' />
+                <EmptyState text='No phone numbers added' />
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-base font-semibold'>
-                  Email Addresses
-                </CardTitle>
-
-                <Button variant='ghost' size='icon'>
-                  <Plus className='h-4 w-4' />
-                </Button>
+                <div className='flex w-full flex-row items-center justify-between'>
+                  <div className='flex items-center'>
+                    <div className='bg-muted pt-0.8 rounded-full'>
+                      <Mail className='text-muted-foreground h-4 w-4' />
+                    </div>
+                    <CardTitle className='ml-3 text-base font-semibold'>
+                      Email Addresses
+                    </CardTitle>
+                  </div>
+                </div>
+                <Dialog
+                  open={emailOpen}
+                  onOpenChange={() => setEmailOpen(!emailOpen)}
+                >
+                  <DialogTrigger asChild>
+                    <Button variant='ghost' size='icon'>
+                      <Plus className='h-4 w-4' />
+                    </Button>
+                  </DialogTrigger>
+                  <AddEmail
+                    emailOpen={emailOpen}
+                    patientInfo={PatientProfile}
+                    setEmailOpen={setEmailOpen}
+                  />
+                </Dialog>
               </CardHeader>
               <CardContent>
-                <EmptyState icon={Mail} text='No additional emails added' />
+                <EmptyState text='No additional emails added' />
               </CardContent>
             </Card>
 
@@ -145,12 +174,24 @@ export default function PatientProfile() {
                 <CardTitle className='text-base font-semibold'>
                   Addresses
                 </CardTitle>
-                <Button variant='ghost' size='icon'>
-                  <Plus className='h-4 w-4' />
-                </Button>
+                <Dialog
+                  open={addressOpen}
+                  onOpenChange={() => setAddressOpen(!addressOpen)}
+                >
+                  <DialogTrigger asChild>
+                    <Button variant='ghost' size='icon'>
+                      <Plus className='h-4 w-4' />
+                    </Button>
+                  </DialogTrigger>
+                  <AddAddress
+                    addressOpen={addressOpen}
+                    patientInfo={PatientProfile}
+                    setAddressOpen={setAddressOpen}
+                  />
+                </Dialog>
               </CardHeader>
               <CardContent>
-                <EmptyState icon={MapPin} text='No addresses added' />
+                <EmptyState text='No addresses added' />
               </CardContent>
             </Card>
           </div>
@@ -160,12 +201,9 @@ export default function PatientProfile() {
   )
 }
 
-function EmptyState({ icon: Icon, text }: { icon: any; text: string }) {
+function EmptyState({ text }: { text: string }) {
   return (
     <div className='flex flex-col items-center justify-center py-8 text-center'>
-      <div className='bg-muted mb-3 rounded-full p-3'>
-        <Icon className='text-muted-foreground h-6 w-6' />
-      </div>
       <p className='text-muted-foreground text-sm'>{text}</p>
     </div>
   )

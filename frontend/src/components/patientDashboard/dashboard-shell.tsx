@@ -53,12 +53,15 @@ export function DashboardShell({ children, className }: DashboardShellProps) {
   ]
 
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex min-h-screen font-sans'>
       {/* Sidebar para desktop */}
-      <aside className='hidden w-64 border-r bg-[#6B8FB2] text-white lg:block'>
+      <aside className='hidden w-64 border-r bg-blue-600 text-white lg:block'>
         <div className='flex h-full flex-col'>
-          <div className='px-6 py-4'>
-            <h2 className='text-lg font-semibold'>Dental Rain Maker</h2>
+          <div className='flex flex-row items-center justify-center space-x-2 pt-2'>
+            <div className='h-8 w-9 items-center justify-center space-x-2 rounded-lg bg-white'>
+              <span className='p-4 text-xl font-bold text-blue-600'>D</span>
+            </div>
+            <span className='text-xl font-bold'>DentalRainMaker</span>
           </div>
           <nav className='flex-1 space-y-1 px-3 py-4'>
             {routes.map((route) => (
@@ -87,10 +90,16 @@ export function DashboardShell({ children, className }: DashboardShellProps) {
             <Menu className='h-6 w-6' />
           </Button>
         </SheetTrigger>
-        <SheetContent side='left' className='w-64 bg-[#6B8FB2] p-0 text-white'>
+        <SheetContent
+          side='left'
+          className='w-64 bg-blue-600 p-0 font-sans text-white'
+        >
           <div className='flex h-full flex-col'>
-            <div className='px-6 py-4'>
-              <h2 className='text-lg font-semibold'>DentalCare</h2>
+            <div className='flex flex-row items-center justify-center space-x-2 pt-2'>
+              <div className='h-8 w-9 items-center justify-center space-x-2 rounded-lg bg-white'>
+                <span className='p-4 text-xl font-bold text-blue-600'>D</span>
+              </div>
+              <span className='text-xl font-bold'>DentalRainMaker</span>
             </div>
             <nav className='flex-1 space-y-1 px-3 py-4'>
               {routes.map((route) => (
