@@ -15,5 +15,27 @@
       "UPDATE_APPOINTMENT"
     ],
     "views": ["USER_PROFILE", "USER_APPOINTMENTS"]
+  },
+  {
+    "name": "EMPLOYEER",
+    "permissions": [
+      "UPDATE_USER",
+      "DELETE_USER",
+      "READ_OWN_USER",
+      "READ_OWN_APPOINTMENT",
+      "CREATE_APPOINTMENT",
+      "UPDATE_APPOINTMENT"
+    ],
+    "views": ["USER_PROFILE", "USER_APPOINTMENTS"]
+  },
+  {
+    "name": "VENDOR",
+    "permissions": ["UPDATE_USER", "DELETE_USER", "READ_OWN_USER"],
+    "views": ["USER_PROFILE"]
+  },
+  {
+    "name": "OTHER",
+    "permissions": ["UPDATE_USER", "DELETE_USER", "READ_OWN_USER"],
+    "views": ["USER_PROFILE"]
   }
 ]

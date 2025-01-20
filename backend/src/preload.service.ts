@@ -40,12 +40,12 @@ export class PreloadService implements OnModuleInit {
       this.logger.log('Clinics preload completed.')
 
       // Preload Auth Users
-      await this.authService.preloadUsers()
-      this.logger.log('Auth users preload completed.')
+      // await this.authService.preloadUsers()
+      // this.logger.log('Auth users preload completed.')
 
       // Preload Updated Users
-      await this.usersService.preloadUpdateUsers()
-      this.logger.log('Updated users preload completed.')
+      // await this.usersService.preloadUpdateUsers()
+      // this.logger.log('Updated users preload completed.')
     } catch (error) {
       this.logger.error('Error during preload process:', error.message)
     }

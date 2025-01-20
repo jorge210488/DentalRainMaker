@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsISO8601,
   ValidateNested,
+  IsUUID,
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { NotificationType } from '../enums/notifications.enum'
@@ -28,7 +29,7 @@ class NotificationContentDto {
 
   @ApiPropertyOptional({
     example:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJc18Ihn9RZ_3II5khLLon39Sydu880MovUQ&s',
+      'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png',
     description: 'Imagen a mostrar en la notificación (opcional)',
   })
   @IsString()
@@ -107,11 +108,19 @@ export class CreateNotificationDto {
   notification: NotificationContentDto
 
   @ApiProperty({
-    example: '12345',
+    example: '804',
     description: 'ID del usuario al que pertenece la notificación',
   })
   @IsString()
-  userId: string
+  remote_id: string
+
+  @IsString({ message: 'El clinic_id debe ser una cadena de texto' })
+  @IsUUID(4, { each: true })
+  @ApiProperty({
+    example: 'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
+    description: 'Identificador de la clinica en (UUID format)',
+  })
+  clinic_id: string
 
   @ApiProperty({
     type: NotificationDataDto,

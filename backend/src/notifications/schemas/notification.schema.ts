@@ -11,8 +11,17 @@ export class Notification extends Document {
   })
   _id: string
 
-  @Prop({ type: String, required: true })
-  userId: string
+  @Prop({
+    type: String,
+    required: true,
+  })
+  remote_id: string
+
+  @Prop({
+    type: String,
+    required: true,
+  })
+  clinic_id: string
 
   @Prop({
     type: Object,
@@ -55,9 +64,3 @@ export class Notification extends Document {
 }
 
 export const NotificationSchema = SchemaFactory.createForClass(Notification)
-
-// Índice único para evitar duplicados
-NotificationSchema.index(
-  { userId: 1, 'data.type': 1, 'notification.title': 1 },
-  { unique: true },
-)

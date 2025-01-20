@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 import { hashPasswordMiddleware } from '../middlewares/hash-password.middleware'
+import { Document, Schema as MongooseSchema } from 'mongoose'
+import { Role } from '../../roles/schemas/role.schema'
 
 export type CredentialDocument = Credential & Document
 
@@ -34,6 +35,25 @@ export class Credential {
     },
   })
   providerId: string
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  remote_id?: string
+
+  @Prop({
+    type: String,
+    required: true,
+  })
+  clinic_id: string
+
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Role',
+    required: true,
+  })
+  type: Role
 }
 
 export const CredentialSchema = SchemaFactory.createForClass(Credential)

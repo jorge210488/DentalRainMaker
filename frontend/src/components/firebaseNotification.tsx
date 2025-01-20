@@ -85,11 +85,16 @@ const FirebaseNotification = () => {
         if (token) {
           console.log('Token de Firebase obtenido:', token)
 
-          if (session?.user?.userId && session?.user?.token) {
+          if (
+            session?.user?.userId &&
+            session?.user?.token &&
+            session?.user?.clinicId
+          ) {
             await saveFirebaseTokenToServer(
               session.user.userId,
               token,
-              session.user.token,
+              session.user.clinicId,
+              session.user.token, //Bearer token
             )
           } else {
             console.error(

@@ -8,15 +8,19 @@ import { JwtService } from '@nestjs/jwt'
 import { Reflector } from '@nestjs/core'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
-import { User, UserDocument } from '../users/schemas/user.schema'
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
+import {
+  Credential,
+  CredentialDocument,
+} from '../auth/schemas/credential.schema'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector, // Agregado para manejar metadata
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @InjectModel(Credential.name)
+    private readonly credentialModel: Model<CredentialDocument>,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -55,23 +59,24 @@ export class AuthGuard implements CanActivate {
 
       if (payload) {
         console.log('AuthGuard: Token is valid')
-        const user = await this.userModel
-          .findById(payload.user_id)
-          .populate('type')
+        const credential = await this.credentialModel
+          .findById(payload.sub)
+          .populate('type') // Incluye el rol asociado
           .exec()
 
-        if (!user) {
-          throw new UnauthorizedException('User not found')
+        if (!credential) {
+          throw new UnauthorizedException('Credential not found')
         }
 
         console.log(
-          `AuthGuard: Payload - User ID: ${user._id}, Role: ${user.type.name}`,
+          `AuthGuard: Credential found - ID: ${credential._id}, Role: ${credential.type.name}`,
         )
+
         request.user = {
           ...payload,
-          user_id: user._id,
-          role: user.type.name,
-          permissions: user.type.permissions || [],
+          credential_id: credential._id,
+          role: credential.type.name,
+          permissions: credential.type.permissions || [],
         }
 
         return true

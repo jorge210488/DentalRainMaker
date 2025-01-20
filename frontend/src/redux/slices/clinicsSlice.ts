@@ -8,10 +8,12 @@ interface Clinic {
 
 interface ClinicsState {
   clinics: Clinic[]
+  selectedClinicId: string | null // Nueva propiedad para almacenar el ID de la clínica seleccionada
 }
 
 const initialState: ClinicsState = {
   clinics: [],
+  selectedClinicId: null, // Inicializar con null
 }
 
 const clinicsSlice = createSlice({
@@ -40,6 +42,12 @@ const clinicsSlice = createSlice({
         state.clinics[index] = action.payload
       }
     },
+    setSelectedClinic(state, action: PayloadAction<string>) {
+      state.selectedClinicId = action.payload // Establecer el ID de la clínica seleccionada
+    },
+    clearSelectedClinic(state) {
+      state.selectedClinicId = null // Limpiar la clínica seleccionada
+    },
   },
 })
 
@@ -49,6 +57,8 @@ export const {
   addClinic,
   removeClinic,
   updateClinic,
+  setSelectedClinic,
+  clearSelectedClinic,
 } = clinicsSlice.actions
 
 export default clinicsSlice.reducer

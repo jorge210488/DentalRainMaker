@@ -11,6 +11,7 @@ import { Notification } from './schemas/notification.schema'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { DeviceToken } from './schemas/deviceToken.schema'
+import { ContactsService } from '../contacts/contacts.service'
 
 @Injectable()
 export class NotificationsService {
@@ -20,11 +21,29 @@ export class NotificationsService {
     private readonly notificationModel: Model<Notification>,
     @InjectModel(DeviceToken.name)
     private readonly deviceTokenModel: Model<DeviceToken>,
+    private readonly contactsService: ContactsService,
   ) {}
 
-  async saveDeviceToken(userId: string, token: string): Promise<void> {
-    if (!userId || !token) {
-      throw new BadRequestException('User ID and token are required')
+  async saveDeviceToken(
+    remoteId: string,
+    clinicId: string,
+    token: string,
+  ): Promise<void> {
+    if (!remoteId || !token || !clinicId) {
+      throw new BadRequestException(
+        'Remote ID, Clinic ID, and token are required',
+      )
+    }
+
+    const contact = await this.contactsService.getContactById(
+      clinicId,
+      remoteId,
+    )
+
+    if (!contact) {
+      throw new NotFoundException(
+        `Contact with remoteId ${remoteId} not found in clinic ${clinicId}`,
+      )
     }
 
     const existingToken = await this.deviceTokenModel.findOne({ token })
@@ -34,19 +53,22 @@ export class NotificationsService {
       return
     }
 
-    await this.deviceTokenModel.updateOne(
-      { userId },
-      { token },
-      { upsert: true },
-    )
+    await this.deviceTokenModel.create({
+      remote_id: remoteId,
+      clinic_id: clinicId,
+      token,
+    })
 
-    console.log('DeviceTokenService: Token saved or updated successfully')
+    console.log(
+      'DeviceTokenService: Token saved successfully for the remoteId and clinicId',
+    )
   }
 
   async sendPushNotification(
     notificationDto: CreateNotificationDto,
   ): Promise<void> {
-    const { userId, notification, data, webpush } = notificationDto
+    const { clinic_id, remote_id, notification, data, webpush } =
+      notificationDto
 
     const { title, body, image } = notification
     const link =
@@ -58,15 +80,20 @@ export class NotificationsService {
     }
 
     // Buscar todos los tokens asociados al userId
-    const deviceTokens = await this.deviceTokenModel.find({ userId })
+    const deviceTokens = await this.deviceTokenModel.find({
+      remote_id,
+      clinic_id,
+    })
 
     if (!deviceTokens.length) {
-      console.error(`No device tokens found for userId ${userId}`)
-      throw new NotFoundException(`No device tokens found for user ${userId}`)
+      console.error(`No device tokens found for userId ${remote_id}`)
+      throw new NotFoundException(
+        `No device tokens found for user ${remote_id}`,
+      )
     }
 
     console.log(
-      `Found ${deviceTokens.length} device tokens for userId ${userId}`,
+      `Found ${deviceTokens.length} device tokens for userId ${remote_id}`,
       deviceTokens,
     )
 
@@ -109,35 +136,6 @@ export class NotificationsService {
     notificationDto: CreateNotificationDto,
     isSent = false,
   ): Promise<Notification> {
-    const { userId, notification, data, sendAt } = notificationDto
-
-    // Extraer title y body desde notification
-    const { title, body } = notification
-
-    // Establecer ventana de tiempo de 1 semana atrás
-    const timeWindow = new Date()
-    timeWindow.setDate(timeWindow.getDate() - 1)
-
-    // Buscar notificación existente en la ventana de tiempo
-    const existingNotification = await this.notificationModel.findOne({
-      userId,
-      'notification.title': title,
-      'notification.body': body,
-      data,
-      sendAt: { $gte: timeWindow },
-    })
-
-    if (existingNotification) {
-      console.log(
-        'NotificationsService: Duplicate notification detected within time window',
-        existingNotification,
-      )
-      throw new ConflictException(
-        'Duplicate notification detected within the time window',
-      )
-    }
-
-    // Crear nueva notificación
     const notificationToSave = new this.notificationModel({
       ...notificationDto,
       isSent,
@@ -150,6 +148,7 @@ export class NotificationsService {
 
     return notificationToSave.save()
   }
+
   async updateNotification(
     id: string,
     updateDto: UpdateNotificationDto,
