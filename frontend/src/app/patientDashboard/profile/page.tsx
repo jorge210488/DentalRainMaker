@@ -15,8 +15,8 @@ import {
 import { DashboardShell } from '@/components/patientDashboard/dashboard-shell'
 import EditProfileForm from '@/components/patientDashboard/formsPatientProfile/editProfileForm'
 import { Separator } from '@/components/ui/separator'
-import { useForm } from 'react-hook-form'
-import { Building2, Mail, MapPin, Phone, Plus } from 'lucide-react'
+// import { useForm } from 'react-hook-form'
+import { Mail, MapPin, Phone, Plus } from 'lucide-react'
 
 interface Address {
   street?: string
@@ -45,10 +45,10 @@ const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
 export default function PatientProfile() {
   const [isEditing, setIsEditing] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
-  const [isAddingEmail, setIsAddingEmail] = useState(false)
-  const [isAddingAddress, setIsAddingAddress] = useState(false)
+  // const [isAddingEmail, setIsAddingEmail] = useState(false)
+  // const [isAddingAddress, setIsAddingAddress] = useState(false)
 
-  const formEdit = useForm<PatientProfile>()
+  // const formEdit = useForm<PatientProfile>()
 
   return (
     <DashboardShell>

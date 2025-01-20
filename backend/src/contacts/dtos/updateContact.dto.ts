@@ -1,5 +1,26 @@
-import { IsOptional, IsString, IsArray, IsObject } from 'class-validator'
+import {
+  IsOptional,
+  IsString,
+  IsArray,
+  IsObject,
+  IsEnum,
+} from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
+
+enum AddressType {
+  HOME = 'HOME',
+  WORK = 'WORK',
+  OTHER = 'OTHER',
+}
+
+enum PhoneNumberType {
+  MOBILE = 'MOBILE',
+  HOME = 'HOME',
+  WORK = 'WORK',
+  FAX = 'FAX',
+  PAGER = 'PAGER',
+  OTHER = 'OTHER',
+}
 
 class AddressDTO {
   @IsOptional()
@@ -23,8 +44,13 @@ class AddressDTO {
   country_code?: string
 
   @IsOptional()
-  @IsString()
-  type?: string
+  @IsEnum(AddressType)
+  @ApiProperty({
+    example: 'HOME',
+    enum: AddressType,
+    required: false,
+  })
+  type?: AddressType
 }
 
 class Phone_NumberDTO {
@@ -33,8 +59,13 @@ class Phone_NumberDTO {
   number?: string
 
   @IsOptional()
-  @IsString()
-  type?: string
+  @IsEnum(PhoneNumberType)
+  @ApiProperty({
+    example: 'MOBILE',
+    enum: PhoneNumberType,
+    required: false,
+  })
+  type?: PhoneNumberType
 }
 
 class Email_AddressDTO {
@@ -47,19 +78,30 @@ class Email_AddressDTO {
   type?: string
 }
 
-export class UpdateUserDto {
+class AdditionalDataDTO {
   @IsOptional()
   @IsString()
-  @ApiProperty({ example: 'Jhon Wayne', required: false })
-  name?: string
+  ImageFolder?: string
+}
 
+export class UpdateContactDto {
   @IsOptional()
   @IsString()
-  @ApiProperty({
-    example: 'PATIENT',
-    required: false,
-  })
-  type?: string
+  @ApiProperty({ example: '805', required: false })
+  remote_id?: string
+
+  // @IsOptional()
+  // @IsString()
+  // @ApiProperty({ example: 'Jhon Wayne', required: false })
+  // name?: string
+
+  // @IsOptional()
+  // @IsString()
+  // @ApiProperty({
+  //   example: 'PATIENT',
+  //   required: false,
+  // })
+  // type?: string
 
   @IsOptional()
   @IsString()
@@ -77,22 +119,23 @@ export class UpdateUserDto {
   preferred_name?: string
 
   @IsOptional()
-  @IsString()
+  @IsEnum(['MALE', 'FEMALE', 'GENDER_OTHER'])
   @ApiProperty({
-    example: 'MALE',
+    example: 'GENDER_OTHER',
+    enum: ['MALE', 'FEMALE', 'GENDER_OTHER'],
     required: false,
   })
   gender?: string
 
   @IsOptional()
   @IsString()
-  @ApiProperty({ example: '1/1/1980', required: false })
+  @ApiProperty({ example: '0000-00-00', required: false })
   birth_date?: string
 
-  @IsOptional()
-  @IsString()
-  @ApiProperty({ example: 'Additional notes', required: false })
-  notes?: string
+  // @IsOptional()
+  // @IsString()
+  // @ApiProperty({ example: 'Additional notes', required: false })
+  // notes?: string
 
   @IsOptional()
   @IsArray()
@@ -148,8 +191,48 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   @ApiProperty({
+    example: 'jwayne@gmail.com',
+    required: false,
+  })
+  primary_email_address?: string
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
     example: 'ACTIVE',
     required: false,
   })
   state?: string
+
+  @IsOptional()
+  @IsObject()
+  @ApiProperty({
+    example: {
+      ImageFolder: 'martnezjorge805',
+    },
+    required: false,
+  })
+  additional_data?: AdditionalDataDTO
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: null,
+    required: false,
+  })
+  preferred_provider?: string | null
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ example: '0001-01-01', required: false })
+  first_visit?: string
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ example: 'contacts/805', required: false })
+  guarantor?: string
+
+  @IsOptional()
+  @ApiProperty({ example: null, required: false })
+  opt_ins?: any
 }
