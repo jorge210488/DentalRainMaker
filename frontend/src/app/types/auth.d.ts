@@ -1,7 +1,7 @@
 export interface LoginFormData {
   email: string
   password: string
-  rememberMe: boolean
+  clinic_id: string
 }
 
 export interface FormData {

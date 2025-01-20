@@ -1,6 +1,7 @@
 export const saveFirebaseTokenToServer = async (
-  userId: string,
+  remoteId: string,
   token: string,
+  clinicId: string,
   bearerToken: string,
 ) => {
   try {
@@ -12,7 +13,7 @@ export const saveFirebaseTokenToServer = async (
           'Content-Type': 'application/json',
           Authorization: `Bearer ${bearerToken}`,
         },
-        body: JSON.stringify({ userId, token }),
+        body: JSON.stringify({ remoteId, clinicId, token }),
       },
     )
     if (!response.ok) {

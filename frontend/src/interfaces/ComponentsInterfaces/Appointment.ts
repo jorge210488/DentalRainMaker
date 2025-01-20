@@ -12,8 +12,12 @@ export interface IAppointment {
   cancelled?: boolean
   completed?: boolean
   broken?: boolean
-  doctor_id: string
-  clinic_id: string
   providers?: Array<string>
   scheduler?: Array<string>
+  additional_data: {
+    doctor_name: string
+    clinic_name: string
+    // room_number:string;
+    paid: boolean
+  }
 }

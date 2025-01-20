@@ -1,26 +1,46 @@
-import { Injectable, BadRequestException } from '@nestjs/common'
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common'
 import { UploadApiResponse, v2 } from 'cloudinary'
 import * as toStream from 'buffer-to-stream'
 import { InjectModel } from '@nestjs/mongoose'
-import { User, UserDocument } from '../users/schemas/user.schema'
 import { Model } from 'mongoose'
 import { CloudinaryDto } from './dto/cloudinary.dto'
+import { ContactsService } from '../contacts/contacts.service'
+import { Cloudinary, CloudinaryDocument } from './schemas/cloudinary.schema'
 
 @Injectable()
 export class CloudinaryService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @InjectModel(Cloudinary.name)
+    private cloudinaryModel: Model<CloudinaryDocument>,
+    private readonly contactsService: ContactsService,
   ) {}
 
   async uploadImage(
-    id: string,
+    clinicId: string,
+    remoteId: string,
     file: Express.Multer.File,
-    dto: CloudinaryDto,
   ): Promise<UploadApiResponse> {
     if (!file) {
       throw new BadRequestException('File not provided')
     }
 
+    // Verificar si el contacto existe usando el método getContactById
+    const contact = await this.contactsService.getContactById(
+      clinicId,
+      remoteId,
+    )
+
+    if (!contact) {
+      throw new NotFoundException(
+        `Contact with remoteId ${remoteId} not found in clinic ${clinicId}`,
+      )
+    }
+
+    // Subir la imagen a Cloudinary
     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
       const upload = v2.uploader.upload_stream(
         {
@@ -38,12 +58,14 @@ export class CloudinaryService {
       toStream(file.buffer).pipe(upload)
     })
 
-    // Usar el DTO para actualizar el campo `img_url` en MongoDB
-    await this.userModel.findByIdAndUpdate(
-      id,
-      { img_url: result.secure_url },
-      { new: true }, // Devuelve el documento actualizado
-    )
+    // Guardar en el esquema de Cloudinary
+    const cloudinaryRecord = new this.cloudinaryModel({
+      remote_id: remoteId,
+      clinic_id: clinicId, // Agregamos el clinic_id
+      img_url: result.secure_url,
+    })
+
+    await cloudinaryRecord.save()
 
     return result
   }
