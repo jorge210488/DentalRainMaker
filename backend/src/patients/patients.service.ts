@@ -41,10 +41,7 @@ export class PatientService {
       const { url, headers } = await this.getRequestConfig(clinicId)
 
       const response = await lastValueFrom(this.httpService.get(url, { headers }));
-      const contacts = response.data.contacts;
-    //   console.log('Contacts:', contacts);
-      console.log("este es el tipo de contacts",typeof contacts);
-      
+      const contacts = response.data.contacts;  
 
       // Filtrar los pacientes y calcular la edad
       const patients = contacts

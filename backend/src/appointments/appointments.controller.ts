@@ -8,6 +8,7 @@ import {
   Put,
   HttpCode,
   UseGuards,
+  Query,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { RolesGuard } from '../guards/role.guard'
@@ -25,72 +26,86 @@ import { UpdateStatusDto } from './dto/updateStatus.dto'
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
-  @HttpCode(200)
-  @Post()
-  @Permissions('ALL_ACCESS', 'CREATE_APPOINTMENT')
-  async create(@Body() createAppointmentDto: CreateAppointmentDto) {
-    return this.appointmentsService.create(createAppointmentDto)
+  // @HttpCode(200)
+  // @Post()
+  // @Permissions('ALL_ACCESS', 'CREATE_APPOINTMENT')
+  // async create(@Body() createAppointmentDto: CreateAppointmentDto) {
+  //   return this.appointmentsService.create(createAppointmentDto)
+  // }
+
+  // @HttpCode(200)
+  // @Get()
+  // @Permissions('ALL_ACCESS', 'READ_ALL_APPOINTMENTS')
+  // async getAppointments(): Promise<AppointmentDocument[]> {
+  //   return this.appointmentsService.getAppointments()
+  // }
+
+  // @HttpCode(200)
+  // @Get(':id')
+  // @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
+  // async getAppointmentById(
+  //   @Param('id') _id: string,
+  // ): Promise<AppointmentDocument> {
+  //   return this.appointmentsService.getAppointmentById(_id)
+  // }
+
+  // @HttpCode(200)
+  // @Get('user/:id')
+  // @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
+  // async getAppointmentByUserId(
+  //   @Param('id') contact_id: string,
+  // ): Promise<AppointmentDocument[]> {
+  //   return this.appointmentsService.getAppointmentByUserId(contact_id)
+  // }
+
+  // @HttpCode(200)
+  // @Get('doctor/:id')
+  // @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
+  // async getAppointmentByDoctorId(
+  //   @Param('id') doctor_id: string,
+  // ): Promise<AppointmentDocument[]> {
+  //   return this.appointmentsService.getAppointmentByDoctorId(doctor_id)
+  // }
+
+  // @HttpCode(200)
+  // @Put(':id')
+  // @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT')
+  // async updateAppointment(
+  //   @Param('id') _id: string,
+  //   @Body() updateAppointmentDto: CreateAppointmentDto,
+  // ): Promise<AppointmentDocument> {
+  //   return this.appointmentsService.updateAppointment(_id, updateAppointmentDto)
+  // }
+
+  // @HttpCode(200)
+  // @Put('status/:id')
+  // @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT')
+  // async updateStatusAppointment(
+  //   @Param('id') _id: string,
+  //   @Body() updateStatusDto: UpdateStatusDto,
+  // ): Promise<AppointmentDocument> {
+  //   const { field, value } = updateStatusDto
+  //   return this.appointmentsService.updateStatusAppointment(_id, field, value)
+  // }
+
+  // @HttpCode(204)
+  // @Delete(':id')
+  // @Permissions('ALL_ACCESS', 'DELETE_APPOINTMENT')
+  // async deleteAppointment(@Param('id') _id: string): Promise<void> {
+  //   return this.appointmentsService.deleteAppointment(_id)
+  // }
+  
+
+    @Get('visits')
+    async getVisits(
+      @Query('clinicId') clinicId: string,
+      @Query('contactId') contactId: string,
+    ) {
+      return await this.appointmentsService.getVisits(clinicId, contactId);
+    }
+
+
+    
   }
 
-  @HttpCode(200)
-  @Get()
-  @Permissions('ALL_ACCESS', 'READ_ALL_APPOINTMENTS')
-  async getAppointments(): Promise<AppointmentDocument[]> {
-    return this.appointmentsService.getAppointments()
-  }
 
-  @HttpCode(200)
-  @Get(':id')
-  @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
-  async getAppointmentById(
-    @Param('id') _id: string,
-  ): Promise<AppointmentDocument> {
-    return this.appointmentsService.getAppointmentById(_id)
-  }
-
-  @HttpCode(200)
-  @Get('user/:id')
-  @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
-  async getAppointmentByUserId(
-    @Param('id') contact_id: string,
-  ): Promise<AppointmentDocument[]> {
-    return this.appointmentsService.getAppointmentByUserId(contact_id)
-  }
-
-  @HttpCode(200)
-  @Get('doctor/:id')
-  @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
-  async getAppointmentByDoctorId(
-    @Param('id') doctor_id: string,
-  ): Promise<AppointmentDocument[]> {
-    return this.appointmentsService.getAppointmentByDoctorId(doctor_id)
-  }
-
-  @HttpCode(200)
-  @Put(':id')
-  @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT')
-  async updateAppointment(
-    @Param('id') _id: string,
-    @Body() updateAppointmentDto: CreateAppointmentDto,
-  ): Promise<AppointmentDocument> {
-    return this.appointmentsService.updateAppointment(_id, updateAppointmentDto)
-  }
-
-  @HttpCode(200)
-  @Put('status/:id')
-  @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT')
-  async updateStatusAppointment(
-    @Param('id') _id: string,
-    @Body() updateStatusDto: UpdateStatusDto,
-  ): Promise<AppointmentDocument> {
-    const { field, value } = updateStatusDto
-    return this.appointmentsService.updateStatusAppointment(_id, field, value)
-  }
-
-  @HttpCode(204)
-  @Delete(':id')
-  @Permissions('ALL_ACCESS', 'DELETE_APPOINTMENT')
-  async deleteAppointment(@Param('id') _id: string): Promise<void> {
-    return this.appointmentsService.deleteAppointment(_id)
-  }
-}
