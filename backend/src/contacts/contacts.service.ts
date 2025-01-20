@@ -100,26 +100,4 @@ export class ContactsService {
       )
     }
   }
-
-
-  async getPatients(clinicId: string): Promise<any> {
-    try {
-      const { url:baseUrl, headers } = await this.getRequestConfig(clinicId)
-
-      const patientUrl = `${baseUrl}?filter=type='PATIENT'`
-
-      const response = await lastValueFrom(
-        this.httpService.get(patientUrl, { headers }),
-      )
-
-      return response.data
-    } catch (error) {
-      console.error('Error fetching patients from Kolla:', error)
-
-      throw new HttpException(
-        'Failed to fetch patients from Kolla.',
-        HttpStatus.BAD_GATEWAY,
-      )
-    }
-  }
 }
