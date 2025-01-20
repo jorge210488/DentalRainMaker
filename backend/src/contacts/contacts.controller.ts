@@ -1,4 +1,12 @@
-import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Query,
+  Patch,
+  Param,
+  UseGuards,
+  Body,
+} from '@nestjs/common'
 import { ContactsService } from './contacts.service'
 import {
   ApiTags,
@@ -10,6 +18,7 @@ import {
 import { RolesGuard } from '../guards/role.guard'
 import { PermissionsGuard } from '../guards/permission.guard'
 import { Permissions } from '../decorators/permissions.decorator'
+import { UpdateContactDto } from './dtos/updateContact.dto'
 
 @ApiBearerAuth()
 @ApiTags('Contacts')
@@ -69,5 +78,25 @@ export class ContactsController {
     @Param('remote_id') remoteId: string,
   ) {
     return this.contactsService.getContactById(clinicId, remoteId)
+  }
+
+  @Patch(':remote_id')
+  @ApiOperation({ summary: 'Update contact by remote ID' })
+  @ApiQuery({ name: 'clinicId', required: true, type: String })
+  @ApiResponse({ status: 200, description: 'Contact updated successfully.' })
+  @ApiResponse({ status: 400, description: 'Invalid data.' })
+  @ApiResponse({ status: 404, description: 'Contact not found.' })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @Permissions('ALL_ACCESS', 'UPDATE_USER')
+  async updateContact(
+    @Query('clinicId') clinicId: string,
+    @Param('remote_id') remoteId: string,
+    @Body() updateContactDto: UpdateContactDto,
+  ) {
+    return this.contactsService.updateContact(
+      clinicId,
+      remoteId,
+      updateContactDto,
+    )
   }
 }
