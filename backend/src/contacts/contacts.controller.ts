@@ -70,4 +70,17 @@ export class ContactsController {
   ) {
     return this.contactsService.getContactById(clinicId, remoteId)
   }
+
+
+  @Get('patients')
+  @ApiOperation({ summary: 'Get patients' })
+  @ApiQuery({ name: 'clinicId', required: true, type: String })
+  @ApiResponse({ status: 200, description: 'Patients found.' })
+  @ApiResponse({ status: 404, description: 'Patients not found.' })
+  @Permissions('ALL_ACCESS')
+  async getPatients(
+    @Query('clinicId') clinicId: string,
+  ) {
+    return this.contactsService.getPatients(clinicId)
+  }
 }
