@@ -78,12 +78,6 @@ export function Sidebar({ children, className }: DashboardShellProps) {
       {/* Sidebar para desktop */}
       <aside className='hidden w-64 border-r bg-blue-600 text-white lg:block'>
         <div className='flex h-full flex-col'>
-          <div className='flex flex-row items-center justify-center space-x-2 pt-2'>
-            <div className='h-8 w-9 items-center justify-center space-x-2 rounded-lg bg-white'>
-              <span className='p-4 text-xl font-bold text-blue-600'>D</span>
-            </div>
-            <span className='text-xl font-bold'>DentalRainMaker</span>
-          </div>
           <nav className='flex-1 space-y-1 px-3 py-4'>
             {routes.map((route) => (
               <Link
@@ -116,12 +110,6 @@ export function Sidebar({ children, className }: DashboardShellProps) {
           className='w-64 bg-blue-600 p-0 font-sans text-white'
         >
           <div className='flex h-full flex-col'>
-            <div className='flex flex-row items-center justify-center space-x-2 pt-2'>
-              <div className='h-8 w-9 items-center justify-center space-x-2 rounded-lg bg-white'>
-                <span className='p-4 text-xl font-bold text-blue-600'>D</span>
-              </div>
-              <span className='text-xl font-bold'>DentalRainMaker</span>
-            </div>
             <nav className='flex-1 space-y-1 px-3 py-4'>
               {routes.map((route) => (
                 <Link

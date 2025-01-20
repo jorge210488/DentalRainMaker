@@ -12,7 +12,7 @@ export default {
   theme: {
   	extend: {
 		fontFamily: {
-			sans: ['Playpen Sans Variable', 'sans-serif'], // Configura la fuente Lalezar
+			sans: ['Sunflower', 'sans-serif'], // Configura la fuente Lalezar
 		},
 		colors: {
   			background: 'hsl(var(--background))',

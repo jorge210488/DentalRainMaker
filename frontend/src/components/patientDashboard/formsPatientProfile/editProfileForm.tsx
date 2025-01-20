@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { PatientProfile } from '@/app/patientDashboard/profile/page'
 import { DialogHeader } from '@/components/ui/dialog'
 import { DialogTitle } from '@radix-ui/react-dialog'
@@ -46,7 +46,7 @@ export default function EditProfileForm({
             required: 'Given name is required',
             minLength: {
               value: 3,
-              message: 'Family name should be at least 3 characters long',
+              message: 'Given name should be at least 3 characters long',
             },
             maxLength: {
               value: 50,

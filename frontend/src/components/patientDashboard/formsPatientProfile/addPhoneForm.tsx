@@ -28,6 +28,7 @@ export function AddPhone({
     register,
     handleSubmit,
     formState: { errors },
+    clearErrors,
   } = useForm<{ phone: string }>()
 
   const onSubmitForm = handleSubmit((data) => {
@@ -63,7 +64,10 @@ export function AddPhone({
           <Button
             type='button'
             variant='outline'
-            onClick={() => setPhoneOpen(!phoneOpen)}
+            onClick={() => {
+              clearErrors()
+              setPhoneOpen(!phoneOpen)
+            }}
           >
             Cancel
           </Button>

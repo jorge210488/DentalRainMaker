@@ -113,19 +113,6 @@ export default function RegisterForm() {
               </div>
             </div>
 
-            {/* <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Date of Birth</Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                {...register("dateOfBirth", { required: "Date of birth is required" })}
-                aria-invalid={errors.dateOfBirth ? "true" : "false"}
-              />
-              {errors.dateOfBirth && (
-                <p className="text-sm text-red-500">{errors.dateOfBirth.message}</p>
-              )}
-            </div> */}
-
             <div className='space-y-2'>
               <Label htmlFor='email'>Email Address</Label>
               <Input
@@ -156,6 +143,12 @@ export default function RegisterForm() {
                   minLength: {
                     value: 8,
                     message: 'Password must be at least 8 characters',
+                  },
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{1,}$/,
+                    message:
+                      'Password must include uppercase, lowercase, number, and special character',
                   },
                 })}
                 placeholder='Enter your password'
