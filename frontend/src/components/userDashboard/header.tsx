@@ -45,7 +45,7 @@ export default function Header() {
         <h1 className='text-2xl font-semibold text-blue-600'>
           DentalRainMaker
         </h1>
-        <span className='rounded bg-blue-100 px-2 py-1 text-xs text-blue-600'>
+        <span className='rounded bg-blue-600 px-2 py-1 text-xs text-blue-100'>
           Beta
         </span>
         <div className='ml-auto flex items-center space-x-4'>

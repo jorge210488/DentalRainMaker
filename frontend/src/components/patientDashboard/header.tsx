@@ -1,82 +1,145 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import * as React from 'react'
+import { Bell, Calendar, Menu, Settings } from 'lucide-react'
 
-import { Bell, Calendar, Settings } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/patientDashboard/ui/avatar'
-import { Button } from '@/components/patientDashboard/ui/button'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 
-export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { data: session, status } = useSession()
-  const router = useRouter()
+interface SiteHeaderProps {
+  onLogout: () => void
+}
 
-  const toggleMenu = () => {
-    setIsMenuOpen((prev) => !prev)
-  }
-
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: '/login' })
-  }
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      console.log('Session is authenticated')
-      console.log('Token:', session?.user?.token)
-      console.log('User ID:', session?.user?.userId)
-      console.log('User Type:', session?.user?.type)
-      console.log('User Views:', session?.user?.views)
-      console.log('Clinic ID:', session?.user?.clinicId)
-    } else if (status === 'unauthenticated') {
-      console.log('No session available')
-    } else if (status === 'loading') {
-      console.log('Session is loading')
-    }
-  }, [status, session])
-
+export default function Header({ onLogout }: SiteHeaderProps) {
   return (
-    <header className='border-b bg-white'>
-      <div className='flex h-16 items-center gap-4 px-4'>
-        <h1 className='text-2xl font-semibold text-blue-600'>
-          DentalRainMaker
-        </h1>
-        <span className='rounded bg-blue-100 px-2 py-1 text-xs text-blue-600'>
-          Beta
-        </span>
-        <div className='ml-auto flex items-center space-x-4'>
-          <Button>
-            <Calendar className='h-5 w-5' />
-          </Button>
-          <Button>
-            <Bell className='h-5 w-5' />
-          </Button>
-          <Button>
-            <Settings className='h-5 w-5' />
-          </Button>
-          <div className='relative'>
-            <Avatar onClick={toggleMenu} className='cursor-pointer'>
-              <AvatarImage src='/placeholder-user.jpg' alt='Dr. Smith' />
-              <AvatarFallback>DS</AvatarFallback>
-            </Avatar>
-            {isMenuOpen && (
-              <div className='absolute right-0 z-10 mt-2 w-48 rounded-md bg-white shadow-lg'>
-                <div className='py-2'>
-                  <button
-                    onClick={handleLogout}
-                    className='block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100'
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
+    <header className='sticky top-0 z-50 w-full border-b bg-blue-600 font-sans sm:w-[127vw]'>
+      <div className='container flex h-16 items-center px-4'>
+        {/* Logo Section */}
+        <div className='flex items-center gap-2'>
+          <div className='flex h-8 w-9 items-center justify-center rounded-lg bg-white'>
+            <span className='text-xl font-bold text-blue-600'>D</span>
           </div>
+          <span className='text-xl font-bold text-white'>DentalRainMaker</span>
+          <span className='ml-2 rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-600'>
+            Beta
+          </span>
+        </div>
+
+        {/* Mobile Navigation */}
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='ml-auto text-white hover:bg-blue-500 md:hidden'
+            >
+              <Menu className='h-5 w-5' />
+              <span className='sr-only'>Toggle menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle className='w-full justify-start font-sans'>
+                Menu
+              </SheetTitle>
+            </SheetHeader>
+            <div className='grid gap-4 py-4'>
+              <Button
+                variant='ghost'
+                className='w-full justify-start font-sans'
+              >
+                <Calendar className='mr-2 h-5 w-5' />
+                Calendar
+              </Button>
+              <Button
+                variant='ghost'
+                className='w-full justify-start font-sans'
+              >
+                <Bell className='mr-2 h-5 w-5' />
+                Notifications
+              </Button>
+              <Button
+                variant='ghost'
+                className='w-full justify-start font-sans'
+              >
+                <Settings className='mr-2 h-5 w-5' />
+                Settings
+              </Button>
+              <Button
+                variant='ghost'
+                className='w-full justify-start font-sans'
+                onClick={onLogout}
+              >
+                Logout
+              </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* Desktop Navigation */}
+        <div className='ml-auto hidden items-center space-x-2 md:flex'>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='text-white hover:bg-blue-500'
+          >
+            <Calendar className='h-5 w-5' />
+            <span className='sr-only'>Calendar</span>
+          </Button>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='text-white hover:bg-blue-500'
+          >
+            <Bell className='h-5 w-5' />
+            <span className='sr-only'>Notifications</span>
+          </Button>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='text-white hover:bg-blue-500'
+          >
+            <Settings className='h-5 w-5' />
+            <span className='sr-only'>Settings</span>
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='relative h-8 w-8 rounded-full'
+              >
+                <Avatar className='h-8 w-8'>
+                  <AvatarImage src='/placeholder-user.jpg' alt='Dr. Smith' />
+                  <AvatarFallback>DS</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              <DropdownMenuItem className='font-sans'>Profile</DropdownMenuItem>
+              <DropdownMenuItem className='font-sans'>
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className='font-sans' onClick={onLogout}>
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
