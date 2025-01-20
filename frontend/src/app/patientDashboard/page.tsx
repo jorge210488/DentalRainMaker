@@ -14,17 +14,19 @@ export const metadata: Metadata = {
 export default function DashboardPage() {
   return (
     <DashboardShell>
-      <DashboardHeader
-        heading='Welcome back, Sarah'
-        text='Manage your dental care journey'
-      />
-      <div className='grid gap-6'>
-        <MetricsCards />
-        <div className='grid gap-6 md:grid-cols-2'>
-          <AppointmentList />
-          <TreatmentProgress />
+      <div className='p-8'>
+        <DashboardHeader
+          heading='Welcome back, Sarah'
+          text='Manage your dental care journey'
+        />
+        <div className='grid gap-6'>
+          <MetricsCards />
+          <div className='grid gap-6 md:grid-cols-2'>
+            <AppointmentList />
+            <TreatmentProgress />
+          </div>
+          <MessagingWidget />
         </div>
-        <MessagingWidget />
       </div>
     </DashboardShell>
   )

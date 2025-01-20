@@ -4,26 +4,19 @@ export default {
     darkMode: ["class"],
 	
     content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // Escanea archivos de React
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/**/*.{js,jsx,ts,tsx,css}", // Escanea archivos de React
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx,css}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx,css}',
   ],
   theme: {
   	extend: {
-  		colors: {
+		fontFamily: {
+			sans: ['Sunflower', 'sans-serif'], // Configura la fuente Lalezar
+		},
+		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
-  			card: {
-  				DEFAULT: 'hsl(var(--card))',
-  				foreground: 'hsl(var(--card-foreground))'
-  			},
-  			fontFamily: {
-  				sans: {
-  					DEFAULT: 'Lalezar',
-  					sans: 'sans-serif'
-  				}
-  			},
   			popover: {
   				DEFAULT: 'hsl(var(--popover))',
   				foreground: 'hsl(var(--popover-foreground))'
