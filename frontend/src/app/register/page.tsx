@@ -119,9 +119,14 @@ export default function RegisterForm() {
               <Label htmlFor='clinic_id'>Select Clinic</Label>
               <select
                 id='clinic_id'
-                className='w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600'
+                className={`w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  errors.clinic_id ? 'border-red-500' : ''
+                }`}
                 value={selectedClinicId || ''}
-                onChange={handleClinicChange}
+                {...register('clinic_id', {
+                  required: 'Selecting a clinic is required',
+                  onChange: (event) => handleClinicChange(event),
+                })}
               >
                 <option value='' disabled>
                   Select Clinic
