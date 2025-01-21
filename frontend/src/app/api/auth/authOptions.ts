@@ -10,7 +10,7 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
     CredentialsProvider({
-      name: 'Credentials',
+      name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
@@ -32,19 +32,34 @@ export const authOptions: AuthOptions = {
             },
           )
 
+          // console.log('Authorize Response:', response)
+
           if (!response.ok) {
             throw new Error('Invalid credentials')
           }
 
           const data = await response.json()
+          // console.log('Authorize Data:', data)
+
+          const decodedToken = jwt.decode(data.token) as jwt.JwtPayload | null
+          // console.log('Decoded Token:', decodedToken)
+
+          if (!decodedToken || typeof decodedToken !== 'object') {
+            throw new Error(
+              'Failed to decode token or token is not a valid object',
+            )
+          }
+
+          // console.log('Decoded Token:', decodedToken)
 
           // Retornar los datos necesarios
           return {
-            id: data.userId,
+            id: decodedToken.userId,
             id_token: data.token,
-            user_id: data.userId,
-            user_type: data.type,
-            user_views: data.views,
+            user_id: decodedToken.user_id,
+            user_type: decodedToken.type,
+            user_views: decodedToken.views,
+            user_clinicId: decodedToken.clinic_id,
           }
         } catch (error) {
           console.error('Error during local login:', error)
@@ -76,7 +91,7 @@ export const authOptions: AuthOptions = {
             body: JSON.stringify(userPayload),
           })
 
-          console.log('User registered successfully')
+          // console.log('User registered successfully')
         } catch (err) {
           console.error('User already registered or registration failed', err)
         }
@@ -113,7 +128,7 @@ export const authOptions: AuthOptions = {
             )
           }
 
-          console.log('Decoded Token:', decodedToken)
+          // console.log('Decoded Token:', decodedToken)
 
           account.id_token = data.token
           account.user_id = decodedToken.user_id
@@ -121,7 +136,7 @@ export const authOptions: AuthOptions = {
           account.user_views = decodedToken.views
           account.user_clinicId = decodedToken.clinic_id
 
-          console.log('User signed in successfully', decodedToken)
+          // console.log('User signed in successfully', decodedToken)
         } catch (error) {
           console.error('Sign-in failed or Firebase token save failed', error)
           return false // Prevent sign-in
@@ -131,7 +146,11 @@ export const authOptions: AuthOptions = {
     },
 
     async jwt({ token, account, profile, user }) {
-      if (account && account.provider === 'credentials') {
+      // console.log('JWT Callback - Initial Token:', token)
+      // console.log('JWT Callback - Account:', account)
+      // console.log('JWT Callback - User:', user)
+
+      if (account && account.provider === 'credentials' && user) {
         // Datos de credentials
         token.accessToken = user?.id_token // Consistencia con GoogleProvider
         token.userId = user?.user_id
@@ -159,6 +178,9 @@ export const authOptions: AuthOptions = {
       return token
     },
     async session({ session, token }) {
+      console.log('Session Callback - Token:', token) // Log del token recibido
+      console.log('Session Callback - Initial Session:', session) // Log de la sesión inicial
+
       if (session.user) {
         session.user.id = token.id as string
         session.user.given_name = token.given_name as string
@@ -178,19 +200,19 @@ export const authOptions: AuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       // Si viene de iniciar sesión, redirige al dashboard
-      // if (url === '/patientDashboard') {
-      //   return '/patientDashboard'
-      // }
+      if (url === '/patientDashboard') {
+        return '/patientDashboard'
+      }
 
-      // // Si viene de cerrar sesión, redirige al login
-      // if (url === '/login') {
-      //   return '/login'
-      // }
+      // Si viene de cerrar sesión, redirige al login
+      if (url === '/login') {
+        return '/login'
+      }
 
-      // // Permite redirecciones dentro del dominio base
-      // if (url.startsWith(baseUrl)) {
-      //   return url
-      // }
+      // Permite redirecciones dentro del dominio base
+      if (url.startsWith(baseUrl)) {
+        return url
+      }
 
       // Redirección predeterminada para otros casos
       return '/patientDashboard'

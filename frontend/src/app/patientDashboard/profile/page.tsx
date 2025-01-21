@@ -100,7 +100,7 @@ export default function PatientProfile() {
 
   return (
     <DashboardShell>
-      <div className='container mx-auto max-w-4xl py-6 font-sans md:overflow-y-hidden'>
+      <div className='container mx-0 w-[95%] py-2 font-sans sm:mx-auto sm:max-w-4xl sm:py-6 md:overflow-y-hidden'>
         <div className='mb-6 flex items-center justify-between'>
           <div>
             <h1 className='text-3xl font-bold tracking-tight'>
