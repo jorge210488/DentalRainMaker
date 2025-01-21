@@ -6,11 +6,12 @@ import { ConfigModule } from '@nestjs/config';
 import { ClinicConfigService } from 'src/config/clinicsConfig.service';
 import { ClinicsModule } from 'src/clinics/clinics.module';
 import { AppointmentsService } from 'src/appointments/appointments.service';
+import { InsuranceService } from 'src/insurance/insurance.service';
 
 
 @Module({
   imports: [HttpModule, ConfigModule, ClinicsModule],
-  providers: [PatientService, ClinicConfigService, AppointmentsService],
+  providers: [PatientService, ClinicConfigService, AppointmentsService, InsuranceService],
   controllers: [PatientController],
   exports: [PatientService],
 })
