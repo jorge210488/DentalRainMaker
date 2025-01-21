@@ -1,13 +1,15 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios'
-import { lastValueFrom } from 'rxjs';
+import { last, lastValueFrom } from 'rxjs';
 import { ClinicConfigService } from '../config/clinicsConfig.service'
+import { AppointmentsService } from 'src/appointments/appointments.service';
 
 @Injectable()
 export class PatientService {
   constructor(
     private readonly httpService: HttpService,
     private readonly clinicConfigService: ClinicConfigService,
+    private readonly appointmentsService: AppointmentsService
     ) {}
 
    private async getRequestConfig(clinicId: string) {
@@ -49,9 +51,23 @@ export class PatientService {
         .map((patient) => ({
           ...patient,
           age: this.calculateAge(patient.birth_date), // Calcular la edad
+          nextVisit: null,
+          lastVisit: null,
         }));
 
-      return patients;
+      // Obtener visitas para cada paciente
+      const patientsWithVisits = await Promise.all(
+      patients.map(async (patient) => {
+        const { nextVisit, lastVisit } = await this.appointmentsService.getVisits(clinicId, patient.remote_id);
+        return {
+          ...patient,
+          nextVisit,
+          lastVisit,
+        };
+        }),
+      );  
+
+      return patientsWithVisits;
     } catch (error) {
       throw new Error('Error fetching patients: ' + error.message);
     }

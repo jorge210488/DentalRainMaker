@@ -5,11 +5,12 @@ import { PatientService } from './patients.service';
 import { ConfigModule } from '@nestjs/config';
 import { ClinicConfigService } from 'src/config/clinicsConfig.service';
 import { ClinicsModule } from 'src/clinics/clinics.module';
+import { AppointmentsService } from 'src/appointments/appointments.service';
 
 
 @Module({
   imports: [HttpModule, ConfigModule, ClinicsModule],
-  providers: [PatientService, ClinicConfigService],
+  providers: [PatientService, ClinicConfigService, AppointmentsService],
   controllers: [PatientController],
   exports: [PatientService],
 })

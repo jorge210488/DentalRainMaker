@@ -49,7 +49,7 @@ export class AppointmentsService {
     
         // Filtrar por contact_id
         const filteredAppointments = appointments.filter(
-          (appointment) => appointment.contact_id === contactId,
+          (appointment) => appointment.contact.remote_id === contactId,
         );
         console.log('filteredAppointments', filteredAppointments);
         
