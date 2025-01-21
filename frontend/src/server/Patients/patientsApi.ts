@@ -3,7 +3,7 @@ export const fetchPatientsList = async (clinicId: string, page: number, pagesize
         console.log('Fetching patients List...');
         
       const response = await fetch(
-        `http://localhost:3200/patients/paginated?clinicId=${encodeURIComponent(clinicId)}&page=${page}&pagesize=${pagesize}`,
+        `https://dentalrainmaker.onrender.com/patients/paginated?clinicId=${encodeURIComponent(clinicId)}&page=${page}&pagesize=${pagesize}`,
         {
           method: 'GET',
           headers: {

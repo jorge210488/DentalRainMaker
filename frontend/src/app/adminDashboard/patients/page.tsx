@@ -1,8 +1,12 @@
 'use client'
+
+import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell';
+import { RootState } from '@/redux/store';
 import { fetchPatientsList } from '@/server/Patients/patientsApi';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 type Patient = {
   remote_id: number;
@@ -17,30 +21,37 @@ type Patient = {
 
 export default function Home() {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const clinics = useSelector((state: RootState) => state.clinics.clinics);
+  const { data: session } = useSession()
+  
   
     useEffect(() => {
       const initializePatients = async () => {
-        try {
-          console.log('Fetching patients...');
+        try { 
+          if(session?.user?.token){
+            console.log(session.user);
+            
+            const patients: Patient[] = await fetchPatientsList(
+              clinics[3]._id,
+              2,
+              10,
+              session.user.token
+            )
+            console.log('patients fetched ', patients)
+            setPatients(patients)
+          }     
           
-          const patients: Patient[] = await fetchPatientsList(
-            'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
-            1,
-            5,
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZmY0MDRkYS03OTVhLTRhMzAtOTZmYy00ZWVkM2EzZjdlM2MiLCJ1c2VyX2lkIjoiODA4IiwidHlwZSI6IkFETUlOIiwiZW1haWwiOiJqb3NlQGdtYWlsLmNvbSIsImNsaW5pY19pZCI6ImZiOGNlMjNmLThmZWQtNDkxMS04ZmRmLWVkNGE1YzlkZDMwNiIsInZpZXdzIjpbIkFMTF9WSUVXUyJdLCJpYXQiOjE3Mzc0MjY3NjksImV4cCI6MTczNzQ0MTE2OX0.rJch05nt6nbBHsZes6AD0vq75OjyFUbOwQf4HuL8UXo'
-          )
-          console.log('patients fetched ', patients)
-          setPatients(patients)
   
         } catch (error) {
           console.error('Error initializing patients:', error)
         }
       }
       initializePatients()
-     }, [])
+     }, [clinics])
 
 
   return (
+    <DashboardShell>
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Lista de Pacientes</h1>
       <div className="bg-white shadow rounded-lg p-4">
@@ -74,5 +85,7 @@ export default function Home() {
         </table>
       </div>
     </div>
+    </DashboardShell>
+    
   );
 }
