@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { lastValueFrom } from 'rxjs'
 import { ClinicConfigService } from '../config/clinicsConfig.service'
+import { UpdateContactDto } from './dtos/updateContact.dto'
 
 @Injectable()
 export class ContactsService {
@@ -96,6 +97,41 @@ export class ContactsService {
 
       throw new HttpException(
         'Failed to fetch contact from Kolla.',
+        HttpStatus.BAD_GATEWAY,
+      )
+    }
+  }
+
+  async updateContact(
+    clinicId: string,
+    remoteId: string,
+    updateContactDto: UpdateContactDto,
+  ): Promise<any> {
+    try {
+      // Reutilizar getContactById para verificar si el contacto existe
+      await this.getContactById(clinicId, remoteId)
+
+      const { url: baseUrl, headers } = await this.getRequestConfig(clinicId)
+
+      // Construir el update_mask desde el DTO
+      const updateMask = Object.keys(updateContactDto).join(',')
+      const contactUrl = `${baseUrl}/${remoteId}?update_mask=${encodeURIComponent(updateMask)}`
+
+      // Enviar la solicitud PATCH a la API
+      const response = await lastValueFrom(
+        this.httpService.patch(contactUrl, updateContactDto, { headers }),
+      )
+
+      return response.data
+    } catch (error) {
+      console.error('Error updating contact:', error)
+
+      if (error.response?.status === 404) {
+        throw new HttpException('Contact not found.', HttpStatus.NOT_FOUND)
+      }
+
+      throw new HttpException(
+        'Failed to update contact in Kolla.',
         HttpStatus.BAD_GATEWAY,
       )
     }

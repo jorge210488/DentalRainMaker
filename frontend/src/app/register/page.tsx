@@ -58,13 +58,19 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className='flex min-h-screen w-full'>
+    <div className='flex min-h-screen w-full font-sans'>
       {/* Left side - Form */}
       <div className='flex-1 p-8 lg:p-12'>
         <div className='mx-auto max-w-md space-y-6'>
           <div className='space-y-2 text-center'>
             <h1 className='text-2xl font-bold tracking-tight'>
-              Welcome to Dental Rain Maker
+              Welcome to{' '}
+              <div className='flex flex-row items-center justify-center space-x-2 pt-2'>
+                <div className='h-8 w-9 items-center justify-center space-x-2 rounded-lg bg-blue-600'>
+                  <span className='p-4 text-xl font-bold text-white'>D</span>
+                </div>
+                <span className='text-xl font-bold'>DentalRainMaker</span>
+              </div>
             </h1>
           </div>
 
@@ -107,19 +113,6 @@ export default function RegisterForm() {
               </div>
             </div>
 
-            {/* <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Date of Birth</Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                {...register("dateOfBirth", { required: "Date of birth is required" })}
-                aria-invalid={errors.dateOfBirth ? "true" : "false"}
-              />
-              {errors.dateOfBirth && (
-                <p className="text-sm text-red-500">{errors.dateOfBirth.message}</p>
-              )}
-            </div> */}
-
             <div className='space-y-2'>
               <Label htmlFor='email'>Email Address</Label>
               <Input
@@ -150,6 +143,12 @@ export default function RegisterForm() {
                   minLength: {
                     value: 8,
                     message: 'Password must be at least 8 characters',
+                  },
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{1,}$/,
+                    message:
+                      'Password must include uppercase, lowercase, number, and special character',
                   },
                 })}
                 placeholder='Enter your password'
