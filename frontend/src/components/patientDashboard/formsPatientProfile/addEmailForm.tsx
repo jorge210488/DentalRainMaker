@@ -37,7 +37,7 @@ export function AddEmail({
   })
 
   return (
-    <DialogContent className='font-sans sm:max-w-[425px]'>
+    <DialogContent className='w-[90%] font-sans sm:max-w-[425px]'>
       <DialogHeader>
         <DialogTitle className='font-bold'>Add Email Address</DialogTitle>
       </DialogHeader>

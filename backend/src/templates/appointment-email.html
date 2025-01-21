@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reminder: your appointment is {{date}}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arimo', sans-serif;
+      }
+      table {
+        border-spacing: 0;
+        width: 100%;
+        height: 100%;
+      }
+      td {
+        padding: 0;
+      }
+      .content {
+        background: linear-gradient(135deg, #e3e3ff, #eaeafc, #ffffff);
+        padding: 20px;
+        text-align: center;
+      }
+      .titleSee {
+        color: #231971;
+        font-weight: bold;
+      }
+      .info {
+        color: #2a2742;
+        font-size: 18px;
+        text-align: justify;
+        padding: 0 15px;
+      }
+      .title {
+        color: #2a2742;
+        font-size: 40px;
+        text-align: center;
+      }
+      .logo {
+        width: 30%;
+        object-fit: contain;
+        object-position: center;
+        background: none;
+        background-color: transparent;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <table role="presentation">
+      <tr>
+        <td
+          background="https://res.cloudinary.com/deflfnoba/image/upload/v1736291384/DentalRainMaker%20Frontend/gvn7fpvfvo0p1kturta1.jpg"
+          style="background-size: cover; background-position: center"
+        >
+          <div class="content">
+            <div class="containerLogo">
+              <img
+                class="logo"
+                src="https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png"
+                alt="Dental Rain Maker Logo"
+              />
+            </div>
+            <h1 class="title">
+              Hello, <span class="titleSee">{{given_name}}!</span>
+            </h1>
+            <p class="info">
+              This is a friendly reminder of your upcoming appointment:<br /><br />
+
+              <span class="titleSee">Date:</span> {{start_time}}<br />
+              <span class="titleSee">Time:</span> {{start_time}} -
+              {{end_time}}<br />
+              <span class="titleSee">Type:</span>
+              {{appointment_type_display_name}}<br />
+              <span class="titleSee">Location:</span> {{location}}<br />
+              <span class="titleSee">Doctor:</span>
+              {{doctor_display_name}}<br />
+              <span class="titleSee">Clinic:</span> {{clinic_name}}<br /><br />
+
+              Please make sure to arrive a few minutes early to ensure a smooth
+              process.<br /><br />
+
+              If you have any questions or need to reschedule, feel free to
+              contact us.<br /><br />
+
+              Best regards,<br />
+              <span class="titleSee"><em>The Dental Rain Maker Team</em></span>
+            </p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

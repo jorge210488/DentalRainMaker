@@ -10,4 +10,5 @@ export interface FormData {
   email: string
   password: string
   confirmPassword: string
+  clinic_id: string
 }

@@ -13,6 +13,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Address, PatientProfile } from '@/app/patientDashboard/profile/page'
 import { Dispatch, SetStateAction } from 'react'
+import { useSession } from 'next-auth/react'
+import { updateContact } from '@/server/contacts'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '@/redux/slices/userSlice'
+import Swal from 'sweetalert2'
 
 interface AddressDialogProps {
   addressOpen: boolean
@@ -32,12 +37,69 @@ export function AddAddress({
     clearErrors,
   } = useForm<Address>()
 
-  const onSubmitForm = handleSubmit((data) => {
-    return
+  const { data: session } = useSession()
+  const dispatch = useDispatch()
+
+  const onSubmitForm = handleSubmit(async (data) => {
+    try {
+      if (
+        session?.user?.token &&
+        session?.user?.userId &&
+        session?.user?.clinicId
+      ) {
+        const addressPayload = {
+          addresses: [
+            {
+              street_address: data.street || '',
+              city: data.city || '',
+              state: data.state || '',
+              postal_code: data.postal_code || '',
+              country_code: '', // Opcional, vacío por defecto
+              type: 'ADDRESS_TYPE_UNSPECIFIED', // Default
+            },
+          ],
+        }
+
+        const updatedContact = await updateContact(
+          session.user.clinicId,
+          session.user.userId,
+          session.user.token,
+          addressPayload,
+        )
+
+        dispatch(updateUser(updatedContact))
+
+        setAddressOpen(false)
+        await Swal.fire({
+          title: 'Success',
+          text: 'The address has been added successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        })
+      } else {
+        console.error('Session or required user data is missing')
+
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to add address. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
+      }
+    } catch (error) {
+      console.error('Failed to update contact:', error)
+
+      Swal.fire({
+        title: 'Error',
+        text: 'An error occurred while adding the address. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
+    }
   })
 
   return (
-    <DialogContent className='font-sans sm:max-w-[425px]'>
+    <DialogContent className='w-[90%] max-w-[425px] font-sans sm:mx-auto sm:max-w-[95%]'>
       <DialogHeader>
         <DialogTitle className='font-bold'>Add Address</DialogTitle>
       </DialogHeader>
