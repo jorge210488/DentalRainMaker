@@ -33,8 +33,6 @@ interface UserState {
   email_addresses?: EmailAddress[]
   primary_email_address: string
   state: 'ACTIVE' | 'INACTIVE' | 'DECEASED'
-  img_url?: string
-  clinics: string[]
 }
 
 const initialState: UserState = {
@@ -50,8 +48,6 @@ const initialState: UserState = {
   email_addresses: [],
   primary_email_address: '',
   state: 'ACTIVE',
-  img_url: '',
-  clinics: [],
 }
 
 const userSlice = createSlice({

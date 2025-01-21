@@ -14,9 +14,15 @@ import {
   AddAddress,
 } from '@/components/patientDashboard/formsPatientProfile'
 import { Separator } from '@/components/ui/separator'
-
 import { useForm } from 'react-hook-form'
 import { Icon, Mail, MapPin, Phone, Plus } from 'lucide-react'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { setUser } from '@/redux/slices/userSlice'
+import { fetchContactById } from '@/server/contacts'
+import { useSession } from 'next-auth/react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
 
 export interface Address {
   street?: string
@@ -29,6 +35,7 @@ export interface PatientProfile {
   name: string
   given_name: string
   family_name: string
+  birth_date: string
   primary_email_address: string
   state: string
   addresses: Address[]
@@ -48,7 +55,48 @@ export default function PatientProfile() {
   const [emailOpen, setEmailOpen] = useState(false)
   const [addressOpen, setAddressOpen] = useState(false)
 
+  const dispatch = useDispatch()
+  const { data: session } = useSession()
+
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      try {
+        if (
+          session?.user?.token &&
+          session?.user?.userId &&
+          session?.user?.clinicId
+        ) {
+          const userData = await fetchContactById(
+            session.user.clinicId,
+            session.user.userId,
+            session.user.token,
+          )
+          dispatch(setUser(userData))
+        }
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error)
+      }
+    }
+
+    loadUserProfile()
+  }, [dispatch, session])
+
   // const formEdit = useForm<PatientProfile>()
+
+  const {
+    given_name,
+    family_name,
+    primary_email_address,
+    state,
+    email_addresses,
+    phone_numbers,
+    addresses,
+    birth_date,
+  } = useSelector((state: RootState) => state.user)
+
+  // Convierte `state` a formato con la primera letra en mayúscula
+  const formattedState =
+    state.charAt(0).toUpperCase() + state.slice(1).toLowerCase()
 
   return (
     <DashboardShell>
@@ -85,18 +133,20 @@ export default function PatientProfile() {
               <div className='grid gap-4'>
                 <div className='flex items-center justify-between'>
                   <div>
-                    <p className='text-2xl font-semibold'>Jorge Martínez</p>
+                    <p className='text-2xl font-semibold'>{`${given_name} ${family_name}`}</p>
                     <p className='text-muted-foreground text-sm'>
-                      jorge@email.com
+                      {`${primary_email_address}`}
                     </p>
                   </div>
-                  <Badge variant={getStateVariant('ACTIVE')}>Active</Badge>
+                  <Badge
+                    variant={getStateVariant('ACTIVE')}
+                  >{`${formattedState}`}</Badge>
                 </div>
                 <Separator />
                 <div className='grid gap-2 text-sm'>
                   <div className='grid grid-cols-2 gap-1'>
-                    <p className='text-muted-foreground'>Created</p>
-                    <p>{format(new Date('2025-01-08T16:59:23.916Z'), 'PPP')}</p>
+                    <p className='text-muted-foreground'>Birthday</p>
+                    <p>{birth_date}</p>
                   </div>
                 </div>
               </div>
@@ -133,7 +183,23 @@ export default function PatientProfile() {
                 </Dialog>
               </CardHeader>
               <CardContent>
-                <EmptyState text='No phone numbers added' />
+                {phone_numbers && phone_numbers.length > 0 ? (
+                  <ul className='space-y-2'>
+                    {phone_numbers.map((phone, index) => (
+                      <li
+                        key={index}
+                        className='flex items-center justify-between'
+                      >
+                        <span>{phone.number}</span>
+                        <span className='text-muted-foreground text-sm'>
+                          {phone.type.toLowerCase()}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <EmptyState text='No phone numbers added' />
+                )}
               </CardContent>
             </Card>
 
@@ -166,7 +232,25 @@ export default function PatientProfile() {
                 </Dialog>
               </CardHeader>
               <CardContent>
-                <EmptyState text='No additional emails added' />
+                {email_addresses && email_addresses.length > 0 ? (
+                  <ul className='space-y-2'>
+                    {email_addresses.map((email, index) => (
+                      <li
+                        key={index}
+                        className='flex items-center justify-between'
+                      >
+                        <span>{email.address}</span>
+                        <span className='text-muted-foreground text-sm'>
+                          {email.type
+                            .replace('EMAIL_ADDRESS_TYPE_', '')
+                            .toLowerCase()}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <EmptyState text='No email addresses added' />
+                )}
               </CardContent>
             </Card>
 
@@ -192,7 +276,30 @@ export default function PatientProfile() {
                 </Dialog>
               </CardHeader>
               <CardContent>
-                <EmptyState text='No addresses added' />
+                {addresses && addresses.length > 0 ? (
+                  <ul className='space-y-4'>
+                    {addresses.map((address, index) => (
+                      <li key={index} className='flex flex-col gap-1'>
+                        <p className='font-semibold'>
+                          {address.street_address}
+                        </p>
+                        <p className='text-muted-foreground text-sm'>
+                          {address.city}, {address.state}, {address.postal_code}
+                        </p>
+                        <p className='text-muted-foreground text-sm'>
+                          {address.country_code || 'N/A'}
+                        </p>
+                        <p className='text-muted-foreground text-sm italic'>
+                          {address.type
+                            .replace('ADDRESS_TYPE_', '')
+                            .toLowerCase()}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <EmptyState text='No addresses added' />
+                )}
               </CardContent>
             </Card>
           </div>
