@@ -55,7 +55,7 @@ export function AppointmentList() {
                 </div>
               </div>
               <div className='flex items-center gap-2'>
-                {appointment.isVirtual && (
+                {appointment.type && (
                   <Button variant='outline' size='sm'>
                     <Video className='mr-2 h-4 w-4' />
                     Join Call
