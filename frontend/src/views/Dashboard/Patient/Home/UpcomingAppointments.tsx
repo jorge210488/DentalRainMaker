@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import AppointmentCard from '@/components/MainComponents/AppointmentCard/AppointmentCard'
-import { getUserAppointments } from '@/server/User/getUserAppointments'
 import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
+import { fetchUserAppointmentsTest } from '@/server/Appointment/appoinmentsApi'
 
 const UpcomingAppointments: React.FC = () => {
   const { data: session, status } = useSession()
@@ -18,7 +18,7 @@ const UpcomingAppointments: React.FC = () => {
         return
       }
       try {
-        const response = await getUserAppointments(
+        const response = await fetchUserAppointmentsTest(
           session.user.userId,
           session.user.token,
         )
@@ -50,7 +50,7 @@ const UpcomingAppointments: React.FC = () => {
   return (
     <section className='mt-8 w-full space-y-4'>
       <h3 className='mb-4 text-xl font-semibold'>Your upcoming appointments</h3>
-      {userAppointments.map((appointment) => (
+      {/* {userAppointments.map((appointment) => (
         <AppointmentCard
           key={appointment._id}
           _id={appointment._id}
@@ -61,7 +61,7 @@ const UpcomingAppointments: React.FC = () => {
             paid: appointment.additional_data.paid,
           }}
         />
-      ))}
+      ))} */}
     </section>
   )
 }

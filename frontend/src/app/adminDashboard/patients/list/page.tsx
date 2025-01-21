@@ -14,10 +14,6 @@ type Patient = {
   activeTreatment: boolean;
 };
 
-// const patients: Patient[] = [
- 
-// ];
-
 
 export default function Home() {
   const [patients, setPatients] = useState<Patient[]>([]);
