@@ -11,6 +11,9 @@ import {
 import { AppointmentsController } from './appointments.controller'
 import { AppointmentsService } from './appointments.service'
 import { UsersModule } from 'src/users/users.module'
+import { HttpModule } from '@nestjs/axios'
+import { ConfigModule } from '@nestjs/config'
+import { ClinicConfigService } from 'src/config/clinicsConfig.service'
 
 @Module({
   imports: [
@@ -20,9 +23,11 @@ import { UsersModule } from 'src/users/users.module'
     ]),
     ClinicsModule,
     UsersModule,
+    HttpModule,
+    ConfigModule,
   ],
   controllers: [AppointmentsController],
-  providers: [AppointmentsService],
+  providers: [AppointmentsService, ClinicConfigService],
   exports: [AppointmentsService, MongooseModule],
 })
 export class AppointmentsModule {}

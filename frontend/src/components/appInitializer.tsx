@@ -18,6 +18,7 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ children }) => {
         const clinics = await fetchClinics()
         dispatch(setClinics(clinics))
         console.log('Clinics fetched and saved in Redux:', clinics)
+
       } catch (error) {
         console.error('Error initializing clinics:', error)
       }

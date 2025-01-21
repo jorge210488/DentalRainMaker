@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Card,
   CardContent,
@@ -9,22 +11,22 @@ import { Button } from '@/components/ui/button'
 import { Calendar, Clock, Video } from 'lucide-react'
 
 export function AppointmentList() {
+
   const appointments = [
     {
-      id: 1,
-      date: 'March 15, 2024',
-      time: '10:00 AM',
-      type: 'Regular Checkup',
-      doctor: 'Dr. Smith',
-      isVirtual: false,
-    },
-    {
-      id: 2,
+      remote_id: 233,
       date: 'March 28, 2024',
       time: '2:30 PM',
       type: 'Virtual Consultation',
       doctor: 'Dr. Johnson',
-      isVirtual: true,
+    },
+    {
+      remote_id: 2,
+      date: 'March 28, 2024',
+      time: '2:30 PM',
+      type: 'Virtual Consultation',
+      doctor: 'Dr. Walker',
+  
     },
   ]
 
@@ -38,7 +40,7 @@ export function AppointmentList() {
         <div className='space-y-4'>
           {appointments.map((appointment) => (
             <div
-              key={appointment.id}
+              key={appointment.remote_id}
               className='flex items-center justify-between rounded-lg border p-4'
             >
               <div className='space-y-1'>
