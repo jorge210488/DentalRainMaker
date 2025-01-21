@@ -51,7 +51,6 @@ export class AppointmentsService {
         const filteredAppointments = appointments.filter(
           (appointment) => appointment.contact.remote_id === contactId,
         );
-        console.log('filteredAppointments', filteredAppointments);
         
     
         // Filtrar y ordenar para nextVisit
