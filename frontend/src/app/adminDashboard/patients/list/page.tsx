@@ -1,9 +1,12 @@
-// pages/index.tsx
+'use client'
+import { fetchPatientsList } from '@/server/Patients/patientsApi';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 type Patient = {
   remote_id: number;
-  name: string;
+  fullname: string;
   age: number;
   insurance: string;
   nextVisit: string;
@@ -11,91 +14,36 @@ type Patient = {
   activeTreatment: boolean;
 };
 
-const patients: Patient[] = [
-  // {
-  //   id: 1,
-  //   name: 'John Doe',
-  //   age: 34,
-  //   insurance: 'HealthPlus',
-  //   nextVisit: '2024-03-15',
-  //   lastVisit: '2023-12-10',
-  //   activeTreatment: true,
-  // },
-  // {
-  //   id: 2,
-  //   name: 'Jane Smith',
-  //   age: 29,
-  //   insurance: 'DentalCare',
-  //   nextVisit: '2024-04-20',
-  //   lastVisit: '2023-11-05',
-  //   activeTreatment: false,
-  // },
-  // {
-  //   id: 3,
-  //   name: 'Carlos Pérez',
-  //   age: 45,
-  //   insurance: 'VidaSalud',
-  //   nextVisit: '2024-05-12',
-  //   lastVisit: '2023-09-15',
-  //   activeTreatment: true,
-  // },
-  // {
-  //   id: 4,
-  //   name: 'Anna Kowalski',
-  //   age: 32,
-  //   insurance: 'HealthPlus',
-  //   nextVisit: '2024-06-22',
-  //   lastVisit: '2023-10-08',
-  //   activeTreatment: false,
-  // },
-  // {
-  //   id: 5,
-  //   name: 'Liam Brown',
-  //   age: 50,
-  //   insurance: 'CareSecure',
-  //   nextVisit: '2024-03-30',
-  //   lastVisit: '2023-07-25',
-  //   activeTreatment: true,
-  // },
-  // {
-  //   id: 6,
-  //   name: 'Olivia Johnson',
-  //   age: 37,
-  //   insurance: 'MediCare',
-  //   nextVisit: '2024-02-14',
-  //   lastVisit: '2023-12-01',
-  //   activeTreatment: true,
-  // },
-  // {
-  //   id: 7,
-  //   name: 'Noah Williams',
-  //   age: 41,
-  //   insurance: 'VidaSalud',
-  //   nextVisit: '2024-01-18',
-  //   lastVisit: '2023-08-21',
-  //   activeTreatment: false,
-  // },
-  // {
-  //   id: 8,
-  //   name: 'Emma Davis',
-  //   age: 28,
-  //   insurance: 'HealthPlus',
-  //   nextVisit: '2024-07-05',
-  //   lastVisit: '2023-10-30',
-  //   activeTreatment: true,
-  // },
-  // {
-  //   id: 9,
-  //   name: 'Sophia Martinez',
-  //   age: 33,
-  //   insurance: 'CareSecure',
-  //   nextVisit: '2024-08-12',
-  //   lastVisit: '2023-06-18',
-  //   activeTreatment: false,
-  // },
-];
+// const patients: Patient[] = [
+ 
+// ];
+
 
 export default function Home() {
+  const [patients, setPatients] = useState<Patient[]>([]);
+  
+    useEffect(() => {
+      const initializePatients = async () => {
+        try {
+          console.log('Fetching patients...');
+          
+          const patients: Patient[] = await fetchPatientsList(
+            'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
+            1,
+            5,
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZmY0MDRkYS03OTVhLTRhMzAtOTZmYy00ZWVkM2EzZjdlM2MiLCJ1c2VyX2lkIjoiODA4IiwidHlwZSI6IkFETUlOIiwiZW1haWwiOiJqb3NlQGdtYWlsLmNvbSIsImNsaW5pY19pZCI6ImZiOGNlMjNmLThmZWQtNDkxMS04ZmRmLWVkNGE1YzlkZDMwNiIsInZpZXdzIjpbIkFMTF9WSUVXUyJdLCJpYXQiOjE3Mzc0MjY3NjksImV4cCI6MTczNzQ0MTE2OX0.rJch05nt6nbBHsZes6AD0vq75OjyFUbOwQf4HuL8UXo'
+          )
+          console.log('patients fetched ', patients)
+          setPatients(patients)
+  
+        } catch (error) {
+          console.error('Error initializing patients:', error)
+        }
+      }
+      initializePatients()
+     }, [])
+
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Lista de Pacientes</h1>
@@ -116,7 +64,7 @@ export default function Home() {
               <tr key={patient.remote_id} className="hover:bg-gray-100">
                 <td className="p-2">
                   <Link href={`/adminDashboard/patients/${patient.remote_id}`} className="text-blue-500 hover:underline">
-                    {patient.name}
+                    {patient.fullname}
                   </Link>
                 </td>
                 <td className="p-2">{patient.age}</td>
