@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Query,
+  Post,
   Patch,
   Param,
   UseGuards,
@@ -19,6 +20,7 @@ import { RolesGuard } from '../guards/role.guard'
 import { PermissionsGuard } from '../guards/permission.guard'
 import { Permissions } from '../decorators/permissions.decorator'
 import { UpdateContactDto } from './dtos/updateContact.dto'
+import { CreatePatientDto } from './dtos/createPatient.dto'
 
 @ApiBearerAuth()
 @ApiTags('Contacts')
@@ -27,7 +29,6 @@ import { UpdateContactDto } from './dtos/updateContact.dto'
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
 
-  @ApiBearerAuth()
   @Get()
   @ApiOperation({
     summary: 'Obtener contactos desde Kolla',
@@ -98,5 +99,23 @@ export class ContactsController {
       remoteId,
       updateContactDto,
     )
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Create a new patient' })
+  @ApiQuery({
+    name: 'clinicId',
+    description: 'ID of the clinic associated with the patient.',
+    required: true,
+    type: String,
+  })
+  @ApiResponse({ status: 201, description: 'Patient created successfully.' })
+  @ApiResponse({ status: 400, description: 'Invalid data.' })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  async createPatient(
+    @Query('clinicId') clinicId: string,
+    @Body() createPatientDto: CreatePatientDto,
+  ) {
+    return this.contactsService.createPatient(clinicId, createPatientDto)
   }
 }

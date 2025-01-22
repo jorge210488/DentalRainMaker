@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Put, Param, UseGuards } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  Put,
+  Param,
+  UseGuards,
+  Get,
+  Query,
+} from '@nestjs/common'
 import { NotificationsService } from './notifications.service'
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger'
 import { RolesGuard } from '../guards/role.guard'
@@ -80,5 +89,19 @@ export class NotificationsController {
       id,
       updateNotificationDto,
     )
+  }
+
+  @ApiOperation({
+    summary: 'Get notifications by user remote_id and clinic_id',
+  })
+  @Get('user/:remoteId')
+  async getNotificationsByUser(
+    @Param('remoteId') remoteId: string,
+    @Query('clinic_id') clinicId: string,
+  ): Promise<Notification[]> {
+    console.log(
+      `NotificationsController: Fetching notifications for user ${remoteId} and clinic ${clinicId}`,
+    )
+    return this.notificationsService.getNotificationsByUser(remoteId, clinicId)
   }
 }
