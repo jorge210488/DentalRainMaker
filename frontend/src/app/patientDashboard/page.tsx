@@ -17,11 +17,11 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   // const { data: session, status } = useSession()
-  
+
   //   useEffect(() => {
   //       if (status === 'authenticated') {
   //         console.log('User:', session?.user);
-          
+
   //         console.log('Token:', session?.user?.token)
   //         console.log('User ID:', session?.user?.userId)
   //         console.log('User Type:', session?.user?.type)
@@ -31,23 +31,20 @@ export default function DashboardPage() {
   //       }
   //     }, [status, session])
 
-
   return (
-    <DashboardShell>
-      <div className='p-8'>
-        <DashboardHeader
-          heading='Welcome back, Sarah'
-          text='Manage your dental care journey'
-        />
-        <div className='grid gap-6'>
-          <MetricsCards />
-          <div className='grid gap-6 md:grid-cols-2'>
-            <AppointmentList />
-            <TreatmentProgress />
-          </div>
-          <MessagingWidget />
+    <div className='p-8'>
+      <DashboardHeader
+        heading='Welcome back, Sarah'
+        text='Manage your dental care journey'
+      />
+      <div className='grid gap-6'>
+        <MetricsCards />
+        <div className='grid gap-6 md:grid-cols-2'>
+          <AppointmentList />
+          <TreatmentProgress />
         </div>
+        <MessagingWidget />
       </div>
-    </DashboardShell>
+    </div>
   )
 }

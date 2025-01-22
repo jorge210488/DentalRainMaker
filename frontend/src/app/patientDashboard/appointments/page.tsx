@@ -103,129 +103,125 @@ const AppointmentsPage = () => {
   })
 
   return (
-    <DashboardShell>
-      <div className='min-h-screen bg-gray-100 p-6'>
-        {/* Main content */}
-        <main className='ml-24'>
-          {/* Header */}
-          <header className='mb-6 flex items-center justify-between'>
-            <h1 className='text-2xl font-bold'>My Appointments</h1>
-            <button
-              onClick={() =>
-                router.push('/dashboard/patient/scheduled-appointment')
-              }
-              className='rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600'
-            >
-              + Schedule Appointment
-            </button>
-          </header>
+    <div className='min-h-screen bg-gray-100 p-6'>
+      {/* Main content */}
+      <main className='ml-24'>
+        {/* Header */}
+        <header className='mb-6 flex items-center justify-between'>
+          <h1 className='text-2xl font-bold'>My Appointments</h1>
+          <button
+            onClick={() =>
+              router.push('/dashboard/patient/scheduled-appointment')
+            }
+            className='rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600'
+          >
+            + Schedule Appointment
+          </button>
+        </header>
 
-          {/* Primary filters */}
-          <div className='mb-4 flex items-center gap-4'>
-            <button
-              onClick={() => setPrimaryFilter('History')}
-              className={`rounded-lg px-4 py-2 ${
-                primaryFilter === 'History'
-                  ? 'bg-green-600 text-white'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              History
-            </button>
-            <button
-              onClick={() => setPrimaryFilter('Upcoming')}
-              className={`rounded-lg px-4 py-2 ${
-                primaryFilter === 'Upcoming'
-                  ? 'bg-green-600 text-white'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              Upcoming
-            </button>
-          </div>
+        {/* Primary filters */}
+        <div className='mb-4 flex items-center gap-4'>
+          <button
+            onClick={() => setPrimaryFilter('History')}
+            className={`rounded-lg px-4 py-2 ${
+              primaryFilter === 'History'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            History
+          </button>
+          <button
+            onClick={() => setPrimaryFilter('Upcoming')}
+            className={`rounded-lg px-4 py-2 ${
+              primaryFilter === 'Upcoming'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            Upcoming
+          </button>
+        </div>
 
-          {/* Secondary filters */}
-          <div className='mb-4 flex items-center gap-4'>
-            <button
-              onClick={() => setSecondaryFilter('All')}
-              className={`rounded-lg px-4 py-2 ${
-                secondaryFilter === 'All'
-                  ? 'bg-green-600 text-white'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setSecondaryFilter('In-person')}
-              className={`rounded-lg px-4 py-2 ${
-                secondaryFilter === 'In-person'
-                  ? 'bg-green-600 text-white'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              In-person
-            </button>
-            <button
-              onClick={() => setSecondaryFilter('Virtual')}
-              className={`rounded-lg px-4 py-2 ${
-                secondaryFilter === 'Virtual'
-                  ? 'bg-green-600 text-white'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              Virtual
-            </button>
-          </div>
+        {/* Secondary filters */}
+        <div className='mb-4 flex items-center gap-4'>
+          <button
+            onClick={() => setSecondaryFilter('All')}
+            className={`rounded-lg px-4 py-2 ${
+              secondaryFilter === 'All'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setSecondaryFilter('In-person')}
+            className={`rounded-lg px-4 py-2 ${
+              secondaryFilter === 'In-person'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            In-person
+          </button>
+          <button
+            onClick={() => setSecondaryFilter('Virtual')}
+            className={`rounded-lg px-4 py-2 ${
+              secondaryFilter === 'Virtual'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            Virtual
+          </button>
+        </div>
 
-          {/* Appointment list */}
-          <div className='space-y-4'>
-            {filteredAppointments.map((appointment) => (
-              <div
-                key={appointment.id}
-                className='flex items-center justify-between rounded-lg bg-white p-4 shadow-md'
-              >
-                <div>
-                  <p
-                    className={`text-sm ${
-                      appointment.paymentStatus === 'Pending'
-                        ? 'text-red-500'
-                        : 'text-green-500'
-                    }`}
-                  >
-                    {appointment.paymentStatus === 'Pending'
-                      ? 'Payment pending'
-                      : 'Paid'}
-                  </p>
-                  <h2 className='text-lg font-bold'>{appointment.doctor}</h2>
-                  <p className='text-sm text-gray-600'>
-                    {appointment.specialty}
-                  </p>
-                  <p className='text-sm text-gray-600'>
-                    Patient: {appointment.patient}
-                  </p>
-                  <p className='text-sm text-gray-600'>
-                    {appointment.date} - {appointment.time}
-                  </p>
-                  <p className='text-sm text-gray-600'>
-                    {appointment.location} - {appointment.office}
-                  </p>
-                </div>
-                <div className='flex flex-col items-end gap-2'>
-                  {/* <button className="text-green-600 hover:underline">Reschedule</button>
-                <button className="text-red-600 hover:underline">Cancel</button> */}
-                  {appointment.paymentStatus === 'Pending' && (
-                    <button className='rounded-lg border border-green-600 px-4 py-1 text-green-600 hover:bg-green-100'>
-                      Pay
-                    </button>
-                  )}
-                </div>
+        {/* Appointment list */}
+        <div className='space-y-4'>
+          {filteredAppointments.map((appointment) => (
+            <div
+              key={appointment.id}
+              className='flex items-center justify-between rounded-lg bg-white p-4 shadow-md'
+            >
+              <div>
+                <p
+                  className={`text-sm ${
+                    appointment.paymentStatus === 'Pending'
+                      ? 'text-red-500'
+                      : 'text-green-500'
+                  }`}
+                >
+                  {appointment.paymentStatus === 'Pending'
+                    ? 'Payment pending'
+                    : 'Paid'}
+                </p>
+                <h2 className='text-lg font-bold'>{appointment.doctor}</h2>
+                <p className='text-sm text-gray-600'>{appointment.specialty}</p>
+                <p className='text-sm text-gray-600'>
+                  Patient: {appointment.patient}
+                </p>
+                <p className='text-sm text-gray-600'>
+                  {appointment.date} - {appointment.time}
+                </p>
+                <p className='text-sm text-gray-600'>
+                  {appointment.location} - {appointment.office}
+                </p>
               </div>
-            ))}
-          </div>
-        </main>
-      </div>
-    </DashboardShell>
+              <div className='flex flex-col items-end gap-2'>
+                {/* <button className="text-green-600 hover:underline">Reschedule</button>
+                <button className="text-red-600 hover:underline">Cancel</button> */}
+                {appointment.paymentStatus === 'Pending' && (
+                  <button className='rounded-lg border border-green-600 px-4 py-1 text-green-600 hover:bg-green-100'>
+                    Pay
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
   )
 }
 
