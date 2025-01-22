@@ -1,12 +1,13 @@
 'use client'
 
 import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell';
-import { RootState } from '@/redux/store';
 import { fetchPatientsList } from '@/server/Patients/patientsApi';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import { FormData } from '../../types/auth'
 
 type Patient = {
   remote_id: number;
@@ -20,7 +21,14 @@ type Patient = {
 
 
 export default function Home() {
+  const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm<FormData>()
   const [allPatients, setAllPatients] = useState<Patient[]>([]);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,6 +36,7 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null); // Paciente seleccionado para el modal
   const { data: session } = useSession();
+  const [refreshPatients, setRefreshPatients] = useState(false);
   const patientsPerPage = 10; // Número de elementos por página
   
     useEffect(() => {
@@ -50,7 +59,7 @@ export default function Home() {
         }
       }
       initializePatients()
-     }, [session])
+     }, [session,refreshPatients])
 
 
      
@@ -122,11 +131,76 @@ export default function Home() {
       setSelectedPatient(null);
     };
 
+    
+
+    const onSubmit = async (data: any) => {
+      const realData = {
+        ...data,
+        password: "Prueba123!",
+        confirmPassword: "Prueba123!",
+        provider: "local",
+        clinic_id: session?.user.clinicId,
+      };
+  
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(realData),
+          }
+        );
+  
+        const result = await response.json();
+  
+        if (response.status === 201) {
+          Swal.fire({
+            title: "Success",
+            text: "The patient has been created successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          // Activa la actualización de la lista de pacientes
+          setRefreshPatients((prev) => !prev);
+          // reset();
+          setIsCreateModalOpen(false);
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: result.message || "An error occurred while creating the patient.",
+            icon: "error",
+            confirmButtonText: "Try Again",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "Connection Error",
+          text: "Failed to connect to the server. Please try again later.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    };
+
+    const openCreateModal = () => setIsCreateModalOpen(true);
+    const closeCreateModal = () => setIsCreateModalOpen(false);
+
 
   return (
     <DashboardShell>
       <div className="min-h-screen bg-gray-100 p-6">
-        <h1 className="text-2xl font-bold mb-4">Lista de Pacientes</h1>
+        <h1 className="text-2xl font-bold mb-4">Patients List</h1>
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={openCreateModal}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            New Patient
+          </button>
+        </div>
         <div className="mb-4 flex items-center gap-4">
           {/* Barra de búsqueda */}
           <input
@@ -141,25 +215,25 @@ export default function Home() {
             className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
             onClick={() => handleSort("name")}
           >
-            Ordenar por Nombre {sortField === "name" && (sortOrder === "asc" ? "↑" : "↓")}
+            Sort by Name {sortField === "name" && (sortOrder === "asc" ? "↑" : "↓")}
           </button>
           <button
             className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
             onClick={() => handleSort("age")}
           >
-            Ordenar por Edad {sortField === "age" && (sortOrder === "asc" ? "↑" : "↓")}
+            Sort by age {sortField === "age" && (sortOrder === "asc" ? "↑" : "↓")}
           </button>
         </div>
         <div className="bg-white shadow rounded-lg p-4">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b">
-                <th className="p-2">Nombre</th>
-                <th className="p-2">Edad</th>
-                <th className="p-2">Seguro</th>
-                <th className="p-2">Próxima Visita</th>
-                <th className="p-2">Última Visita</th>
-                <th className="p-2">Tratamiento Activo</th>
+                <th className="p-2">Name</th>
+                <th className="p-2">Age</th>
+                <th className="p-2">Insurance</th>
+                <th className="p-2">Next Visit</th>
+                <th className="p-2">Last Visit</th>
+                <th className="p-2">Treatment active</th>
               </tr>
             </thead>
             <tbody>
@@ -189,7 +263,7 @@ export default function Home() {
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
-              Anterior
+              Previous
             </button>
             <span className="px-4 py-2 mx-1">{`Página ${currentPage} de ${totalPages}`}</span>
             <button
@@ -197,7 +271,7 @@ export default function Home() {
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
-              Siguiente
+              Next
             </button>
           </div>
 
@@ -213,30 +287,100 @@ export default function Home() {
               </button>
               <h2 className="text-xl font-bold mb-4">Detalles del Paciente</h2>
               <p>
-                <strong>Nombre:</strong> {selectedPatient.fullname}
+                <strong>Name:</strong> {selectedPatient.fullname}
               </p>
               <p>
-                <strong>Edad:</strong> {selectedPatient.age}
+                <strong>Age:</strong> {selectedPatient.age}
               </p>
               <p>
-                <strong>Seguro:</strong> {selectedPatient.insurance}
+                <strong>Insurance:</strong> {selectedPatient.insurance}
               </p>
               <p>
-                <strong>Próxima Visita:</strong> {selectedPatient.nextVisit}
+                <strong>Next Visit:</strong> {selectedPatient.nextVisit}
               </p>
               <p>
-                <strong>Última Visita:</strong> {selectedPatient.lastVisit}
+                <strong>Last Visit:</strong> {selectedPatient.lastVisit}
               </p>
               <p>
-                <strong>Tratamiento Activo:</strong>{" "}
+                <strong>Treatment active:</strong>{" "}
                 {selectedPatient.activeTreatment ? "Sí" : "No"}
               </p>
               <button
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 onClick={closePatientModal}
               >
-                Cerrar
+                Close
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Modal para Crear Paciente */}
+        {isCreateModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg p-6 w-96 shadow-lg relative">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                onClick={closeCreateModal}
+              >
+                ✕
+              </button>
+              <h2 className="text-xl font-bold mb-4">Crear Nuevo Paciente</h2>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                
+                <div>
+                  <label htmlFor="familyName" className="block font-medium">
+                    Family Name
+                  </label>
+                  <input
+                    id="familyName"
+                    className="w-full rounded border p-2"
+                    {...register("family_name", { required: "El apellido es obligatorio" })}
+                  />
+                  {errors.family_name && (
+                    <p className="text-sm text-red-500">{errors.family_name.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="givenName" className="block font-medium">
+                    Name
+                  </label>
+                  <input
+                    id="givenName"
+                    className="w-full rounded border p-2"
+                    {...register("given_name", { required: "El nombre es obligatorio" })}
+                  />
+                  {errors.given_name && (
+                    <p className="text-sm text-red-500">{errors.given_name.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="email" className="block font-medium">
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    className="w-full rounded border p-2"
+                    {...register("email", {
+                      required: "El email es obligatorio",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "El formato del email no es válido",
+                      },
+                    })}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500">{errors.email.message}</p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Create Patient
+                </button>
+              </form>
             </div>
           </div>
         )}
