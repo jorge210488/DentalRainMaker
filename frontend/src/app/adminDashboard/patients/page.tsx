@@ -134,17 +134,17 @@ export default function Home() {
     
 
     const onSubmit = async (data: any) => {
+      console.log("TESTING",`${process.env.NEXT_PASS_CLIENT}`);
+      
       const realData = {
         ...data,
-        password: "Prueba123!",
-        confirmPassword: "Prueba123!",
         provider: "local",
         clinic_id: session?.user.clinicId,
       };
   
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+          `${process.env.NEXT_PUBLIC_API_URL}/contacts`,
           {
             method: "POST",
             headers: {
