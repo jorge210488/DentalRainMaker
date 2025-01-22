@@ -38,7 +38,7 @@ import { InsuranceModule } from './insurance/insurance.module'
     }),
     JwtModule.register({
       global: true,
-      signOptions: { expiresIn: '4h' },
+      signOptions: { expiresIn: '24h' },
       secret: process.env.JWT_SECRET,
     }),
     DatabaseModule,
