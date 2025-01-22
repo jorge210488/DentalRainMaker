@@ -11,7 +11,8 @@ export const fetchPatientsList = async (clinicId: string, bearerToken: string) =
     try {
         
       const response = await fetch(
-        `http://localhost:3200/patients?clinicId=${encodeURIComponent(clinicId)}`,
+        // `http://localhost:3200/patients?clinicId=${encodeURIComponent(clinicId)}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/patients?clinicId=${encodeURIComponent(clinicId)}`,
         {
           method: 'GET',
           headers: {
