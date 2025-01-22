@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios'
 import { lastValueFrom } from 'rxjs'
 import { ClinicConfigService } from '../config/clinicsConfig.service'
 import { UpdateContactDto } from './dtos/updateContact.dto'
+import { CreatePatientDto } from './dtos/createPatient.dto'
 
 @Injectable()
 export class ContactsService {
@@ -132,6 +133,35 @@ export class ContactsService {
 
       throw new HttpException(
         'Failed to update contact in Kolla.',
+        HttpStatus.BAD_GATEWAY,
+      )
+    }
+  }
+
+  async createPatient(
+    clinicId: string,
+    createPatientDto: CreatePatientDto,
+  ): Promise<any> {
+    try {
+      const { url, headers } = await this.getRequestConfig(clinicId)
+
+      const response = await lastValueFrom(
+        this.httpService.post(url, createPatientDto, { headers }),
+      )
+
+      return response.data
+    } catch (error) {
+      console.error('Error creating patient in Kolla:', error)
+
+      if (error.response?.status === 400) {
+        throw new HttpException(
+          'Invalid patient data provided.',
+          HttpStatus.BAD_REQUEST,
+        )
+      }
+
+      throw new HttpException(
+        'Failed to create patient in Kolla.',
         HttpStatus.BAD_GATEWAY,
       )
     }
