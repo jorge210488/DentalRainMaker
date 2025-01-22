@@ -185,9 +185,7 @@ const AppointmentsDateTime = () => {
         <button
           disabled={!selectedSlot}
           onClick={() =>
-            router.push(
-              '/patientDashboard/scheduled-appointment/in-person/confirm',
-            )
+            router.push('/patientDashboard/scheduled-appointment/confirm')
           }
           className={`rounded-lg px-6 py-2 ${
             selectedSlot
