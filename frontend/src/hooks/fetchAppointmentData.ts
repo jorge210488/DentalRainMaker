@@ -1,7 +1,8 @@
 'use client'
 
 import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
-import { getAppointments } from '@/server/Appointment/appoinmentsApi'
+import { fetchUserAppointmentsTest } from '@/server/Appointment/appoinmentsApi'
+
 import { useEffect, useState } from 'react'
 
 const useAppointmentData = () => {
@@ -11,7 +12,7 @@ const useAppointmentData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const appointmentData = await getAppointments()
+        const appointmentData = await fetchUserAppointmentsTest('test', 'test')
 
         if (!Array.isArray(appointmentData)) {
           throw new Error('Datos no válidos recibidos del servidor')
