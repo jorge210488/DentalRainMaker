@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button'
 import { Calendar, Clock, Video } from 'lucide-react'
 
 export function AppointmentList() {
-
   const appointments = [
     {
       remote_id: 233,
@@ -26,7 +25,6 @@ export function AppointmentList() {
       time: '2:30 PM',
       type: 'Virtual Consultation',
       doctor: 'Dr. Walker',
-  
     },
   ]
 
@@ -55,7 +53,7 @@ export function AppointmentList() {
                 </div>
               </div>
               <div className='flex items-center gap-2'>
-                {appointment.isVirtual && (
+                {appointment.type && (
                   <Button variant='outline' size='sm'>
                     <Video className='mr-2 h-4 w-4' />
                     Join Call

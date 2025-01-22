@@ -40,6 +40,7 @@ export default function LoginForm() {
         provider: 'local',
         redirect: false,
       })
+      console.log('Login result:', result)
 
       if (result?.ok) {
         // Login exitoso

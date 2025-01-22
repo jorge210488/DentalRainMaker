@@ -178,9 +178,8 @@ export const authOptions: AuthOptions = {
       return token
     },
     async session({ session, token }) {
-      console.log('Session Callback - Token:', token) // Log del token recibido
-      console.log('Session Callback - Initial Session:', session) // Log de la sesión inicial
-
+      // console.log('Session Callback - Token:', token)
+      // console.log('Session Callback - Initial Session:', session)
       if (session.user) {
         session.user.id = token.id as string
         session.user.given_name = token.given_name as string
