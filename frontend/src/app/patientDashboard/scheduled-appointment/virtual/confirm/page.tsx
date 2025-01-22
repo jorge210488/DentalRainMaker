@@ -22,7 +22,7 @@ const AppointmentConfirmation = () => {
         <div className='mb-8 flex items-center justify-center gap-6'>
           <div
             onClick={() =>
-              router.push('/dashboard/patient/scheduled-appointment/in-person')
+              router.push('/patientDashboard/scheduled-appointment/in-person')
             }
             className='flex cursor-pointer items-center'
           >
@@ -34,7 +34,7 @@ const AppointmentConfirmation = () => {
           <div
             onClick={() =>
               router.push(
-                '/dashboard/patient/scheduled-appointment/in-person/search-date',
+                '/patientDashboard/scheduled-appointment/in-person/search-date',
               )
             }
             className='flex cursor-pointer items-center'
@@ -47,7 +47,7 @@ const AppointmentConfirmation = () => {
           <div
             onClick={() =>
               router.push(
-                '/dashboard/patient/scheduled-appointment/in-person/confirm',
+                '/patientDashboard/scheduled-appointment/in-person/confirm',
               )
             }
             className='flex cursor-pointer items-center'
@@ -109,13 +109,13 @@ const AppointmentConfirmation = () => {
 
         <div className='mt-6 flex justify-between'>
           <button
-            onClick={() => router.push('/dashboard/patient/appointments')}
+            onClick={() => router.push('/patientDashboard/appointments')}
             className='rounded-lg bg-red-500 px-6 py-2 text-white hover:bg-red-600'
           >
             Cancel
           </button>
           <button
-            onClick={() => router.push('/dashboard/patient/appointments')}
+            onClick={() => router.push('/patientDashboard/appointments')}
             className='rounded-lg bg-green-500 px-6 py-2 text-white hover:bg-green-600'
           >
             Confirm

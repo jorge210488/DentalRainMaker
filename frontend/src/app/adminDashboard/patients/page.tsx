@@ -23,6 +23,7 @@ type Patient = {
 export default function Home() {
   const {
       register,
+      reset,
       handleSubmit,
       watch,
       formState: { errors },
@@ -134,47 +135,52 @@ export default function Home() {
     
 
     const onSubmit = async (data: any) => {
-      console.log("TESTING",`${process.env.NEXT_PASS_CLIENT}`);
+      console.log("email ingresado",data);
       
       const realData = {
-        ...data,
-        provider: "local",
-        clinic_id: session?.user.clinicId,
+        given_name:data.given_name,
+        family_name:data.family_name,
+        email_addresses: [{address:data.email, type:"OTHER"}],
       };
   
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/contacts`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(realData),
+        if(session?.user?.clinicId){
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/contacts?clinicId=${encodeURIComponent(session.user.clinicId)}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session?.user.token}`,
+              },
+              body: JSON.stringify(realData),
+            }
+          );
+    
+          const result = await response.json();
+    
+          if (response.status === 201) {
+            Swal.fire({
+              title: "Success",
+              text: "The patient has been created successfully.",
+              icon: "success",
+              confirmButtonText: "OK",
+            });
+            // Activa la actualización de la lista de pacientes
+            setRefreshPatients((prev) => !prev);
+            reset();
+            setIsCreateModalOpen(false);
+          } else {
+            Swal.fire({
+              title: "Error",
+              text: result.message || "An error occurred while creating the patient.",
+              icon: "error",
+              confirmButtonText: "Try Again",
+            });
           }
-        );
-  
-        const result = await response.json();
-  
-        if (response.status === 201) {
-          Swal.fire({
-            title: "Success",
-            text: "The patient has been created successfully.",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
-          // Activa la actualización de la lista de pacientes
-          setRefreshPatients((prev) => !prev);
-          // reset();
-          setIsCreateModalOpen(false);
-        } else {
-          Swal.fire({
-            title: "Error",
-            text: result.message || "An error occurred while creating the patient.",
-            icon: "error",
-            confirmButtonText: "Try Again",
-          });
+
         }
+        
       } catch (error) {
         Swal.fire({
           title: "Connection Error",
