@@ -9,14 +9,65 @@ import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { FormData } from '../../types/auth'
 
+type Address = {
+  street_address: string,
+  city: string,
+  state: string,
+  postal_code: string,
+  country_code: string,
+  type: string
+}
+
+type Phone_Number = {
+  number: string,
+  type: string
+}
+
+type Email_Address = {
+  address: string,
+  type: string
+}
+
+type Provider = {
+  name: string,
+  remote_id: string,
+  type: string,
+  display_name: string
+}
+
+type Opt_Ins = {
+  sms: boolean,
+  email: boolean
+}
+
 type Patient = {
+  type:string;
   remote_id: number;
+  given_name: string;
+  family_name: string;
+  preferred_name: string;
   fullname: string;
+  birth_date: string;
   age: number;
+  gender: string;
+  notes: string;
+  addresses: Address[];
+  phone_numbers: Phone_Number[];
+  primary_phone_number: string;
+  email_addresses: Email_Address[];
+  primary_email_address: string;
+  state: string;
+  additional_data: object;
+  preferred_provider: Provider;
   insurance: string;
+  first_visit: string;
   nextVisit: string;
   lastVisit: string;
+  guarantor: string;
+  opt_ins: Opt_Ins;
   activeTreatment: boolean;
+  create_time: string;
+  update_time: string;
 };
 
 
@@ -282,7 +333,7 @@ export default function Home() {
           </div>
 
         </div>
-        {selectedPatient && (
+        {/* {selectedPatient && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg p-6 w-96 shadow-lg relative">
               <button
@@ -297,6 +348,9 @@ export default function Home() {
               </p>
               <p>
                 <strong>Age:</strong> {selectedPatient.age}
+              </p>
+              <p>
+                <strong>Gender:</strong> {selectedPatient.gender}
               </p>
               <p>
                 <strong>Insurance:</strong> {selectedPatient.insurance}
@@ -319,7 +373,126 @@ export default function Home() {
               </button>
             </div>
           </div>
+        )} */}
+
+        {/* Modal para Detalle Paciente */}
+        {selectedPatient && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg p-6 max-h-screen w-full max-w-4xl shadow-lg relative overflow-y-auto">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                onClick={closePatientModal}
+              >
+                ✕
+              </button>
+              <h2 className="text-2xl font-bold mb-4 text-center">Detalles del Paciente</h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p><strong>Type:</strong> {selectedPatient.type ?? "null"}</p>
+                  <p><strong>Given Name:</strong> {selectedPatient.given_name ?? "null"}</p>
+                  <p><strong>Family Name:</strong> {selectedPatient.family_name ?? "null"}</p>
+                  <p><strong>Preferred Name:</strong> {selectedPatient.preferred_name ?? "null"}</p>
+                  <p><strong>Gender:</strong> {selectedPatient.gender ?? "null"}</p>
+                  <p><strong>Birth Date:</strong> {selectedPatient.birth_date ?? "null"}</p>
+                  <p><strong>Notes:</strong> {selectedPatient.notes ?? "null"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold">Addresses</h3>
+                  {selectedPatient.addresses?.length > 0 ? (
+                    selectedPatient.addresses.map((address, index) => (
+                      <div key={index} className="mb-2">
+                        <p><strong>Type:</strong> {address.type ?? "null"}</p>
+                        <p><strong>Street:</strong> {address.street_address ?? "null"}</p>
+                        <p><strong>City:</strong> {address.city ?? "null"}</p>
+                        <p><strong>State:</strong> {address.state ?? "null"}</p>
+                        <p><strong>Postal Code:</strong> {address.postal_code ?? "null"}</p>
+                        <p><strong>Country Code:</strong> {address.country_code ?? "null"}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No addresses available.</p>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold">Phone Numbers</h3>
+                  {selectedPatient.phone_numbers?.length > 0 ? (
+                    selectedPatient.phone_numbers.map((phone, index) => (
+                      <div key={index} className="mb-2">
+                        <p><strong>Type:</strong> {phone.type ?? "null"}</p>
+                        <p><strong>Number:</strong> {phone.number ?? "null"}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No phone numbers available.</p>
+                  )}
+                  <p><strong>Primary Phone Number:</strong> {selectedPatient.primary_phone_number ?? "null"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold">Email Addresses</h3>
+                  {selectedPatient.email_addresses?.length > 0 ? (
+                    selectedPatient.email_addresses.map((email, index) => (
+                      <div key={index} className="mb-2">
+                        <p><strong>Type:</strong> {email.type ?? "null"}</p>
+                        <p><strong>Address:</strong> {email.address ?? "null"}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No email addresses available.</p>
+                  )}
+                  <p><strong>Primary Email Address:</strong> {selectedPatient.primary_email_address ?? "null"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold">Additional Data</h3>
+                  {selectedPatient.additional_data ? (
+                    Object.entries(selectedPatient.additional_data).map(([key, value], index) => (
+                      <p key={index}><strong>{key}:</strong> {value ?? "null"}</p>
+                    ))
+                  ) : (
+                    <p>No additional data available.</p>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold">Preferred Provider</h3>
+                  {selectedPatient.preferred_provider ? (
+                    <>
+                      <p><strong>Name:</strong> {selectedPatient.preferred_provider.name ?? "null"}</p>
+                      <p><strong>Remote ID:</strong> {selectedPatient.preferred_provider.remote_id ?? "null"}</p>
+                      <p><strong>Type:</strong> {selectedPatient.preferred_provider.type ?? "null"}</p>
+                      <p><strong>Display Name:</strong> {selectedPatient.preferred_provider.display_name ?? "null"}</p>
+                    </>
+                  ) : (
+                    <p>No preferred provider information available.</p>
+                  )}
+                  <p><strong>First Visit:</strong> {selectedPatient.first_visit ?? "null"}</p>
+                  <p><strong>Guarantor:</strong> {selectedPatient.guarantor ?? "null"}</p>
+                </div>
+              </div>
+
+              <h3 className="text-lg font-bold mt-4">Opt-Ins</h3>
+              <p><strong>SMS:</strong> {selectedPatient.opt_ins?.sms ? "Yes" : "No"}</p>
+              <p><strong>Email:</strong> {selectedPatient.opt_ins?.email ? "Yes" : "No"}</p>
+
+              <p><strong>Create Time:</strong> {selectedPatient.create_time ?? "null"}</p>
+              <p><strong>Update Time:</strong> {selectedPatient.update_time ?? "null"}</p>
+
+              <button
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={closePatientModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         )}
+
+
+
 
         {/* Modal para Crear Paciente */}
         {isCreateModalOpen && (
