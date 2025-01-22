@@ -1,3 +1,5 @@
+import { fetchWithTimeout } from "@/utils/fetchwithTimeout";
+
 export const fetchPatientsList = async (clinicId: string, bearerToken: string) => {
 
   if (!clinicId || !bearerToken) {
@@ -10,7 +12,7 @@ export const fetchPatientsList = async (clinicId: string, bearerToken: string) =
 
     try {
         
-      const response = await fetch(
+      const response = await fetchWithTimeout(
         `${process.env.NEXT_PUBLIC_API_URL}/patients?clinicId=${encodeURIComponent(clinicId)}`,
         {
           method: 'GET',
@@ -19,6 +21,7 @@ export const fetchPatientsList = async (clinicId: string, bearerToken: string) =
             Authorization: `Bearer ${bearerToken}`,
           },
         },
+        100000//tiempo timeout espera completa fetch
       )
       console.log("respuesta del fetch",response);
       
