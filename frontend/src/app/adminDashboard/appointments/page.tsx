@@ -1,6 +1,7 @@
 'use client'
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell';
 
 type Appointment = {
   id: number;
@@ -48,7 +49,8 @@ export default function DoctorAppointmentsPage() {
 //   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <DashboardShell>
+      <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Citas del Doctor</h1>
       <div className="bg-white shadow rounded-lg p-4 mb-6">
         <h2 className="text-lg font-semibold mb-2">Información del Doctor</h2>
@@ -73,5 +75,7 @@ export default function DoctorAppointmentsPage() {
         </ul>
       </div>
     </div>
+    </DashboardShell>
+    
   );
 }

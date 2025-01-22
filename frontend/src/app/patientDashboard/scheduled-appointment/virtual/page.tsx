@@ -40,7 +40,7 @@ const DoctorSelectionPage = () => {
         <div className='mb-8 flex items-center justify-center gap-6'>
           <div
             onClick={() =>
-              router.push('/dashboard/patient/scheduled-appointment/virtual')
+              router.push('/patientDashboard/scheduled-appointment/virtual')
             }
             className='flex cursor-pointer items-center'
           >
@@ -106,7 +106,7 @@ const DoctorSelectionPage = () => {
                 <button
                   onClick={() =>
                     router.push(
-                      '/dashboard/patient/scheduled-appointment/virtual/search-date',
+                      '/patientDashboard/scheduled-appointment/virtual/search-date',
                     )
                   }
                   className='rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700'

@@ -111,7 +111,7 @@ const AppointmentsPage = () => {
           <h1 className='text-2xl font-bold'>My Appointments</h1>
           <button
             onClick={() =>
-              router.push('/dashboard/patient/scheduled-appointment')
+              router.push('/patientDashboard/scheduled-appointment')
             }
             className='rounded-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600'
           >
