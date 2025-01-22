@@ -1,9 +1,8 @@
-export const fetchPatientsList = async (clinicId: string, page: number, pagesize: number, bearerToken: string) => {
+export const fetchPatientsList = async (clinicId: string, bearerToken: string) => {
     try {
-        console.log('Fetching patients List...');
         
       const response = await fetch(
-        `https://dentalrainmaker.onrender.com/patients/paginated?clinicId=${encodeURIComponent(clinicId)}&page=${page}&pagesize=${pagesize}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/patients?clinicId=${encodeURIComponent(clinicId)}`,
         {
           method: 'GET',
           headers: {
@@ -12,15 +11,15 @@ export const fetchPatientsList = async (clinicId: string, page: number, pagesize
           },
         },
       )
-      console.log('Response de fetchpatientslist:', response);
+
       
       if (!response.ok) {
         throw new Error('Failed to fetch patients.')
       }
   
-      const {data} = await response.json()
-      console.log('Patients fetched successfully:', data)
-      return data
+      const patients = await response.json()
+      console.log('Patients fetched successfully:', patients)
+      return patients
     } catch (error) {
       console.error('Error fetching patients:', error)
       throw error
