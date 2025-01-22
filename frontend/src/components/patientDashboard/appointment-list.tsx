@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button'
 import { Calendar, Clock, Video } from 'lucide-react'
 
 export function AppointmentList() {
-
   const appointments = [
     {
       remote_id: 233,
@@ -26,7 +25,6 @@ export function AppointmentList() {
       time: '2:30 PM',
       type: 'Virtual Consultation',
       doctor: 'Dr. Walker',
-  
     },
   ]
 

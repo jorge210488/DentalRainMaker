@@ -53,6 +53,24 @@ export class Notification extends Document {
     [key: string]: string | undefined
   }
 
+  @Prop({
+    type: Object,
+    validate: {
+      validator: (webpush: any) => {
+        return (
+          webpush?.fcm_options?.link &&
+          typeof webpush.fcm_options.link === 'string'
+        )
+      },
+      message: 'Webpush must contain a valid fcm_options.link as a string.',
+    },
+  })
+  webpush?: {
+    fcm_options?: {
+      link?: string
+    }
+  }
+
   @Prop({ type: Date, default: Date.now })
   sendAt?: Date
 

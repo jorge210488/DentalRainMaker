@@ -170,4 +170,34 @@ export class NotificationsService {
 
     return notification
   }
+
+  async getNotificationsByUser(
+    remoteId: string,
+    clinicId: string,
+  ): Promise<Notification[]> {
+    if (!remoteId) {
+      throw new BadRequestException('Remote ID is required')
+    }
+
+    if (!clinicId) {
+      throw new BadRequestException('Clinic ID is required')
+    }
+
+    const notifications = await this.notificationModel.find({
+      remote_id: remoteId,
+      clinic_id: clinicId,
+    })
+
+    if (!notifications.length) {
+      throw new NotFoundException(
+        `No notifications found for user with remote_id ${remoteId} and clinic_id ${clinicId}`,
+      )
+    }
+
+    console.log(
+      `NotificationsService: Found ${notifications.length} notifications for user ${remoteId} and clinic ${clinicId}`,
+    )
+
+    return notifications
+  }
 }
