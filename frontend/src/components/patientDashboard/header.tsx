@@ -25,6 +25,8 @@ import { fetchNotificationsByUser } from '@/server/notifications'
 import { setNotifications } from '@/redux/slices/notificationsSlice'
 import { RootState } from '@/redux/store'
 import { useSession } from 'next-auth/react'
+import { clearUser } from '@/redux/slices/userSlice'
+import { clearNotifications } from '@/redux/slices/notificationsSlice'
 
 interface SiteHeaderProps {
   onLogout: () => void
@@ -35,8 +37,8 @@ export default function Header({ onLogout }: SiteHeaderProps) {
   const dispatch = useDispatch()
   const { data: session } = useSession()
 
-  const notifications = useSelector(
-    (state: RootState) => state.notifications.notifications,
+  const unreadCount = useSelector(
+    (state: RootState) => state.notifications.unreadCount,
   )
 
   useEffect(() => {
@@ -61,6 +63,12 @@ export default function Header({ onLogout }: SiteHeaderProps) {
 
     loadNotifications()
   }, [dispatch, session])
+
+  const handleLogout = () => {
+    dispatch(clearUser())
+    dispatch(clearNotifications())
+    onLogout()
+  }
 
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-blue-600 font-sans sm:w-[127vw]'>
@@ -94,7 +102,7 @@ export default function Header({ onLogout }: SiteHeaderProps) {
                 Menu
               </SheetTitle>
             </SheetHeader>
-            <div className='grid gap-4 py-4'>
+            <div className='relative grid gap-4 py-4'>
               <Button
                 variant='ghost'
                 className='w-full justify-start font-sans'
@@ -104,12 +112,22 @@ export default function Header({ onLogout }: SiteHeaderProps) {
               </Button>
               <Button
                 variant='ghost'
-                className='w-full justify-start font-sans'
+                className='relative w-full justify-start font-sans'
                 onClick={() => setIsNotificationOpen(true)}
               >
-                <Bell className='mr-2 h-5 w-5' />
+                {/* Icono de la campanita */}
+                <div className='relative'>
+                  <Bell className='mr-2 h-5 w-5' />
+
+                  {unreadCount > 0 && (
+                    <div className='absolute right-[-4px] top-[-5px] flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white md:hidden'>
+                      {unreadCount}
+                    </div>
+                  )}
+                </div>
                 Notifications
               </Button>
+
               <Button
                 variant='ghost'
                 className='w-full justify-start font-sans'
@@ -120,7 +138,7 @@ export default function Header({ onLogout }: SiteHeaderProps) {
               <Button
                 variant='ghost'
                 className='w-full justify-start font-sans'
-                onClick={onLogout}
+                onClick={handleLogout}
               >
                 Logout
               </Button>
@@ -138,15 +156,23 @@ export default function Header({ onLogout }: SiteHeaderProps) {
             <Calendar className='h-5 w-5' />
             <span className='sr-only'>Calendar</span>
           </Button>
-          <Button
-            variant='ghost'
-            size='icon'
-            className='text-white hover:bg-blue-500'
-            onClick={() => setIsNotificationOpen(true)}
-          >
-            <Bell className='h-5 w-5' />
-            <span className='sr-only'>Notifications</span>
-          </Button>
+          <div className='relative'>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='text-white hover:bg-blue-500'
+              onClick={() => setIsNotificationOpen(true)}
+            >
+              <Bell className='h-5 w-5' />
+              <span className='sr-only'>Notifications</span>
+            </Button>
+            {unreadCount > 0 && (
+              <div className='absolute -right-2 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
+                {unreadCount}
+              </div>
+            )}
+          </div>
+
           <Button
             variant='ghost'
             size='icon'
@@ -174,7 +200,7 @@ export default function Header({ onLogout }: SiteHeaderProps) {
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className='font-sans' onClick={onLogout}>
+              <DropdownMenuItem className='font-sans' onClick={handleLogout}>
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>

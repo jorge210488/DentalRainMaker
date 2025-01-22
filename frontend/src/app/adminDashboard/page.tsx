@@ -1,10 +1,6 @@
 import { Metadata } from 'next'
-import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell'
 import { DashboardHeader } from '@/components/patientDashboard/dashboard-header'
-import { AppointmentList } from '@/components/patientDashboard/appointment-list'
-import { TreatmentProgress } from '@/components/patientDashboard/components_treatment-progress'
-import { MessagingWidget } from '@/components/patientDashboard/components_messaging-widget'
-import { MetricsCards } from '@/components/patientDashboard/components_metrics-cards'
+import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell'
 
 export const metadata: Metadata = {
   title: 'Dashboard | Dental Rain Maker',
@@ -15,11 +11,15 @@ export default function DashboardPage() {
 
 
   return (
-    <div>
-      <div className='grid gap-6'>
+    <DashboardShell>
+      <div className='p-8'>
+        <DashboardHeader
+          heading='Welcome back, Doctor'
+          text='Manage your dental care journey'
+        />
         
       </div>
-    </div>
+    </DashboardShell>
       
    
   )

@@ -189,6 +189,7 @@ export class NotificationsService {
     })
 
     if (!notifications.length) {
+      console.log('No se encontraron notificaciones para este usuario')
       throw new NotFoundException(
         `No notifications found for user with remote_id ${remoteId} and clinic_id ${clinicId}`,
       )
@@ -198,6 +199,7 @@ export class NotificationsService {
       `NotificationsService: Found ${notifications.length} notifications for user ${remoteId} and clinic ${clinicId}`,
     )
 
+    console.log(notifications)
     return notifications
   }
 }
