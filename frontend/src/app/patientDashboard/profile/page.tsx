@@ -23,13 +23,11 @@ import { fetchContactById } from '@/server/contacts'
 import { useSession } from 'next-auth/react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-
-export interface Address {
-  street?: string
-  city?: string
-  state?: string
-  postal_code?: string
-}
+import {
+  PhoneNumber,
+  EmailAddress,
+  Address,
+} from '@/redux/types/user.interface'
 
 export interface PatientProfile {
   name: string
@@ -40,7 +38,7 @@ export interface PatientProfile {
   state: string
   addresses: Address[]
   phone_numbers: string[]
-  email_addresses: string[]
+  email_addresses: EmailAddress[]
   createdAt: string
 }
 
@@ -185,7 +183,7 @@ export default function PatientProfile() {
               <CardContent>
                 {phone_numbers && phone_numbers.length > 0 ? (
                   <ul className='space-y-2'>
-                    {phone_numbers.map((phone, index) => (
+                    {phone_numbers.map((phone: PhoneNumber, index: number) => (
                       <li
                         key={index}
                         className='flex items-center justify-between'
@@ -234,19 +232,21 @@ export default function PatientProfile() {
               <CardContent>
                 {email_addresses && email_addresses.length > 0 ? (
                   <ul className='space-y-2'>
-                    {email_addresses.map((email, index) => (
-                      <li
-                        key={index}
-                        className='flex items-center justify-between'
-                      >
-                        <span>{email.address}</span>
-                        <span className='text-muted-foreground text-sm'>
-                          {email.type
-                            .replace('EMAIL_ADDRESS_TYPE_', '')
-                            .toLowerCase()}
-                        </span>
-                      </li>
-                    ))}
+                    {email_addresses.map(
+                      (email: EmailAddress, index: number) => (
+                        <li
+                          key={index}
+                          className='flex items-center justify-between'
+                        >
+                          <span>{email.address}</span>
+                          <span className='text-muted-foreground text-sm'>
+                            {email.type
+                              .replace('EMAIL_ADDRESS_TYPE_', '')
+                              .toLowerCase()}
+                          </span>
+                        </li>
+                      ),
+                    )}
                   </ul>
                 ) : (
                   <EmptyState text='No email addresses added' />
@@ -278,7 +278,7 @@ export default function PatientProfile() {
               <CardContent>
                 {addresses && addresses.length > 0 ? (
                   <ul className='space-y-4'>
-                    {addresses.map((address, index) => (
+                    {addresses.map((address: Address, index: number) => (
                       <li key={index} className='flex flex-col gap-1'>
                         <p className='font-semibold'>
                           {address.street_address}

@@ -17,11 +17,11 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   // const { data: session, status } = useSession()
-  
+
   //   useEffect(() => {
   //       if (status === 'authenticated') {
   //         console.log('User:', session?.user);
-          
+
   //         console.log('Token:', session?.user?.token)
   //         console.log('User ID:', session?.user?.userId)
   //         console.log('User Type:', session?.user?.type)
@@ -30,7 +30,6 @@ export default function DashboardPage() {
   //         console.log('No session available')
   //       }
   //     }, [status, session])
-
 
   return (
     <DashboardShell>
