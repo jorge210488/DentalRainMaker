@@ -3,6 +3,16 @@ import {
   AppointmentType,
 } from '@/redux/types/appointment.interface'
 
+interface Canceler {
+  name: string
+  remote_id: string
+}
+
+export interface CancelAppointmentDto {
+  canceler: Canceler
+  name: string
+}
+
 export const fetchAppointments = async (
   clinicId: string,
   bearerToken: string,
@@ -143,6 +153,80 @@ export const appointmentResources = async (
     return transformedResources
   } catch (error) {
     console.error('Error fetching Appointments resources:', error)
+    throw error
+  }
+}
+
+export const getAppointmentById = async (
+  clinicId: string,
+  appointmentId: string,
+  bearerToken: string,
+) => {
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/${encodeURIComponent(
+      appointmentId,
+    )}?clinic_id=${encodeURIComponent(clinicId)}`
+
+    console.log('Fetching appointment by ID from:', url)
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(
+        `Failed to fetch appointment: ${response.status} ${response.statusText} - ${errorText}`,
+      )
+    }
+
+    const appointment = await response.json()
+    console.log('Appointment fetched successfully:', appointment)
+    return appointment
+  } catch (error) {
+    console.error('Error fetching appointment by ID:', error)
+    throw error
+  }
+}
+
+export const cancelAppointment = async (
+  clinicId: string,
+  appointmentId: string,
+  cancelAppointmentDto: CancelAppointmentDto,
+  bearerToken: string,
+) => {
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/${encodeURIComponent(
+      appointmentId,
+    )}/cancel?clinic_id=${encodeURIComponent(clinicId)}`
+
+    console.log('Cancelling appointment with URL:', url)
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify(cancelAppointmentDto),
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(
+        `Failed to cancel appointment: ${response.status} ${response.statusText} - ${errorText}`,
+      )
+    }
+
+    const result = await response.json()
+    console.log('Appointment cancelled successfully:', result)
+    return result
+  } catch (error) {
+    console.error('Error cancelling appointment:', error)
     throw error
   }
 }
