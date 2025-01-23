@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { setSelectedClinic } from '@/redux/slices/clinicsSlice'
 import Swal from 'sweetalert2'
+import { Clinic } from '@/redux/types/clinic.interface'
 
 export default function RegisterForm() {
   const router = useRouter()
@@ -131,7 +132,7 @@ export default function RegisterForm() {
                 <option value='' disabled>
                   Select Clinic
                 </option>
-                {clinics.map((clinic) => (
+                {clinics.map((clinic: Clinic) => (
                   <option key={clinic._id} value={clinic._id}>
                     {clinic.clinic_name}
                   </option>

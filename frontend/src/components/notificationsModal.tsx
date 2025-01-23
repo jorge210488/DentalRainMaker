@@ -6,6 +6,7 @@ import { RootState } from '@/redux/store'
 import { updateNotification } from '@/server/notifications'
 import { markNotificationAsRead } from '@/redux/slices/notificationsSlice'
 import { useSession } from 'next-auth/react'
+import { Clinic } from '@/redux/types/clinic.interface'
 
 interface NotificationModalProps {
   isOpen: boolean
@@ -63,7 +64,7 @@ export function NotificationModal({
           {sortedNotifications.length > 0 ? (
             sortedNotifications.map((notification, index) => {
               const clinic = clinics.find(
-                (clinic) => clinic._id === notification.clinic_id,
+                (clinic: Clinic) => clinic._id === notification.clinic_id,
               )
               const clinicName = clinic?.clinic_name || 'Unknown Clinic'
 
