@@ -1,263 +1,143 @@
 import {
-  IsObject,
-  IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
-  IsDate,
   IsArray,
-  IsBoolean,
+  IsObject,
+  IsRFC3339,
 } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { Type } from 'class-transformer'
 
-export class CreateAppointmentDto {
-  @ApiProperty({
-    description: 'Unique identifier for the appointment',
-    example: '550e8400-e29b-41d4-a716-446655440000',
-  })
+class ProviderDTO {
   @IsString()
-  @IsOptional()
-  _id?: string
+  @ApiProperty({
+    example: 'resources/provider_1',
+    description: 'Name of the provider.',
+  })
+  name: string
 
-  @ApiProperty({
-    description: 'Name of the appointment',
-    example: 'Consultation with Dr. Smith',
-  })
   @IsString()
+  @ApiProperty({
+    example: 'provider_1',
+    description: 'Remote ID of the provider.',
+  })
+  remote_id: string
+
+  @IsString()
+  @ApiProperty({ example: 'PROVIDER', description: 'Type of the provider.' })
+  type: string
+}
+
+class SchedulerDTO {
   @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: 'Jane Doe',
+    description: 'Name of the scheduler.',
+    required: false,
+  })
   name?: string
 
-  @ApiProperty({
-    description: 'Remote identifier for external systems (optional)',
-    example: '123456',
-  })
-  @IsString()
   @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: '123',
+    description: 'Remote ID of the scheduler.',
+    required: false,
+  })
   remote_id?: string
 
-  @ApiProperty({
-    description: 'ID of the contact associated with this appointment',
-    example: '61b7d88a78989f2b1c5e4d23',
-  })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
+  @ApiProperty({
+    example: 'room',
+    description: 'Type of the scheduler.',
+    required: false,
+  })
+  type?: string
+}
+
+export class CreateAppointmentDto {
+  @IsString()
+  @ApiProperty({
+    example: '804',
+    description: 'Contact ID associated with the appointment.',
+  })
   contact_id: string
 
-  @ApiProperty({
-    description: 'Detailed contact information (optional)',
-    example: {
-      name: 'John Doe',
-      remote_id: 'remote123',
-      given_name: 'John',
-      family_name: 'Doe',
-    },
-    required: false,
-  })
-  @IsObject()
-  @IsOptional()
-  contact?: {
-    name: string
-    remote_id: string
-    given_name: string
-    family_name: string
-  }
-
-  @ApiProperty({
-    description: 'Location of the appointment',
-    example: '123 Main Street, Suite 200',
-  })
   @IsString()
-  @IsNotEmpty()
-  location: string
-
   @ApiProperty({
-    description: 'Start time of the appointment',
-    example: '2025-01-08T09:00:00Z',
-  })
-  @IsDate()
-  @Type(() => Date)
-  @IsNotEmpty()
-  start_time: Date
-
-  @ApiProperty({
-    description: 'End time of the appointment',
-    example: '2025-01-08T10:00:00Z',
-  })
-  @IsDate()
-  @Type(() => Date)
-  @IsOptional()
-  end_time?: Date
-
-  @ApiProperty({
-    description: 'Wall start time of the appointment (optional)',
-    example: '2025-01-08T09:00:00Z',
-  })
-  @IsDate()
-  @Type(() => Date)
-  @IsOptional()
-  wall_start_time?: Date
-
-  @ApiProperty({
-    description: 'Wall end time of the appointment (optional)',
-    example: '2025-01-08T10:00:00Z',
-  })
-  @IsDate()
-  @Type(() => Date)
-  @IsOptional()
-  wall_end_time?: Date
-
-  @ApiProperty({
-    description: 'Time zone of the appointment (optional)',
-    example: 'America/New_York',
-  })
-  @IsString()
-  @IsOptional()
-  time_zone?: string
-
-  @ApiProperty({
-    description: 'List of providers associated with the appointment (optional)',
-    example: [
-      {
-        name: 'Dr. Smith',
-        remote_id: 'provider123',
-        type: 'doctor',
-        display_name: 'Dr. John Smith',
-      },
-    ],
-  })
-  @IsArray()
-  @IsOptional()
-  providers?: Array<{
-    name: string
-    remote_id: string
-    type: string
-    display_name: string
-  }>
-
-  @ApiProperty({
+    example: '2025-02-14 10:00:00',
     description:
-      'List of schedulers associated with the appointment (optional)',
+      'Start time of the appointment in the local timezone (yyyy-mm-dd hh:mm:ss format).',
+  })
+  wall_start_time: string
+
+  @IsString()
+  @ApiProperty({
+    example: '2025-02-14 11:00:00',
+    description:
+      'End time of the appointment in the local timezone (yyyy-mm-dd hh:mm:ss format).',
+  })
+  wall_end_time: string
+
+  @IsArray()
+  @IsObject({ each: true })
+  @ApiProperty({
     example: [
       {
-        name: 'Scheduler 1',
-        remote_id: 'scheduler123',
-        type: 'scheduler',
-        display_name: 'Main Scheduler',
+        name: 'resources/provider_1',
+        remote_id: 'provider_1',
+        type: 'PROVIDER',
       },
     ],
+    description: 'List of providers associated with the appointment.',
   })
-  @IsArray()
+  providers: ProviderDTO[]
+
   @IsOptional()
-  scheduler?: Array<{
-    name: string
-    remote_id: string
-    type: string
-    display_name: string
-  }>
-
+  @IsObject()
   @ApiProperty({
-    description: 'ID of the appointment type',
-    example: '61b7d88a78989f2b1c5e4d45',
-  })
-  @IsString()
-  @IsNotEmpty()
-  appointment_type_id: string
-
-  @ApiProperty({
-    description: 'Short description of the appointment',
-    example: 'Routine check-up',
-  })
-  @IsString()
-  @IsOptional()
-  short_description: string
-
-  @ApiProperty({
-    description: 'Additional notes for the appointment',
-    example: 'Patient has a history of high blood pressure.',
-  })
-  @IsString()
-  @IsOptional()
-  notes: string
-
-  @ApiProperty({
-    description: 'Whether the appointment is confirmed',
-    example: true,
-    default: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  confirmed?: boolean
-
-  @ApiProperty({
-    description: 'Whether the appointment is cancelled',
-    example: false,
-    default: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  cancelled?: boolean
-
-  @ApiProperty({
-    description: 'Whether the appointment is completed',
-    example: false,
-    default: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  completed?: boolean
-
-  @ApiProperty({
-    description: 'Whether the appointment is marked as broken',
-    example: false,
-    default: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  broken?: boolean
-
-  // @ApiProperty({
-  //   description: 'ID of the doctor',
-  //   example: '61b7d88a78989f2b1c5e4d45',
-  // })
-  // @IsString()
-  // @IsNotEmpty()
-  // doctor_id: string
-
-  // @ApiProperty({
-  //   description: 'ID of the clinic',
-  //   example: '61b7d88a78989f2b1c5e4d45',
-  // })
-  // @IsString()
-  // @IsNotEmpty()
-  // clinic_id: string
-
-  // @ApiProperty({
-  //   description: 'Additional data for the appointment',
-  //   example: { key: 'value' },
-  // })
-  // @IsObject()
-  // @IsOptional()
-  // additional_data: Record<string, unknown>
-
-  @ApiProperty({
-    description: 'Additional data for the appointment',
     example: {
-      doctor_id: '61b7d88a78989f2b1c5e4d45',
-      doctor_name: 'Dr. Smith',
-      clinic_id: '61b7d88a78989f2b1c5e4d45',
-      clinic_name: 'Main Clinic',
-      paid: false,
+      name: 'Jane Scheduler',
+      remote_id: '123',
+      type: 'room',
     },
+    description: 'Scheduler information for the appointment.',
     required: false,
   })
-  @IsObject()
+  scheduler?: SchedulerDTO
+
   @IsOptional()
-  additional_data?: {
-    doctor_id: string
-    doctor_name: string
-    clinic_id: string
-    clinic_name: string
-    paid: boolean
-  }
+  @IsString()
+  @ApiProperty({
+    example: 'appointmenttypes/1',
+    description: 'Appointment type ID.',
+    required: false,
+  })
+  appointment_type_id?: string
+
+  @IsString()
+  @ApiProperty({
+    example: 'resources/operatory_5',
+    description: 'Operatory associated with the appointment.',
+  })
+  operatory: string
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: 'Routine check-up',
+    description: 'Short description of the appointment.',
+    required: false,
+  })
+  short_description?: string
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: 'Patient needs a follow-up on previous treatment.',
+    description: 'Notes about the appointment.',
+    required: false,
+  })
+  notes?: string
 }
