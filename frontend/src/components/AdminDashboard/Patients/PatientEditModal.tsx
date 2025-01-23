@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Patient } from '@/interfaces/ComponentsInterfaces/Patient';
+import { useSession } from 'next-auth/react';
+import { updateContact } from '@/server/contacts';
+import Swal from 'sweetalert2';
+import { useForm } from 'react-hook-form';
 
 type PatientEditModalProps = {
   patient: Patient;
@@ -9,16 +13,68 @@ type PatientEditModalProps = {
 
 export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, closeEditModal, onUpdatePatient }) => {
   const [formData, setFormData] = useState(patient);
+  const { data: session } = useSession();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const handleSubmit = () => {
+  
+  const handleSubmit = async() => {
     // Aquí puedes integrar la lógica para enviar los datos actualizados al backend.
-    onUpdatePatient(formData); // Llama a la función para actualizar el paciente.
-    closeEditModal(); // Cierra el modal.
+    try {
+        const newData={
+        given_name: formData.given_name,
+        family_name: formData.family_name,
+        preferred_name: formData.preferred_name,
+        gender: formData.gender,
+        birth_date: formData.birth_date,
+        // addresses: formData.addresses,
+        // phone_numbers: formData.phone_numbers,
+        // email_addresses: formData.email_addresses
+      }
+      console.log('esta es mi data para editar',newData);
+      
+      if(session?.user.clinicId && session.user.token){
+          const response = await updateContact(
+          session.user.clinicId,
+          patient.remote_id.toString(),
+          session.user.token,
+          newData
+        )
+        
+        if (response) {
+          Swal.fire({
+            title: "Success",
+            text: "The patient has been updated successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          onUpdatePatient(formData); // Llama a la función para actualizar el paciente.
+          closeEditModal(); // Cierra el modal.
+
+
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred while creating the patient.",
+            icon: "error",
+            confirmButtonText: "Try Again",
+          });
+        }
+
+        
+        
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Connection Error",
+        text: "Failed to connect to the server. Please try again later.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+    
   };
 
   return (
@@ -86,7 +142,7 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
             </label>
           </div>
 
-          <div>
+          {/* <div>
             <label>
               <strong>Notes:</strong>
               <textarea
@@ -96,7 +152,7 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                 className="w-full border rounded p-2"
               />
             </label>
-          </div>
+          </div> */}
         </div>
 
         <button

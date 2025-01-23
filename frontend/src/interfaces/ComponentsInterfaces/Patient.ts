@@ -38,7 +38,7 @@ export interface Address  {
     fullname: string;
     birth_date: string;
     age: number;
-    gender: string;
+    gender: 'MALE' | 'FEMALE' | 'OTHER';
     notes: string;
     addresses: Address[];
     phone_numbers: Phone_Number[];
@@ -58,3 +58,14 @@ export interface Address  {
     create_time: string;
     update_time: string;
   };
+
+  export interface PatientEdit {
+    given_name: string;
+    family_name: string;
+    preferred_name: string;
+    birth_date: string;
+    gender: 'MALE' | 'FEMALE' | 'OTHER';
+    addresses: Address[];
+    phone_numbers: Phone_Number[];
+    email_addresses: Email_Address[];
+  }

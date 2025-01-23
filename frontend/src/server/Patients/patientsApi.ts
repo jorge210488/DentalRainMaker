@@ -40,3 +40,5 @@ export const fetchPatientsList = async (clinicId: string, bearerToken: string) =
     }
 
 }
+
+
