@@ -1,14 +1,27 @@
-import React from 'react';
+'use-client'
+import React, { useState } from 'react';
 import { Patient } from '@/interfaces/ComponentsInterfaces/Patient';
+import { PatientEditModal } from './PatientEditModal';
 
 type PatientModalProps = {
   patient: Patient;
   closePatientModal: () => void;
-  openEditModal: () => void;
 };
 
 export const PatientModal: React.FC<PatientModalProps> = ({ patient, closePatientModal }) => {
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleOpenEditModal = () => setIsEditModalOpen(true);
+  const handleCloseEditModal = () => setIsEditModalOpen(false);
+
+  const handleUpdatePatient = (updatedPatient: Patient) => {
+    console.log('Updated Patient:', updatedPatient);
+    // Aquí puedes añadir lógica para actualizar el estado o realizar una petición al backend.
+  };
+
   return (
+    <>
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white rounded-lg p-6 max-h-screen w-full max-w-4xl shadow-lg relative overflow-y-auto">
         <button
@@ -123,14 +136,21 @@ export const PatientModal: React.FC<PatientModalProps> = ({ patient, closePatien
 
               <button
                 className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                onClick={openEditModal}
+                onClick={handleOpenEditModal}
               >
                 Edit
-              </button>
-
-              
+              </button>              
 
       </div>
     </div>
+
+    {isEditModalOpen && (
+      <PatientEditModal
+        patient={patient}
+        closeEditModal={handleCloseEditModal}
+        onUpdatePatient={handleUpdatePatient}
+      />
+    )}
+    </>
   );
 };

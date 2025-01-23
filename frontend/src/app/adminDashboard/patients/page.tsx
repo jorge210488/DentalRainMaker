@@ -21,9 +21,6 @@ export default function Home() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [refreshPatients, setRefreshPatients] = useState(false);
-
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Controlar el modal de edición
-  const [editablePatient, setEditablePatient] = useState(null); // Paciente en edición
   
   const { data: session } = useSession();
   const patientsPerPage = 10; // Number of items per page
@@ -84,6 +81,9 @@ export default function Home() {
 }, [searchQuery, sortField, sortOrder, allPatients]);
 
 
+  
+
+
   return (
     <DashboardShell>
       <div className="min-h-screen bg-gray-100 p-6">
@@ -111,8 +111,9 @@ export default function Home() {
         {selectedPatient && (
           <PatientModal
             patient={selectedPatient}
-            openEditModal={}
             closePatientModal={() => setSelectedPatient(null)}
+            
+            
           />
         )}
 
@@ -123,6 +124,9 @@ export default function Home() {
             closeCreateModal={() => setIsCreateModalOpen(false)}
           />
         )}
+
+        
+
       </div>
     </DashboardShell>
   );
