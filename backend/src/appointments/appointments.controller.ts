@@ -105,9 +105,14 @@ export class AppointmentsController {
   }
 
   @Get('visits')
+  @ApiQuery({
+    name: 'clinic_id',
+    required: true,
+    type: String,
+    description: 'The ID of the clinic to fetch patients next and last visit.',
+  })
   async getVisits(
     @Query('clinicId') clinicId: string,
-    @Query('contactId') contactId: string,
   ) {
     return await this.appointmentsService.getVisits(clinicId)
   }
@@ -209,47 +214,5 @@ export class AppointmentsController {
     )
   }
 
-  // @HttpCode(200)
-  // @Post()
-  // @Permissions('ALL_ACCESS', 'CREATE_APPOINTMENT')
-  // async create(@Body() createAppointmentDto: CreateAppointmentDto) {
-  //   return this.appointmentsService.create(createAppointmentDto)
-  // }
-
-  // @HttpCode(200)
-  // @Get('doctor/:id')
-  // @Permissions('ALL_ACCESS', 'READ_OWN_APPOINTMENT')
-  // async getAppointmentByDoctorId(
-  //   @Param('id') doctor_id: string,
-  // ): Promise<AppointmentDocument[]> {
-  //   return this.appointmentsService.getAppointmentByDoctorId(doctor_id)
-  // }
-
-  // @HttpCode(200)
-  // @Put(':id')
-  // @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT')
-  // async updateAppointment(
-  //   @Param('id') _id: string,
-  //   @Body() updateAppointmentDto: CreateAppointmentDto,
-  // ): Promise<AppointmentDocument> {
-  //   return this.appointmentsService.updateAppointment(_id, updateAppointmentDto)
-  // }
-
-  // @HttpCode(200)
-  // @Put('status/:id')
-  // @Permissions('ALL_ACCESS', 'UPDATE_APPOINTMENT')
-  // async updateStatusAppointment(
-  //   @Param('id') _id: string,
-  //   @Body() updateStatusDto: UpdateStatusDto,
-  // ): Promise<AppointmentDocument> {
-  //   const { field, value } = updateStatusDto
-  //   return this.appointmentsService.updateStatusAppointment(_id, field, value)
-  // }
-
-  // @HttpCode(204)
-  // @Delete(':id')
-  // @Permissions('ALL_ACCESS', 'DELETE_APPOINTMENT')
-  // async deleteAppointment(@Param('id') _id: string): Promise<void> {
-  //   return this.appointmentsService.deleteAppointment(_id)
-  // }
+  
 }

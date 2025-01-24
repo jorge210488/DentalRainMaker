@@ -303,56 +303,6 @@ export class AppointmentsService {
   }
 
   
-  // async getVisits(
-  //   clinicId: string,
-  //   contactId: string,
-  // ): Promise<{ nextVisit: string | null; lastVisit: string | null }> {
-  //   try {
-  //     // Obtener datos desde la API externa
-  //     const { url, headers } = await this.getRequestConfig(clinicId)
-  //     const response = await lastValueFrom(
-  //       this.httpService.get(`${url}/appointments`, { headers }),
-  //     )
-  //     const appointments = response.data.appointments
-
-  //     const now = new Date()
-
-  //     // Filtrar citas relevantes para el paciente
-  //     const relevantAppointments = appointments.filter(
-  //       (appointment) => appointment.contact.remote_id === contactId,
-  //     )
-
-  //     // Variables para almacenar la próxima visita y la última visita
-  //     let nextVisit: string | null = null
-  //     let lastVisit: string | null = null
-
-  //     // Iterar una sola vez para encontrar nextVisit y lastVisit
-  //     relevantAppointments.forEach((appointment) => {
-  //       const startTime = new Date(appointment.start_time)
-
-  //       if (
-  //         startTime > now &&
-  //         !appointment.completed &&
-  //         !appointment.cancelled &&
-  //         !appointment.broken
-  //       ) {
-  //         // Si la cita es futura y no está completada, cancelada o rota, verificamos si es la más cercana
-  //         if (!nextVisit || startTime < new Date(nextVisit)) {
-  //           nextVisit = startTime.toISOString().split('T')[0]
-  //         }
-  //       } else if (startTime < now && appointment.confirmed) {
-  //         // Si la cita es pasada y está confirmada, verificamos si es la más reciente
-  //         if (!lastVisit || startTime > new Date(lastVisit)) {
-  //           lastVisit = startTime.toISOString().split('T')[0]
-  //         }
-  //       }
-  //     })
-
-  //     return { nextVisit, lastVisit }
-  //   } catch (error) {
-  //     throw new Error('Error fetching appointments: ' + error.message)
-  //   }
-  // }
 
 
   async getVisits(clinicId: string): Promise<
