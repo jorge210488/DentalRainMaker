@@ -5,10 +5,11 @@ import { PatientEditModal } from './PatientEditModal';
 
 type PatientModalProps = {
   patient: Patient;
+  refreshPatient: () => void;
   closePatientModal: () => void;
 };
 
-export const PatientModal: React.FC<PatientModalProps> = ({ patient, closePatientModal }) => {
+export const PatientModal: React.FC<PatientModalProps> = ({ patient, refreshPatient, closePatientModal }) => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -17,12 +18,13 @@ export const PatientModal: React.FC<PatientModalProps> = ({ patient, closePatien
 
   const handleUpdatePatient = (updatedPatient: Patient) => {
     console.log('Updated Patient:', updatedPatient);
-    // Aquí puedes añadir lógica para actualizar el estado o realizar una petición al backend.
+    refreshPatient();
   };
 
   return (
     <>
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    {!isEditModalOpen && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white rounded-lg p-6 max-h-screen w-full max-w-4xl shadow-lg relative overflow-y-auto">
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-black"
@@ -127,22 +129,29 @@ export const PatientModal: React.FC<PatientModalProps> = ({ patient, closePatien
               <p><strong>Create Time:</strong> {patient.create_time ?? "null"}</p>
               <p><strong>Update Time:</strong> {patient.update_time ?? "null"}</p>
 
-              <button
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={closePatientModal}
-              >
-                Close
-              </button>
+              <div className="flex justify-between gap-x-4">
+                <button
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  onClick={handleOpenEditModal}
+                >
+                  Edit
+                </button> 
+                <button
+                  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  onClick={closePatientModal}
+                >
+                  Close
+                </button>
 
-              <button
-                className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                onClick={handleOpenEditModal}
-              >
-                Edit
-              </button>              
+                 
+              </div>
+
+                          
 
       </div>
     </div>
+    )}
+    
 
     {isEditModalOpen && (
       <PatientEditModal
