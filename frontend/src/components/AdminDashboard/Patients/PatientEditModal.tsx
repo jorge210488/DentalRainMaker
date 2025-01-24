@@ -26,47 +26,14 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
     setFormData({ ...formData, addresses: updatedAddresses });
   };
 
-  const addAddress = () => {
-    setFormData({
-      ...formData,
-      addresses: [
-        ...formData.addresses,
-        {
-          street_address: "",
-          city: "",
-          state: "",
-          postal_code: "",
-          country_code: "",
-          type: "HOME",
-        },
-      ],
-    });
-  };
-
-  const removeAddress = (index: number) => {
-    const updatedAddresses = formData.addresses.filter((_, i) => i !== index);
-    setFormData({ ...formData, addresses: updatedAddresses });
-  };
-
 
   const handlePhoneNumberChange = (index: number, field: string, value: string) => {
     const updatedPhoneNumbers = [...formData.phone_numbers];
     updatedPhoneNumbers[index] = { ...updatedPhoneNumbers[index], [field]: value };
     setFormData({ ...formData, phone_numbers: updatedPhoneNumbers });
   };
-  const addPhoneNumber = () => {
-    setFormData({
-      ...formData,
-      phone_numbers: [
-        ...formData.phone_numbers,
-        { number: "", type: "MOBILE" }, // Valor inicial para un nuevo número
-      ],
-    });
-  };
-  const removePhoneNumber = (index: number) => {
-    const updatedPhoneNumbers = formData.phone_numbers.filter((_, i) => i !== index);
-    setFormData({ ...formData, phone_numbers: updatedPhoneNumbers });
-  };
+  
+  
 
   
   const handleSubmit = async() => {
@@ -265,22 +232,10 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                     <option value="OTHER">Other</option>
                   </select>
                 </label>
-                <button
-                  type="button"
-                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                  onClick={() => removeAddress(index)}
-                >
-                  Remove
-                </button>
+                
               </div>
             ))}
-            <button
-              type="button"
-              className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              onClick={addAddress}
-            >
-              Add Address
-            </button>
+            
           </div>
 
 
@@ -313,22 +268,10 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                     <option value="WORK">Work</option>
                   </select>
                 </label>
-                <button
-                  type="button"
-                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                  onClick={() => removePhoneNumber(index)}
-                >
-                  Remove
-                </button>
+                
               </div>
             ))}
-            <button
-              type="button"
-              className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              onClick={addPhoneNumber}
-            >
-              Add Phone Number
-            </button>
+            
           </div>
         
       </div>
