@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{subject}}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arimo', sans-serif;
+      }
+      table {
+        border-spacing: 0;
+        width: 100%;
+        height: 100%;
+      }
+      td {
+        padding: 0;
+      }
+      .content {
+        background: linear-gradient(135deg, #e3e3ff, #eaeafc, #ffffff);
+        padding: 20px;
+        text-align: center;
+      }
+      .titleSee {
+        color: #231971;
+        font-weight: bold;
+      }
+      .info {
+        color: #2a2742;
+        font-size: 18px;
+        text-align: justify;
+        padding: 0 15px;
+      }
+      .title {
+        color: #2a2742;
+        font-size: 40px;
+        text-align: center;
+      }
+      .logo {
+        width: 30%;
+        object-fit: contain;
+        object-position: center;
+        background: none;
+        background-color: transparent;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <table role="presentation">
+      <tr>
+        <td
+          background="https://res.cloudinary.com/deflfnoba/image/upload/v1736291384/DentalRainMaker%20Frontend/gvn7fpvfvo0p1kturta1.jpg"
+          style="background-size: cover; background-position: center"
+        >
+          <div class="content">
+            <div class="containerLogo">
+              <img
+                class="logo"
+                src="https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png"
+                alt="Dental Rain Maker Logo"
+              />
+            </div>
+            <h1 class="title">
+              {{Greetings}}, <span class="titleSee">{{given_name}}!</span>
+            </h1>
+            <p class="info">
+              We are writing you from the clinic
+              <span class="titleSee">{{clinic_name}} </span><br /><br />
+
+              {{Body}}<br />
+              <br />
+              <a
+                href="{{link}}"
+                style="
+                  display: inline-block;
+                  background-color: #231971;
+                  color: white;
+                  text-decoration: none;
+                  padding: 10px 20px;
+                  border-radius: 5px;
+                  font-weight: bold;
+                "
+                target="_blank"
+              >
+                Click here for more details </a
+              ><br /><br />
+
+              {{closing}},<br />
+              <span class="titleSee"><em>{{signature}}</em></span>
+            </p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

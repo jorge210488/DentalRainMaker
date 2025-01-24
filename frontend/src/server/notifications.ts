@@ -1,3 +1,33 @@
+export interface NotificationContent {
+  title: string
+  body: string
+  image?: string
+}
+
+export interface NotificationData {
+  type: string
+  url?: string
+  promoCode?: string
+  appointmentId?: string
+}
+
+export interface WebpushFcmOptions {
+  link?: string
+}
+
+export interface Webpush {
+  fcm_options: WebpushFcmOptions
+}
+
+export interface CreateNotificationDto {
+  notification: NotificationContent
+  remote_id: string
+  clinic_id: string
+  data?: NotificationData
+  webpush?: Webpush
+  sendAt?: string
+}
+
 export const fetchNotificationsByUser = async (
   clinicId: string,
   remoteId: string,
@@ -83,6 +113,36 @@ export const updateNotification = async (
     return updatedNotification
   } catch (error) {
     console.error('Error updating notification:', error)
+    throw error
+  }
+}
+
+export const sendNotification = async (
+  notificationData: CreateNotificationDto,
+  bearerToken: string,
+): Promise<void> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/notifications/send`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify(notificationData),
+      },
+    )
+
+    if (!response.ok) {
+      throw new Error('Failed to send notification.')
+    }
+
+    const result = await response.json()
+
+    console.log('Notification sent successfully:', result)
+  } catch (error) {
+    console.error('Error sending notification:', error)
     throw error
   }
 }
