@@ -44,16 +44,28 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
   const handleSubmit = async() => {
     // Aquí puedes integrar la lógica para enviar los datos actualizados al backend.
     try {
-        const newData={
-        given_name: formData.given_name,
-        family_name: formData.family_name,
-        preferred_name: formData.preferred_name,
-        gender: formData.gender,
-        birth_date: formData.birth_date,
-        addresses: formData.addresses,
-        phone_numbers: formData.phone_numbers,
-        email_addresses: formData.email_addresses
-      }
+      //   const newData={
+      //   given_name: formData.given_name,
+      //   family_name: formData.family_name,
+      //   preferred_name: formData.preferred_name,
+      //   gender: formData.gender,
+      //   birth_date: formData.birth_date,
+      //   addresses: formData.addresses,
+      //   phone_numbers: formData.phone_numbers,
+      //   email_addresses: formData.email_addresses
+      // }
+      
+      const newData: Partial<Patient> = {};
+
+        if (formData.preferred_name) newData.preferred_name = formData.preferred_name;
+        if (formData.gender) newData.gender = formData.gender;
+        if (formData.birth_date) newData.birth_date = formData.birth_date;
+        if (formData.addresses.length > 0) newData.addresses = formData.addresses;
+        if (formData.phone_numbers.length > 0) newData.phone_numbers = formData.phone_numbers;
+        if (formData.given_name) newData.given_name = formData.given_name;
+        if (formData.family_name) newData.family_name = formData.family_name;
+        if (formData.email_addresses.length > 0) newData.email_addresses = formData.email_addresses;
+        
       console.log('esta es mi data para editar',newData);
       
       if(session?.user.clinicId && session.user.token){
