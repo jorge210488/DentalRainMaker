@@ -109,7 +109,7 @@ export class AppointmentsController {
     @Query('clinicId') clinicId: string,
     @Query('contactId') contactId: string,
   ) {
-    return await this.appointmentsService.getVisits(clinicId, contactId)
+    return await this.appointmentsService.getVisits(clinicId)
   }
 
   @Get(':appointment_id')

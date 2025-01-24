@@ -7,10 +7,11 @@ import { ClinicConfigService } from 'src/config/clinicsConfig.service'
 import { ClinicsModule } from 'src/clinics/clinics.module'
 import { AppointmentsModule } from 'src/appointments/appointments.module'
 import { InsuranceService } from 'src/insurance/insurance.service'
+import { ContactsService } from 'src/contacts/contacts.service'
 
 @Module({
   imports: [HttpModule, ConfigModule, ClinicsModule, AppointmentsModule],
-  providers: [PatientService, ClinicConfigService, InsuranceService],
+  providers: [PatientService, ClinicConfigService, InsuranceService, ContactsService],
   controllers: [PatientController],
   exports: [PatientService],
 })
