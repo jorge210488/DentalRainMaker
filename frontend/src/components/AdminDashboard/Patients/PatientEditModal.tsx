@@ -15,10 +15,31 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
   const [formData, setFormData] = useState(patient);
   const { data: session } = useSession();
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleAddressChange = (index: number, field: string, value: string) => {
+    const updatedAddresses = [...formData.addresses];
+    updatedAddresses[index] = { ...updatedAddresses[index], [field]: value };
+    setFormData({ ...formData, addresses: updatedAddresses });
+  };
+
+  const handlePhoneNumberChange = (index: number, field: string, value: string) => {
+    const updatedPhoneNumbers = [...formData.phone_numbers];
+    updatedPhoneNumbers[index] = { ...updatedPhoneNumbers[index], [field]: value };
+    setFormData({ ...formData, phone_numbers: updatedPhoneNumbers });
+  };
+
+  const handleEmailChange = (index: number, field: string, value: string) => {
+    const updatedEmails = [...formData.email_addresses];
+    updatedEmails[index] = {...updatedEmails[index], [field]:value };
+    setFormData({...formData, email_addresses: updatedEmails});
+  };
+  
+  
+
   
   const handleSubmit = async() => {
     // Aquí puedes integrar la lógica para enviar los datos actualizados al backend.
@@ -29,9 +50,9 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
         preferred_name: formData.preferred_name,
         gender: formData.gender,
         birth_date: formData.birth_date,
-        // addresses: formData.addresses,
-        // phone_numbers: formData.phone_numbers,
-        // email_addresses: formData.email_addresses
+        addresses: formData.addresses,
+        phone_numbers: formData.phone_numbers,
+        email_addresses: formData.email_addresses
       }
       console.log('esta es mi data para editar',newData);
       
@@ -120,16 +141,23 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                 className="w-full border rounded p-2"
               />
             </label>
+
             <label>
               <strong>Gender:</strong>
-              <input
-                type="text"
+              <select
                 name="gender"
-                value={formData.gender || ''}
+                value={formData.gender || ""}
                 onChange={handleInputChange}
                 className="w-full border rounded p-2"
-              />
+              >
+                <option value="" disabled>
+                  Select Gender
+                </option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+              </select>
             </label>
+
             <label>
               <strong>Birth Date:</strong>
               <input
@@ -140,21 +168,153 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                 className="w-full border rounded p-2"
               />
             </label>
+          </div>  
+        
+          <div>
+            <h3 className="text-xl font-bold mb-2">Addresses</h3>
+            {formData.addresses.map((address, index) => (
+              <div key={index} className="mb-4 border p-2 rounded">
+                <label>
+                  <strong>Street Address:</strong>
+                  <input
+                    type="text"
+                    value={address.street_address}
+                    onChange={(e) =>
+                      handleAddressChange(index, "street_address", e.target.value)
+                    }
+                    className="w-full border rounded p-2"
+                  />
+                </label>
+                <label>
+                  <strong>City:</strong>
+                  <input
+                    type="text"
+                    value={address.city}
+                    onChange={(e) => handleAddressChange(index, "city", e.target.value)}
+                    className="w-full border rounded p-2"
+                  />
+                </label>
+                <label>
+                  <strong>State:</strong>
+                  <input
+                    type="text"
+                    value={address.state}
+                    onChange={(e) => handleAddressChange(index, "state", e.target.value)}
+                    className="w-full border rounded p-2"
+                  />
+                </label>
+                <label>
+                  <strong>Postal Code:</strong>
+                  <input
+                    type="text"
+                    value={address.postal_code}
+                    onChange={(e) =>
+                      handleAddressChange(index, "postal_code", e.target.value)
+                    }
+                    className="w-full border rounded p-2"
+                  />
+                </label>
+                <label>
+                  <strong>Country Code:</strong>
+                  <input
+                    type="text"
+                    value={address.country_code}
+                    onChange={(e) =>
+                      handleAddressChange(index, "country_code", e.target.value)
+                    }
+                    className="w-full border rounded p-2"
+                  />
+                </label>
+                <label>
+                  <strong>Type:</strong>
+                  <select
+                    value={address.type}
+                    onChange={(e) => handleAddressChange(index, "type", e.target.value)}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="HOME">Home</option>
+                    <option value="WORK">Work</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </label>
+                
+              </div>
+            ))}
+            
           </div>
 
-          {/* <div>
-            <label>
-              <strong>Notes:</strong>
-              <textarea
-                name="notes"
-                value={formData.notes || ''}
-                onChange={handleInputChange}
-                className="w-full border rounded p-2"
-              />
-            </label>
-          </div> */}
-        </div>
 
+          <div>
+            <h3 className="text-xl font-bold mb-2">Phone Numbers</h3>
+            {formData.phone_numbers.map((phone, index) => (
+              <div key={index} className="mb-4 border p-2 rounded">
+                <label>
+                  <strong>Phone Number:</strong>
+                  <input
+                    type="text"
+                    value={phone.number}
+                    onChange={(e) =>
+                      handlePhoneNumberChange(index, "number", e.target.value)
+                    }
+                    className="w-full border rounded p-2"
+                  />
+                </label>
+                <label>
+                  <strong>Type:</strong>
+                  <select
+                    value={phone.type}
+                    onChange={(e) =>
+                      handlePhoneNumberChange(index, "type", e.target.value)
+                    }
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="MOBILE">Mobile</option>
+                    <option value="HOME">Home</option>
+                    <option value="WORK">Work</option>
+                  </select>
+                </label>
+                
+              </div>
+            ))}
+            
+          </div>
+
+
+          <div>
+            <h3 className="text-xl font-bold mb-2">Email Address</h3>
+            {formData.email_addresses.map((email, index) => (
+              <div key={index} className="mb-4 border p-2 rounded">
+                <label>
+                  <strong>Email Address:</strong>
+                  <input
+                    type="text"
+                    value={email.address}
+                    onChange={(e) =>
+                      handleEmailChange(index, "address", e.target.value)
+                    }
+                    className="w-full border rounded p-2"
+                  />
+                </label>
+                <label>
+                  <strong>Type:</strong>
+                  <select
+                    value={email.type}
+                    onChange={(e) =>
+                      handleEmailChange(index, "type", e.target.value)
+                    }
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="HOME">Home</option>
+                    <option value="WORK">Work</option>
+                  </select>
+                </label>
+                
+              </div>
+            ))}
+            
+          </div>
+        
+      </div>
         <button
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={handleSubmit}

@@ -111,6 +111,7 @@ export default function Home() {
         {selectedPatient && (
           <PatientModal
             patient={selectedPatient}
+            refreshPatient={handleRefreshPatients}
             closePatientModal={() => setSelectedPatient(null)}
             
             
