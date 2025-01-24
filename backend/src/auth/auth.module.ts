@@ -4,8 +4,8 @@ import { AuthService } from './auth.service'
 import { MongooseModule } from '@nestjs/mongoose'
 import { Credential, CredentialSchema } from './schemas/credential.schema'
 import { Role, RoleSchema } from '../roles/schemas/role.schema'
-import { NodemailerService } from '../nodemailer/nodemailer.service'
 import { ContactsModule } from 'src/contacts/contacts.module'
+import { NodemailerModule } from 'src/nodemailer/nodemailer.module'
 
 @Module({
   imports: [
@@ -14,9 +14,10 @@ import { ContactsModule } from 'src/contacts/contacts.module'
       { name: Role.name, schema: RoleSchema },
     ]),
     ContactsModule,
+    NodemailerModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, NodemailerService],
+  providers: [AuthService],
   exports: [AuthService, MongooseModule],
 })
 export class AuthModule {}
