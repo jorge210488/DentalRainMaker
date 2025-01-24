@@ -44,17 +44,7 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
   const handleSubmit = async() => {
     // Aquí puedes integrar la lógica para enviar los datos actualizados al backend.
     try {
-      //   const newData={
-      //   given_name: formData.given_name,
-      //   family_name: formData.family_name,
-      //   preferred_name: formData.preferred_name,
-      //   gender: formData.gender,
-      //   birth_date: formData.birth_date,
-      //   addresses: formData.addresses,
-      //   phone_numbers: formData.phone_numbers,
-      //   email_addresses: formData.email_addresses
-      // }
-      
+            
       const newData: Partial<Patient> = {};
 
         if (formData.preferred_name) newData.preferred_name = formData.preferred_name;
@@ -182,17 +172,17 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
             </label>
           </div>  
         
+
           <div>
             <h3 className="text-xl font-bold mb-2">Addresses</h3>
-            {formData.addresses.map((address, index) => (
-              <div key={index} className="mb-4 border p-2 rounded">
+              <div  className="mb-4 border p-2 rounded">
                 <label>
                   <strong>Street Address:</strong>
                   <input
                     type="text"
-                    value={address.street_address}
+                    value={formData.addresses[0]?.street_address || ""}
                     onChange={(e) =>
-                      handleAddressChange(index, "street_address", e.target.value)
+                      handleAddressChange(0, "street_address", e.target.value)
                     }
                     className="w-full border rounded p-2"
                   />
@@ -201,8 +191,8 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                   <strong>City:</strong>
                   <input
                     type="text"
-                    value={address.city}
-                    onChange={(e) => handleAddressChange(index, "city", e.target.value)}
+                    value={formData.addresses[0]?.city || ""}
+                    onChange={(e) => handleAddressChange(0, "city", e.target.value)}
                     className="w-full border rounded p-2"
                   />
                 </label>
@@ -210,8 +200,8 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                   <strong>State:</strong>
                   <input
                     type="text"
-                    value={address.state}
-                    onChange={(e) => handleAddressChange(index, "state", e.target.value)}
+                    value={formData.addresses[0]?.state || ""}
+                    onChange={(e) => handleAddressChange(0, "state", e.target.value)}
                     className="w-full border rounded p-2"
                   />
                 </label>
@@ -219,9 +209,9 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                   <strong>Postal Code:</strong>
                   <input
                     type="text"
-                    value={address.postal_code}
+                    value={formData.addresses[0]?.postal_code || ""}
                     onChange={(e) =>
-                      handleAddressChange(index, "postal_code", e.target.value)
+                      handleAddressChange(0, "postal_code", e.target.value)
                     }
                     className="w-full border rounded p-2"
                   />
@@ -230,9 +220,9 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                   <strong>Country Code:</strong>
                   <input
                     type="text"
-                    value={address.country_code}
+                    value={formData.addresses[0]?.country_code || ""}
                     onChange={(e) =>
-                      handleAddressChange(index, "country_code", e.target.value)
+                      handleAddressChange(0, "country_code", e.target.value)
                     }
                     className="w-full border rounded p-2"
                   />
@@ -240,10 +230,11 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                 <label>
                   <strong>Type:</strong>
                   <select
-                    value={address.type}
-                    onChange={(e) => handleAddressChange(index, "type", e.target.value)}
+                    value={formData.addresses[0]?.type || "SELECT"}
+                    onChange={(e) => handleAddressChange(0, "type", e.target.value)}
                     className="w-full border rounded p-2"
                   >
+                    <option value="SELECT">Select a type</option>
                     <option value="HOME">Home</option>
                     <option value="WORK">Work</option>
                     <option value="OTHER">Other</option>
@@ -251,22 +242,19 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                 </label>
                 
               </div>
-            ))}
-            
           </div>
 
 
           <div>
             <h3 className="text-xl font-bold mb-2">Phone Numbers</h3>
-            {formData.phone_numbers.map((phone, index) => (
-              <div key={index} className="mb-4 border p-2 rounded">
+              <div  className="mb-4 border p-2 rounded">
                 <label>
                   <strong>Phone Number:</strong>
                   <input
                     type="text"
-                    value={phone.number}
+                    value={formData.phone_numbers[0]?.number || ""}
                     onChange={(e) =>
-                      handlePhoneNumberChange(index, "number", e.target.value)
+                      handlePhoneNumberChange(0, "number", e.target.value)
                     }
                     className="w-full border rounded p-2"
                   />
@@ -274,35 +262,33 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                 <label>
                   <strong>Type:</strong>
                   <select
-                    value={phone.type}
+                    value={formData.phone_numbers[0]?.type || "SELECT"}
                     onChange={(e) =>
-                      handlePhoneNumberChange(index, "type", e.target.value)
+                      handlePhoneNumberChange(0, "type", e.target.value)
                     }
                     className="w-full border rounded p-2"
                   >
+                    <option value="SELECT">Select a type</option>
                     <option value="MOBILE">Mobile</option>
                     <option value="HOME">Home</option>
                     <option value="WORK">Work</option>
                   </select>
                 </label>
-                
               </div>
-            ))}
-            
           </div>
 
 
           <div>
             <h3 className="text-xl font-bold mb-2">Email Address</h3>
-            {formData.email_addresses.map((email, index) => (
-              <div key={index} className="mb-4 border p-2 rounded">
+            
+              <div  className="mb-4 border p-2 rounded">
                 <label>
                   <strong>Email Address:</strong>
                   <input
                     type="text"
-                    value={email.address}
+                    value={formData.email_addresses[0]?.address || ""}
                     onChange={(e) =>
-                      handleEmailChange(index, "address", e.target.value)
+                      handleEmailChange(0, "address", e.target.value)
                     }
                     className="w-full border rounded p-2"
                   />
@@ -310,19 +296,19 @@ export const PatientEditModal: React.FC<PatientEditModalProps> = ({ patient, clo
                 <label>
                   <strong>Type:</strong>
                   <select
-                    value={email.type}
+                    value={formData.email_addresses[0]?.type || "SELECT"}
                     onChange={(e) =>
-                      handleEmailChange(index, "type", e.target.value)
+                      handleEmailChange(0, "type", e.target.value)
                     }
                     className="w-full border rounded p-2"
                   >
+                    <option value="SELECT">Select a type</option>
                     <option value="HOME">Home</option>
                     <option value="WORK">Work</option>
                   </select>
                 </label>
                 
               </div>
-            ))}
             
           </div>
         
