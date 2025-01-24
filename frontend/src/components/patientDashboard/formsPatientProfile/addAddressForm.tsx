@@ -11,13 +11,20 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Address, PatientProfile } from '@/app/patientDashboard/profile/page'
+import { PatientProfile } from '@/app/patientDashboard/profile/page'
 import { Dispatch, SetStateAction } from 'react'
 import { useSession } from 'next-auth/react'
 import { updateContact } from '@/server/contacts'
 import { useDispatch } from 'react-redux'
 import { updateUser } from '@/redux/slices/userSlice'
 import Swal from 'sweetalert2'
+
+export interface Address {
+  street?: string
+  city?: string
+  state?: string
+  postal_code?: string
+}
 
 interface AddressDialogProps {
   addressOpen: boolean
