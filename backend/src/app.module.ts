@@ -25,6 +25,7 @@ import { GoHighLevelModule } from './gohighlevel/gohighlevel.module'
 import { ContactsModule } from './contacts/contacts.module'
 import { PatientModule } from './patients/patients.module'
 import { InsuranceModule } from './insurance/insurance.module'
+import { ResourcesModule } from './resources/resource.module'
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { InsuranceModule } from './insurance/insurance.module'
     ContactsModule,
     PatientModule,
     InsuranceModule,
+    ResourcesModule
   ],
   controllers: [AppController],
   providers: [
