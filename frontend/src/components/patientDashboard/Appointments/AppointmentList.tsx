@@ -9,7 +9,7 @@ const AppointmentsList = ({ appointments }: AppointmentsListProps) => {
   return (
     <div className='space-y-4'>
       {appointments.map((appointment) => (
-        <AppointmentCard key={appointment.id} appointment={appointment} />
+        <AppointmentCard key={appointment.remote_id} appointment={appointment} />
       ))}
     </div>
   )

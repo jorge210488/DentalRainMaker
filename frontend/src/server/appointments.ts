@@ -153,7 +153,7 @@ export const getAppointmentsByContactId = async (
     bearerToken: string,
   ) => {
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/contact/${contactId}?clinicId=${encodeURIComponent(clinicId)}`
+      let url = `http://localhost:3200/appointments/contact/${contactId}?clinic_id=${encodeURIComponent(clinicId)}`
 
       console.log('URL de la peticion', url)
 

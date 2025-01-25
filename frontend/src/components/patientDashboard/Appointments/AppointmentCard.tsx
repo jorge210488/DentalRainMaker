@@ -19,14 +19,13 @@ const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
             ? 'Payment pending'
             : 'Paid'}
         </p>
-        <h2 className='text-lg font-bold'>{appointment.doctor}</h2>
-        <p className='text-sm text-gray-600'>{appointment.specialty}</p>
-        <p className='text-sm text-gray-600'>Patient: {appointment.patient}</p>
+        <h2 className='text-lg font-bold'>Doctor: {appointment.doctor}</h2>
+        <p className='text-sm text-gray-600'>Operator: {appointment.operator}</p>
         <p className='text-sm text-gray-600'>
-          {appointment.date} - {appointment.time}
+          Date: {appointment.date} - time: {appointment.time}
         </p>
         <p className='text-sm text-gray-600'>
-          {appointment.location} - {appointment.office}
+          Location: {appointment.location}
         </p>
       </div>
       {appointment.paymentStatus === 'Pending' && (
