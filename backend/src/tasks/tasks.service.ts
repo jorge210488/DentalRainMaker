@@ -265,6 +265,9 @@ export class TasksService {
 
             const smsBody = `Hello ${contactDetails.given_name}, this is a reminder for your appointment at ${clinic.clinic_name} for tomorrow.`
             const sendSmsDto = {
+              remote_id: contactDetails.remote_id,
+              clinic_id: clinic._id,
+              clinic_name: clinic.clinic_name,
               to: smsTo,
               body: smsBody,
             }
