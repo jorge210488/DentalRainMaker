@@ -82,6 +82,31 @@ export class AppointmentsController {
     return await this.appointmentsService.getAppointments(clinicId, queryParams)
   }
 
+  
+  @Get('contact/:contact_id')
+  @ApiQuery({
+    name: 'clinic_id',
+    required: true,
+    type: String,
+    description: 'The ID of the clinic to fetch appointment details.',
+  })
+  @ApiParam({
+    name: 'contact_id',
+    required: true,
+    type: String,
+    description: 'The ID of the contact to retrieve.',
+  })
+  async getAppointmentByContactId(
+    @Query('clinic_id') clinicId: string,
+    @Param('contact_id') contactId: string,
+  ) {
+    return await this.appointmentsService.getAppointmentsByContactId(
+      clinicId,
+      contactId,
+    )
+  }
+
+
   @Get('appointmenttypes')
   @ApiQuery({
     name: 'clinic_id',

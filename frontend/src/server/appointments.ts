@@ -146,3 +146,37 @@ export const appointmentResources = async (
     throw error
   }
 }
+
+export const getAppointmentsByContactId = async (
+    clinicId: string,
+    contactId: string,
+    bearerToken: string,
+  ) => {
+    try {
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/contact/${contactId}?clinic_id=${encodeURIComponent(clinicId)}`
+
+      console.log('URL de la peticion', url)
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(
+          `Failed to fetch contact appointments: ${response.status} ${response.statusText} - ${errorText}`,
+        )
+      }
+
+      const appointments = await response.json()
+      console.log('Contact appointments fetched successfully:', appointments)
+      return appointments
+    } catch (error) {
+      console.error('Error fetching contact appointments:', error)
+      throw error
+    }
+  }

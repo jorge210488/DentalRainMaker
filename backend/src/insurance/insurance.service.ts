@@ -167,9 +167,7 @@ export class InsuranceService {
           HttpStatus.NOT_FOUND,
         )
       }
-
-      console.log(response.data);
-      
+     
 
       // Transformar los datos para extraer contactId y carrier_title
       const transformedData = response.data.insurance_coverages.map((item: any) => {
