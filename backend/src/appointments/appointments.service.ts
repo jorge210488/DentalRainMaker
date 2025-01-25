@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { ClinicConfigService } from 'src/config/clinicsConfig.service'
-import { lastValueFrom } from 'rxjs'
+import { filter, lastValueFrom } from 'rxjs'
 import { CreateAppointmentDto } from './dto/createAppointment.dto'
 import { ContactsService } from '../contacts/contacts.service'
 import { UpdateAppointmentDto } from './dto/updateAppointment.dto'
@@ -86,23 +86,36 @@ export class AppointmentsService {
     try {
       const { url, headers } = await this.getRequestConfig(clinicId)
 
+      const contact = await this.contactsService.getContactById(
+        clinicId,
+        contactId,
+      )
+
+      if (!contact) {
+        throw new NotFoundException(
+          `Contact with remoteId ${contactId} not found in clinic ${clinicId}`,
+        )
+      }
+
       const response = await lastValueFrom(
         this.httpService.get(`${url}/appointments`, {
           headers,
         }),
       )
+
+      const appointmentsContact = response.data.appointments.filter((appointment) => appointment.contact.remote_id===contactId);
       
-      return response.data
+      return appointmentsContact;
 
     } catch (error) {
-      console.error('Error fetching appointments:', error)
+      console.error('Error fetching contact appointments:', error)
 
       if (error.response?.status === 404) {
-        throw new HttpException('Appointments not found.', HttpStatus.NOT_FOUND)
+        throw new HttpException('Contact appointments not found.', HttpStatus.NOT_FOUND)
       }
 
       throw new HttpException(
-        'Failed to fetch appointments from the API.',
+        'Failed to fetch contact appointments from the API.',
         HttpStatus.BAD_GATEWAY,
       )
     }
