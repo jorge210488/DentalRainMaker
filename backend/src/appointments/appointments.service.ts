@@ -78,6 +78,36 @@ export class AppointmentsService {
     }
   }
 
+  async getAppointmentsByContactId(
+    clinicId: string,
+    contactId: string
+    
+  ): Promise<any> {
+    try {
+      const { url, headers } = await this.getRequestConfig(clinicId)
+
+      const response = await lastValueFrom(
+        this.httpService.get(`${url}/appointments`, {
+          headers,
+        }),
+      )
+      
+      return response.data
+
+    } catch (error) {
+      console.error('Error fetching appointments:', error)
+
+      if (error.response?.status === 404) {
+        throw new HttpException('Appointments not found.', HttpStatus.NOT_FOUND)
+      }
+
+      throw new HttpException(
+        'Failed to fetch appointments from the API.',
+        HttpStatus.BAD_GATEWAY,
+      )
+    }
+  }
+
   async getAppointmentTypes(clinicId: string): Promise<any> {
     try {
       const { url, headers } = await this.getRequestConfig(clinicId)
@@ -175,6 +205,7 @@ export class AppointmentsService {
       }
       const resourcesResponse = await this.getAppointmentResources(clinicId)
       const resources = resourcesResponse?.resources || []
+      
 
       providers.forEach((provider) => {
         const resource = resources.find(
