@@ -7,7 +7,7 @@ const HomeView: React.FC = () => {
   return (
     <main className='min-h-screen bg-gray-50'>
       {/* Navbar */}
-      <NavbarHome />
+      {/* <NavbarHome /> */}
 
       {/* Presentation */}
       <Presentation />

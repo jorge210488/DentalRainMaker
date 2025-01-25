@@ -1,28 +1,56 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+
 import HomeView from '@/views/HomeView/Home'
+import { SendSms } from '@/components/smsModal'
+import { MessageCircle, Mail } from 'lucide-react'
+import { Dialog } from '@/components/ui/dialog'
+import { EmailModal } from '@/components/emailModal'
 
 const Home: React.FC = () => {
-  const { data: session, status } = useSession()
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      console.log('Token:', session?.user?.token)
-      console.log('User ID:', session?.user?.userId)
-      console.log('User Type:', session?.user?.type)
-      console.log('User views', session?.user?.views)
-      console.log('Clinic Id', session?.user?.clinicId)
-    } else if (status === 'unauthenticated') {
-      console.log('No session available')
-    }
-  }, [status, session])
+  const [smsOpen, setSmsOpen] = useState(false)
+  const [emailOpen, setEmailOpen] = useState(false)
 
   return (
     <>
       <HomeView />
-      <div>Welcome, {session?.user?.name || 'Guest'}</div>
+      <div className='flex items-center space-x-2'>
+        <span>Welcome, Guest </span>
+        <button
+          onClick={() => setSmsOpen(true)}
+          className='flex items-center justify-center rounded p-2 hover:bg-gray-200'
+        >
+          <MessageCircle className='h-5 w-5 text-blue-500' />
+        </button>
+        <button
+          onClick={() => setEmailOpen(true)}
+          className='flex items-center justify-center rounded p-2 hover:bg-gray-200'
+        >
+          <Mail className='h-5 w-5 text-blue-500' />
+        </button>
+      </div>
+
+      {/* Wrap the modal in a Dialog */}
+      <Dialog open={smsOpen} onOpenChange={setSmsOpen}>
+        <SendSms
+          smsOpen={smsOpen}
+          setSmsOpen={setSmsOpen}
+          remote_id='804'
+          phone_number='+541126309051'
+        />
+      </Dialog>
+
+      {/* Email Modal */}
+      <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
+        <EmailModal
+          emailOpen={emailOpen}
+          setEmailOpen={setEmailOpen}
+          remote_id='804'
+          email='jorgemartinez.jam@gmail.com'
+          given_name='Jorge'
+        />
+      </Dialog>
     </>
   )
 }
