@@ -1,228 +1,223 @@
 'use client'
+
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { DashboardShell } from '@/components/patientDashboard/dashboard-shell'
+import { Calendar, MapPin, Plus, User2, Video } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const today = new Date().toISOString().split('T')[0]
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
-export type Appointment = {
-  id: number
-  specialty: string
+interface Appointment {
+  id: string
   doctor: string
+  specialty: string
   patient: string
   date: string
   time: string
   location: string
   office: string
-  type: 'In-person' | 'Virtual'
   paymentStatus: 'Pending' | 'Paid'
+  type: 'Virtual' | 'In-person'
 }
 
-const appointments: Appointment[] = [
-  {
-    id: 1,
-    specialty: 'Dentistry',
-    doctor: 'Dr. Flora Emperatriz Zuñiga',
-    patient: 'Jose Antonio Rojas Huaman',
-    date: '2025-01-11',
-    time: '3:20 PM',
-    location: 'Chacarilla Clinical Center',
-    office: 'Office 37',
-    type: 'In-person',
-    paymentStatus: 'Paid',
-  },
-  {
-    id: 2,
-    specialty: 'Dentistry',
-    doctor: 'Dr. Mariana Pérez',
-    patient: 'Jose Antonio Rojas Huaman',
-    date: '2025-01-13',
-    time: '10:00 AM',
-    location: 'San Borja Clinical Center',
-    office: 'Office 12',
-    type: 'Virtual',
-    paymentStatus: 'Paid',
-  },
-  {
-    id: 3,
-    specialty: 'Dentistry',
-    doctor: 'Dr. Mariana Pérez',
-    patient: 'Jose Antonio Rojas Huaman',
-    date: '2025-01-15',
-    time: '10:00 AM',
-    location: 'San Borja Clinical Center',
-    office: 'Office 12',
-    type: 'In-person',
-    paymentStatus: 'Paid',
-  },
-  {
-    id: 4,
-    specialty: 'Dentistry',
-    doctor: 'Dr. Mariana Pérez',
-    patient: 'Jose Antonio Rojas Huaman',
-    date: '2025-01-16',
-    time: '10:00 AM',
-    location: 'San Borja Clinical Center',
-    office: 'Office 12',
-    type: 'Virtual',
-    paymentStatus: 'Pending',
-  },
-  {
-    id: 5,
-    specialty: 'Dentistry',
-    doctor: 'Dr. Mariana Pérez',
-    patient: 'Jose Antonio Rojas Huaman',
-    date: '2025-01-18',
-    time: '12:00 PM',
-    location: 'San Borja Clinical Center',
-    office: 'Office 14',
-    type: 'In-person',
-    paymentStatus: 'Pending',
-  },
-]
-
-const AppointmentsPage = () => {
-  const [primaryFilter, setPrimaryFilter] = useState<'History' | 'Upcoming'>(
-    'Upcoming',
-  )
-  const [secondaryFilter, setSecondaryFilter] = useState<
-    'All' | 'In-person' | 'Virtual'
-  >('All')
+export default function AppointmentsDashboard() {
   const router = useRouter()
+  const [primaryFilter, setPrimaryFilter] = useState('Upcoming')
+  const [secondaryFilter, setSecondaryFilter] = useState('All')
 
-  const filteredAppointments = appointments.filter((appointment) => {
-    const isPrimaryMatch =
-      primaryFilter === 'History'
-        ? new Date(appointment.date) < new Date(today)
-        : new Date(appointment.date) >= new Date(today)
-
-    const isSecondaryMatch =
-      secondaryFilter === 'All' || appointment.type === secondaryFilter
-
-    return isPrimaryMatch && isSecondaryMatch
-  })
+  // This would come from your data source
+  const filteredAppointments: Appointment[] = [
+    {
+      id: '1',
+      doctor: 'Dr. Sarah Wilson',
+      specialty: 'Cardiologist',
+      patient: 'John Doe',
+      date: '2024-01-25',
+      time: '10:00 AM',
+      location: 'Medical Center',
+      office: 'Room 302',
+      paymentStatus: 'Pending',
+      type: 'In-person',
+    },
+    // Add more appointments as needed
+  ]
 
   return (
-    <div className='min-h-screen bg-gray-100 p-6'>
-      {/* Main content */}
-      <main className='ml-24'>
+    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 lg:w-[87%] dark:from-gray-900 dark:to-gray-800'>
+      <main className='container mx-auto px-4 py-8 sm:px-6 lg:ml-24 lg:px-8'>
         {/* Header */}
-        <header className='mb-6 flex items-center justify-between'>
-          <h1 className='text-2xl font-bold'>My Appointments</h1>
-          <button
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'
+        >
+          <div>
+            <h1 className='text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100'>
+              My Appointments
+            </h1>
+            <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
+              Manage your upcoming and past appointments
+            </p>
+          </div>
+          <Button
             onClick={() =>
               router.push('/patientDashboard/scheduled-appointment')
             }
-            className='rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-purple-600'
+            size='lg'
+            className='group'
           >
-            + Schedule Appointment
-          </button>
-        </header>
+            <Plus className='mr-2 h-4 w-4 transition-transform group-hover:rotate-90' />
+            Schedule Appointment
+          </Button>
+        </motion.header>
 
-        {/* Primary filters */}
-        <div className='mb-4 flex items-center gap-4'>
-          <button
-            onClick={() => setPrimaryFilter('History')}
-            className={`rounded-lg px-4 py-2 ${
-              primaryFilter === 'History'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-500 hover:text-gray-800'
-            }`}
-          >
-            History
-          </button>
-          <button
-            onClick={() => setPrimaryFilter('Upcoming')}
-            className={`rounded-lg px-4 py-2 ${
-              primaryFilter === 'Upcoming'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-500 hover:text-gray-800'
-            }`}
-          >
-            Upcoming
-          </button>
-        </div>
+        {/* Filters */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className='mb-8 space-y-4'
+        >
+          {/* Primary Filter */}
+          <Tabs defaultValue={primaryFilter} onValueChange={setPrimaryFilter}>
+            <TabsList className='grid w-full max-w-[400px] grid-cols-2'>
+              <TabsTrigger value='History'>History</TabsTrigger>
+              <TabsTrigger value='Upcoming'>Upcoming</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
-        {/* Secondary filters */}
-        <div className='mb-4 flex items-center gap-4'>
-          <button
-            onClick={() => setSecondaryFilter('All')}
-            className={`rounded-lg px-4 py-2 ${
-              secondaryFilter === 'All'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-500 hover:text-gray-800'
-            }`}
+          {/* Secondary Filter */}
+          <Tabs
+            defaultValue={secondaryFilter}
+            onValueChange={setSecondaryFilter}
           >
-            All
-          </button>
-          <button
-            onClick={() => setSecondaryFilter('In-person')}
-            className={`rounded-lg px-4 py-2 ${
-              secondaryFilter === 'In-person'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-500 hover:text-gray-800'
-            }`}
-          >
-            In-person
-          </button>
-          <button
-            onClick={() => setSecondaryFilter('Virtual')}
-            className={`rounded-lg px-4 py-2 ${
-              secondaryFilter === 'Virtual'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-500 hover:text-gray-800'
-            }`}
-          >
-            Virtual
-          </button>
-        </div>
+            <TabsList>
+              <TabsTrigger value='All'>All</TabsTrigger>
+              <TabsTrigger value='In-person'>In-person</TabsTrigger>
+              <TabsTrigger value='Virtual'>Virtual</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </motion.div>
 
-        {/* Appointment list */}
-        <div className='space-y-4'>
-          {filteredAppointments.map((appointment) => (
-            <div
-              key={appointment.id}
-              className='flex items-center justify-between rounded-lg bg-white p-4 shadow-md'
-            >
-              <div>
-                <p
-                  className={`text-sm ${
-                    appointment.paymentStatus === 'Pending'
-                      ? 'text-red-500'
-                      : 'text-green-500'
-                  }`}
-                >
-                  {appointment.paymentStatus === 'Pending'
-                    ? 'Payment pending'
-                    : 'Paid'}
-                </p>
-                <h2 className='text-lg font-bold'>{appointment.doctor}</h2>
-                <p className='text-sm text-gray-600'>{appointment.specialty}</p>
-                <p className='text-sm text-gray-600'>
-                  Patient: {appointment.patient}
-                </p>
-                <p className='text-sm text-gray-600'>
-                  {appointment.date} - {appointment.time}
-                </p>
-                <p className='text-sm text-gray-600'>
-                  {appointment.location} - {appointment.office}
-                </p>
-              </div>
-              <div className='flex flex-col items-end gap-2'>
-                {/* <button className="text-green-600 hover:underline">Reschedule</button>
-                <button className="text-red-600 hover:underline">Cancel</button> */}
-                {appointment.paymentStatus === 'Pending' && (
-                  <button className='rounded-lg border border-green-600 px-4 py-1 text-green-600 hover:bg-green-100'>
-                    Pay
-                  </button>
-                )}
-              </div>
+        {/* Appointment List */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'
+        >
+          <AnimatePresence>
+            {filteredAppointments.map((appointment) => (
+              <motion.div
+                key={appointment.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Card className='group overflow-hidden'>
+                  <div className='relative p-6'>
+                    <div className='absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 opacity-75' />
+
+                    {/* Status Badge */}
+                    <div className='mb-4 flex items-center justify-between'>
+                      <Badge
+                        variant={
+                          appointment.paymentStatus === 'Paid'
+                            ? 'outline'
+                            : 'destructive'
+                        }
+                      >
+                        {appointment.paymentStatus}
+                      </Badge>
+                      {appointment.type === 'Virtual' ? (
+                        <Video className='h-5 w-5 text-blue-500' />
+                      ) : (
+                        <MapPin className='h-5 w-5 text-blue-500' />
+                      )}
+                    </div>
+
+                    {/* Appointment Details */}
+                    <div className='space-y-4'>
+                      <div>
+                        <h2 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100'>
+                          {appointment.doctor}
+                        </h2>
+                        <p className='text-sm text-gray-500 dark:text-gray-400'>
+                          {appointment.specialty}
+                        </p>
+                      </div>
+
+                      <div className='space-y-2'>
+                        <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300'>
+                          <User2 className='h-4 w-4' />
+                          {appointment.patient}
+                        </div>
+                        <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300'>
+                          <Calendar className='h-4 w-4' />
+                          {appointment.date} at {appointment.time}
+                        </div>
+                        <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300'>
+                          <MapPin className='h-4 w-4' />
+                          {appointment.location} - {appointment.office}
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className='flex items-center justify-end gap-2 pt-4'>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button variant='outline' size='sm'>
+                                Reschedule
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Reschedule this appointment</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
+                        {appointment.paymentStatus === 'Pending' && (
+                          <Button size='sm'>Pay Now</Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Empty State */}
+        {filteredAppointments.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className='mt-8 text-center'
+          >
+            <div className='rounded-full bg-gray-100 p-4 dark:bg-gray-800'>
+              <Calendar className='mx-auto h-12 w-12 text-gray-400' />
             </div>
-          ))}
-        </div>
+            <h3 className='mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100'>
+              No appointments found
+            </h3>
+            <p className='mt-2 text-gray-500 dark:text-gray-400'>
+              Try adjusting your filters or schedule a new appointment.
+            </p>
+          </motion.div>
+        )}
       </main>
     </div>
   )
 }
-
-export default AppointmentsPage

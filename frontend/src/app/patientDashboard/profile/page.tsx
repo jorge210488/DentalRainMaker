@@ -100,7 +100,7 @@ export default function PatientProfile() {
     state.charAt(0).toUpperCase() + state.slice(1).toLowerCase()
 
   return (
-    <div className='container mx-0 w-[95%] py-2 font-sans sm:mx-auto sm:max-w-4xl sm:py-6 md:overflow-y-hidden'>
+    <div className='container mx-0 py-2 font-sans sm:mx-auto sm:max-w-4xl sm:py-6 md:overflow-y-hidden lg:min-w-[150vh]'>
       <div className='mb-6 flex items-center justify-between'>
         <div>
           <h1 className='text-3xl font-bold tracking-tight'>Patient Profile</h1>
