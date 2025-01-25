@@ -2,12 +2,21 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import * as Twilio from 'twilio'
 import { ConfigService } from '@nestjs/config'
 import { SendSmsDto } from './dtos/sms.dto'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+import { Sms } from './schemas/sms.schema'
+import { ContactsService } from 'src/contacts/contacts.service'
 
 @Injectable()
 export class SmsService {
   private readonly client: Twilio.Twilio
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    @InjectModel(Sms.name)
+    private readonly smsModel: Model<Sms>,
+    private readonly configService: ConfigService,
+    private readonly contactsService: ContactsService,
+  ) {
     const accountSid = this.configService.get<string>('TWILIO_ACCOUNT_SID')
     const authToken = this.configService.get<string>('TWILIO_AUTH_TOKEN')
 
@@ -39,6 +48,9 @@ export class SmsService {
         messagingServiceSid,
       })
       console.log(`Message sent successfully: ${message.sid}`)
+
+      const newSms = new this.smsModel(sendSmsDto)
+      await newSms.save()
     } catch (error) {
       console.error('Failed to send SMS:', error.message)
       throw new InternalServerErrorException(
