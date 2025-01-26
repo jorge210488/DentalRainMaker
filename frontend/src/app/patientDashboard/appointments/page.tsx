@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Calendar, MapPin, Plus, User2, Video } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -15,18 +14,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { useEffect, useState } from 'react'
+import Header from '@/components/patientDashboard/Appointments/Header'
+import Filters from '@/components/patientDashboard/Appointments/Filters'
+import AppointmentsList from '@/components/patientDashboard/Appointments/AppointmentList'
+import { useSession } from 'next-auth/react'
+import { getAppointmentsByContactId } from '@/server/appointments'
 
-interface Appointment {
-  id: string
+export type Appointment = {
+  remote_id: string
   doctor: string
-  specialty: string
+  operator: string
+  speciality: string
   patient: string
   date: string
   time: string
   location: string
-  office: string
+  attention_type: 'In-person' | 'Virtual'
   paymentStatus: 'Pending' | 'Paid'
-  type: 'Virtual' | 'In-person'
 }
 
 export default function AppointmentsDashboard() {
@@ -37,16 +42,16 @@ export default function AppointmentsDashboard() {
   // This would come from your data source
   const filteredAppointments: Appointment[] = [
     {
-      id: '1',
+      remote_id: '1',
       doctor: 'Dr. Sarah Wilson',
-      specialty: 'Cardiologist',
+      speciality: 'Cardiologist',
       patient: 'John Doe',
+      operator: 'nn',
       date: '2024-01-25',
       time: '10:00 AM',
       location: 'Medical Center',
-      office: 'Room 302',
       paymentStatus: 'Pending',
-      type: 'In-person',
+      attention_type: 'In-person',
     },
     // Add more appointments as needed
   ]
@@ -118,7 +123,7 @@ export default function AppointmentsDashboard() {
           <AnimatePresence>
             {filteredAppointments.map((appointment) => (
               <motion.div
-                key={appointment.id}
+                key={appointment.remote_id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -139,7 +144,7 @@ export default function AppointmentsDashboard() {
                       >
                         {appointment.paymentStatus}
                       </Badge>
-                      {appointment.type === 'Virtual' ? (
+                      {appointment.attention_type === 'Virtual' ? (
                         <Video className='h-5 w-5 text-blue-500' />
                       ) : (
                         <MapPin className='h-5 w-5 text-blue-500' />
@@ -153,7 +158,7 @@ export default function AppointmentsDashboard() {
                           {appointment.doctor}
                         </h2>
                         <p className='text-sm text-gray-500 dark:text-gray-400'>
-                          {appointment.specialty}
+                          {appointment.speciality}
                         </p>
                       </div>
 
@@ -168,7 +173,7 @@ export default function AppointmentsDashboard() {
                         </div>
                         <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300'>
                           <MapPin className='h-4 w-4' />
-                          {appointment.location} - {appointment.office}
+                          {appointment.location}
                         </div>
                       </div>
 

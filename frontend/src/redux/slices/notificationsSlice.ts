@@ -1,25 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-interface Notification {
-  id: string
-  remote_id: string
-  clinic_id: string
-  image: string
-  title: string
-  body: string
-  type: string
-  link: string
-  isRead: boolean
-  isSent: boolean
-  sendAt: string
-  createdAt: string
-  updatedAt: string
-}
-
-interface NotificationsState {
-  notifications: Notification[]
-  unreadCount: number
-}
+import {
+  NotificationsState,
+  Notification,
+} from '../types/notification.interface'
 
 const initialState: NotificationsState = {
   notifications: [],

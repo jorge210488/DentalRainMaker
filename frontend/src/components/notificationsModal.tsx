@@ -1,63 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
+import { RootState } from '@/redux/store'
+import { updateNotification } from '@/server/notifications'
+import { markNotificationAsRead } from '@/redux/slices/notificationsSlice'
+import { useSession } from 'next-auth/react'
+import { Clinic } from '@/redux/types/clinic.interface'
 
 interface NotificationModalProps {
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const sampleNotifications = [
-  {
-    notification: {
-      title: '¡Descuento en blanqueamiento dental!',
-      body: 'Aprovecha un 20% de descuento en blanqueamiento dental este mes.',
-      image:
-        'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png',
-    },
-    remote_id: '804',
-    clinic_id: 'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
-    data: {
-      type: 'REMINDER',
-    },
-    webpush: {
-      fcm_options: {
-        link: 'https://dental-rain-maker.vercel.app/',
-      },
-    },
-  },
-  {
-    notification: {
-      title: 'Nueva promoción en limpieza dental',
-      body: 'Obtén un 15% de descuento en tu próxima cita.',
-      image:
-        'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png',
-    },
-    remote_id: '805',
-    clinic_id: 'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
-    data: {
-      type: 'PROMOTION',
-    },
-    webpush: {
-      fcm_options: {
-        link: 'https://dental-rain-maker.vercel.app/',
-      },
-    },
-  },
-]
-
-const clinics = [
-  { id: 'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306', name: 'Dental Clinic ABC' },
-]
-
 export function NotificationModal({
   isOpen,
   setIsOpen,
 }: NotificationModalProps) {
-  const handleRedirect = (link: string) => {
-    window.location.href = link
+  const notifications = useSelector(
+    (state: RootState) => state.notifications.notifications,
+  )
+  const clinics = useSelector((state: RootState) => state.clinics.clinics)
+  const { data: session } = useSession()
+  const dispatch = useDispatch()
+
+  const handleNotificationClick = async (
+    notificationId: string,
+    link: string,
+  ) => {
+    try {
+      if (session?.user?.token) {
+        // Actualiza la notificación en el backend
+        await updateNotification(
+          notificationId,
+          { isRead: true },
+          session.user.token,
+        )
+
+        // Actualiza el estado del slice
+        dispatch(markNotificationAsRead(notificationId))
+
+        // Redirige al enlace
+        window.location.href = link
+      }
+    } catch (error) {
+      console.error('Failed to update notification:', error)
+    }
   }
+
+  // Ordenar las notificaciones por createdAt, de más nueva a más vieja
+  const sortedNotifications = [...notifications].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -67,49 +61,61 @@ export function NotificationModal({
         </DialogHeader>
 
         <div className='space-y-6'>
-          {sampleNotifications.map((notificationData, index) => {
-            const { notification, clinic_id, data, webpush } = notificationData
-            const clinicName = clinics.find(
-              (clinic) => clinic.id === clinic_id,
-            )?.name
-            const typeFormatted =
-              data.type.charAt(0).toUpperCase() +
-              data.type.slice(1).toLowerCase()
+          {sortedNotifications.length > 0 ? (
+            sortedNotifications.map((notification, index) => {
+              const clinic = clinics.find(
+                (clinic: Clinic) => clinic._id === notification.clinic_id,
+              )
+              const clinicName = clinic?.clinic_name || 'Unknown Clinic'
 
-            return (
-              <div
-                key={index}
-                className={`border-b border-gray-300 pb-4 ${
-                  index === 0 ? 'mt-2 border-t pt-4' : ''
-                }`}
-              >
+              return (
                 <div
-                  className='cursor-pointer space-y-2'
-                  onClick={() => handleRedirect(webpush.fcm_options.link)}
+                  key={notification.id}
+                  className={`border-b border-gray-300 pb-4 ${
+                    index === 0 ? 'mt-2 border-t pt-4' : ''
+                  } ${
+                    !notification.isRead
+                      ? 'bg-[#f0f8ff]' // Fondo azul claro si isRead es false
+                      : ''
+                  }`}
                 >
-                  {/* Fila 1: Type */}
-                  <div className='flex justify-end text-sm font-medium text-gray-600'>
-                    {typeFormatted}
-                  </div>
+                  <div
+                    className='cursor-pointer space-y-2'
+                    onClick={() =>
+                      handleNotificationClick(
+                        notification.id,
+                        notification.link,
+                      )
+                    }
+                  >
+                    {/* Fila 1: Type */}
+                    <div className='flex justify-end text-sm font-medium text-gray-600'>
+                      {notification.type}
+                    </div>
 
-                  {/* Fila 2: Title */}
-                  <div className='text-base font-bold text-gray-900'>
-                    {notification.title}
-                  </div>
+                    {/* Fila 2: Title */}
+                    <div className='text-base font-bold text-gray-900'>
+                      {notification.title}
+                    </div>
 
-                  {/* Fila 3: Body */}
-                  <div className='text-sm text-gray-700'>
-                    {notification.body}
-                  </div>
+                    {/* Fila 3: Body */}
+                    <div className='text-sm text-gray-700'>
+                      {notification.body}
+                    </div>
 
-                  {/* Fila 4: Clinic Name */}
-                  <div className='flex justify-end text-sm font-medium text-gray-500'>
-                    {clinicName || 'Unknown Clinic'}
+                    {/* Fila 4: Clinic Name */}
+                    <div className='flex justify-end text-sm font-medium text-gray-500'>
+                      {clinicName}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })
+          ) : (
+            <div className='text-center text-gray-600'>
+              No notifications available.
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

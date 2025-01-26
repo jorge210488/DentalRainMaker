@@ -1,15 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-interface Clinic {
-  _id: string
-  clinic_name: string
-  clinic_website?: string
-}
-
-interface ClinicsState {
-  clinics: Clinic[]
-  selectedClinicId: string | null // Nueva propiedad para almacenar el ID de la clínica seleccionada
-}
+import { ClinicsState, Clinic } from '../types/clinic.interface'
 
 const initialState: ClinicsState = {
   clinics: [],
