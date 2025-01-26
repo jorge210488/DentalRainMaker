@@ -1,5 +1,0 @@
-requests
-google-cloud-storage
-json
-dotenv
-os
