@@ -8,6 +8,7 @@ import { MessageCircle, Mail, Bell } from 'lucide-react'
 import { Dialog } from '@/components/ui/dialog'
 import { EmailModal } from '@/components/emailModal'
 import { FormNotificationModal } from '@/components/formNotificationModal'
+import { LookerStudioEmbed } from '@/components/LookerStudioEmbed'
 
 const Home: React.FC = () => {
   const [smsOpen, setSmsOpen] = useState(false)
