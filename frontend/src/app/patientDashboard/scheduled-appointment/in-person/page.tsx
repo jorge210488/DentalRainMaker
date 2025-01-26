@@ -1,35 +1,41 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { getlistDoctors } from '@/server/appointments'
 
 type Doctor = {
-  id: number
+  remote_id: number
   name: string
   specialty: string
 }
 
-const doctors: Doctor[] = [
-  {
-    id: 1,
-    name: 'Alvarez Carpio, Lucia Del Milagro',
-    specialty: 'Dentistry',
-  },
-  {
-    id: 2,
-    name: 'Babilonia Curaca, Sandra',
-    specialty: 'Dentistry',
-  },
-  {
-    id: 3,
-    name: 'Cardenas Paredes, Maria Del Carmen',
-    specialty: 'Dentistry',
-  },
-]
 
 const DoctorSelectionPage = () => {
+  const { data: session } = useSession();
   const [searchTerm, setSearchTerm] = useState('')
   const router = useRouter()
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
 
+  useEffect(() => {
+    const initializeDoctors = async () => {
+      try {
+        if (session?.user?.token && session?.user?.clinicId) {
+          const response = await getlistDoctors(
+            session.user.clinicId,
+            session.user.token
+          );
+          setDoctors(response);
+        }
+      } catch (error) {
+        console.error('Error initializing doctors:', error);
+      }
+    };
+    initializeDoctors();
+  }, [session])
+
+  console.log("esta lista de doctores",doctors);
+  
   const filteredDoctors = doctors.filter((doctor) =>
     doctor.name.toLowerCase().includes(searchTerm.toLowerCase()),
   )
@@ -94,7 +100,7 @@ const DoctorSelectionPage = () => {
           {filteredDoctors.length > 0 ? (
             filteredDoctors.map((doctor) => (
               <li
-                key={doctor.id}
+                key={doctor.remote_id}
                 className='flex items-center justify-between rounded-lg bg-white p-4 shadow-md'
               >
                 <div>
@@ -127,3 +133,4 @@ const DoctorSelectionPage = () => {
 }
 
 export default DoctorSelectionPage
+

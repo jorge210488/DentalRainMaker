@@ -180,3 +180,50 @@ export const getAppointmentsByContactId = async (
       throw error
     }
   }
+
+
+  export const getlistDoctors = async(
+    clinicId: string,
+    bearerToken: string,
+  ) => {
+    try {
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/resources?clinic_id=${encodeURIComponent(clinicId)}`
+
+      console.log('URL de la peticion', url)
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(
+          `Failed to fetch resources: ${response.status} ${response.statusText} - ${errorText}`,
+        )
+      }
+
+      const {resources} = await response.json()
+      console.log("los resources de la clinica",resources);
+      
+      const doctors = resources
+      .filter((resource:any) => 
+        resource.type === "PROVIDER"
+      )
+      .map((doctor:any) => ({
+        ...doctor,
+        name:doctor.display_name,
+        specialty:"Dentistry"
+      }));
+
+      console.log('Doctors list fetched successfully:', doctors)
+      return doctors
+    } catch (error) {
+      console.error('Error fetching doctors list:', error)
+      throw error
+    }
+      
+  }
