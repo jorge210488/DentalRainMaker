@@ -39,12 +39,8 @@ export class ResourcesService {
     }
   }
 
-  async getResources(
-    clinicId: string,
-  ): Promise<any> {
+  async getResources(clinicId: string): Promise<any> {
     try {
-      
-
       const { url: baseUrl, headers } = await this.getRequestConfig(clinicId)
 
       const Url = `${baseUrl}/resources`
@@ -53,7 +49,6 @@ export class ResourcesService {
         this.httpService.get(Url, { headers }),
       )
 
-      
       if (!response.data) {
         throw new HttpException(
           'Resources records not found.',
@@ -61,8 +56,7 @@ export class ResourcesService {
         )
       }
 
-      return response.data.resources;
-
+      return response.data.resources
     } catch (error) {
       console.error('Error fetching resources', error)
 
@@ -79,9 +73,4 @@ export class ResourcesService {
       )
     }
   }
-
-
-
-
-
 }

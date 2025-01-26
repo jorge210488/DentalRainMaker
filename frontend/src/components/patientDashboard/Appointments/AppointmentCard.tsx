@@ -1,4 +1,4 @@
-import { Appointment } from "@/app/patientDashboard/appointments/page"
+import { Appointment } from '@/app/patientDashboard/appointments/page'
 
 type AppointmentCardProps = {
   appointment: Appointment
@@ -15,12 +15,12 @@ const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
               : 'text-green-500'
           }`}
         >
-          {appointment.paymentStatus === 'Pending'
-            ? 'Payment pending'
-            : 'Paid'}
+          {appointment.paymentStatus === 'Pending' ? 'Payment pending' : 'Paid'}
         </p>
         <h2 className='text-lg font-bold'>Doctor: {appointment.doctor}</h2>
-        <p className='text-sm text-gray-600'>Operator: {appointment.operator}</p>
+        <p className='text-sm text-gray-600'>
+          Operator: {appointment.operator}
+        </p>
         <p className='text-sm text-gray-600'>
           Date: {appointment.date} - time: {appointment.time}
         </p>

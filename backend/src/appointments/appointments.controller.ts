@@ -82,7 +82,6 @@ export class AppointmentsController {
     return await this.appointmentsService.getAppointments(clinicId, queryParams)
   }
 
-  
   @Get('contact/:contact_id')
   @ApiQuery({
     name: 'clinic_id',
@@ -105,7 +104,6 @@ export class AppointmentsController {
       contactId,
     )
   }
-
 
   @Get('appointmenttypes')
   @ApiQuery({
@@ -136,9 +134,7 @@ export class AppointmentsController {
     type: String,
     description: 'The ID of the clinic to fetch patients next and last visit.',
   })
-  async getVisits(
-    @Query('clinicId') clinicId: string,
-  ) {
+  async getVisits(@Query('clinicId') clinicId: string) {
     return await this.appointmentsService.getVisits(clinicId)
   }
 
@@ -238,6 +234,4 @@ export class AppointmentsController {
       cancelAppointmentDto,
     )
   }
-
-  
 }

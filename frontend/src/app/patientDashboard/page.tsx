@@ -32,21 +32,19 @@ export default function DashboardPage() {
   //     }, [status, session])
 
   return (
-    <DashboardShell>
-      <div className='p-8'>
-        <DashboardHeader
-          heading='Welcome back, Sarah'
-          text='Manage your dental care journey'
-        />
-        <div className='grid gap-6'>
-          <MetricsCards />
-          <div className='grid gap-6 md:grid-cols-2'>
-            <AppointmentList />
-            <TreatmentProgress />
-          </div>
-          <MessagingWidget />
+    <div className='p-8'>
+      <DashboardHeader
+        heading='Welcome back, Sarah'
+        text='Manage your dental care journey'
+      />
+      <div className='grid gap-6'>
+        <MetricsCards />
+        <div className='grid gap-6 md:grid-cols-2'>
+          <AppointmentList />
+          <TreatmentProgress />
         </div>
+        <MessagingWidget />
       </div>
-    </DashboardShell>
+    </div>
   )
 }
