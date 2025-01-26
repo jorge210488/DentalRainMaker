@@ -5,6 +5,8 @@ import Header from '@/components/patientDashboard/ScheduledAppointment/Header';
 import CalendarComponent from '@/components/patientDashboard/ScheduledAppointment/Calendar';
 import AvailableSlots from '@/components/patientDashboard/ScheduledAppointment/AvailableSlots';
 import ConfirmButton from '@/components/patientDashboard/ScheduledAppointment/ConfirmButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 const appointmentSlots = [
   { date: '2025-01-15', day: 'Wednesday', times: ['8:00 AM', '9:00 AM'] },
@@ -13,10 +15,14 @@ const appointmentSlots = [
 ];
 
 const AppointmentsDateTime = () => {
+
+  const dispatch = useDispatch()
+  const appointment = useSelector((state: RootState) => state.appointmentPost)
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [filteredSlots, setFilteredSlots] = useState(appointmentSlots);
-
+  
   const handleDateChange = (value: Date | null) => {
     if (value) {
       setSelectedDate(value);
@@ -35,7 +41,11 @@ const AppointmentsDateTime = () => {
     return day !== 0 && day !== 6;
   };
 
+  console.log("asi va quedando la cita",appointment);
+  
+
   return (
+    
     <div className="min-h-screen bg-gray-100 p-6">
       <Header />
       <div className="text-center">

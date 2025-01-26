@@ -1,6 +1,8 @@
 'use client';
 
-import React from 'react';
+import { updateAppointmentPost } from '@/redux/slices/appointmentPostSlice';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 type AvailableSlotsProps = {
   selectedDate: Date | null;
@@ -11,6 +13,17 @@ type AvailableSlotsProps = {
 
 const AvailableSlots: React.FC<AvailableSlotsProps> = ({ selectedDate, slots, selectedTime, onTimeSelect }) => {
   if (!selectedDate || slots.length === 0) return null;
+
+  const dispatch = useDispatch()
+  
+  useEffect(() => {
+    dispatch(updateAppointmentPost({
+    wall_start_time:selectedDate.toDateString(),
+    wall_end_time:selectedDate.toDateString()
+  }))
+
+  },[])
+  
 
   return (
     <div className="mx-auto max-w-md rounded-lg bg-white p-4 shadow-md sm:w-1/2">
