@@ -66,7 +66,7 @@ export class NotificationsService {
 
   async sendPushNotification(
     notificationDto: CreateNotificationDto,
-  ): Promise<void> {
+  ): Promise<string> {
     const { clinic_id, remote_id, notification, data, webpush } =
       notificationDto
 
@@ -130,6 +130,8 @@ export class NotificationsService {
         )
       }
     }
+
+    return 'Notifications sent successfully'
   }
 
   async createNotification(

@@ -5,4 +5,5 @@ export enum NotificationType {
   BEHAVIORAL = 'BEHAVIORAL',
   RESCHEDULE = 'RESCHEDULE',
   CANCELLATION = 'CANCELLATION',
+  OTHER = 'OTHER',
 }
