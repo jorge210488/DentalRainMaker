@@ -13,7 +13,7 @@ export interface ICreateEmailDto {
   sendAt?: string
 }
 
-const sendEmailToServer = async (
+export const sendEmailToServer = async (
   emailDto: ICreateEmailDto,
   bearerToken: string,
 ): Promise<{ status: string }> => {
@@ -34,8 +34,14 @@ const sendEmailToServer = async (
       throw new Error('Failed to send email.')
     }
 
-    console.log('Email sent successfully:', await response.json())
-    return { status: 'Email sent successfully' }
+    const result = await response.json()
+
+    if (!result || !result.status) {
+      throw new Error('Unexpected response format from server.')
+    }
+
+    console.log('Email sent successfully:', result)
+    return result // { status: "Your email was sent successfully." }
   } catch (error) {
     console.error('Error sending email:', error)
     throw error

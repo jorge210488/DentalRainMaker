@@ -30,12 +30,25 @@ export class NodemailerController {
 
   @ApiOperation({ summary: 'Send a new email' })
   @Post('send')
-  async sendEmail(@Body() createEmailDto: CreateEmailDto): Promise<void> {
+  async sendEmail(
+    @Body() createEmailDto: CreateEmailDto,
+  ): Promise<{ status: string }> {
     console.log('NodemailerController: Received DTO', createEmailDto)
 
-    // Call the service method to send the email
-    await this.nodemailerService.sendEmail(createEmailDto)
+    try {
+      // Call the service method to send the email
+      const sendResponse =
+        await this.nodemailerService.sendEmail(createEmailDto)
 
-    await this.nodemailerService.saveEmail(createEmailDto)
+      // Save the email record
+      await this.nodemailerService.saveEmail(createEmailDto)
+
+      // Return a proper JSON object
+      console.log(sendResponse)
+      return { status: sendResponse } // Ensure consistent response format
+    } catch (error) {
+      console.error('Error in NodemailerController:', error.message)
+      throw new Error('Failed to send or save the email.')
+    }
   }
 }

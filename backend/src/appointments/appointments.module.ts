@@ -6,11 +6,12 @@ import { HttpModule } from '@nestjs/axios'
 import { ConfigModule } from '@nestjs/config'
 import { ClinicConfigService } from 'src/config/clinicsConfig.service'
 import { ContactsModule } from 'src/contacts/contacts.module'
+import { ResourcesService } from 'src/resources/resource.service'
 
 @Module({
   imports: [ClinicsModule, HttpModule, ConfigModule, ContactsModule],
   controllers: [AppointmentsController],
-  providers: [AppointmentsService, ClinicConfigService],
+  providers: [AppointmentsService, ClinicConfigService, ResourcesService],
   exports: [AppointmentsService],
 })
 export class AppointmentsModule {}

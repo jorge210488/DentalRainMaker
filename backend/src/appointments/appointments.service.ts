@@ -6,11 +6,12 @@ import {
 } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { ClinicConfigService } from 'src/config/clinicsConfig.service'
-import { lastValueFrom } from 'rxjs'
+import { filter, lastValueFrom } from 'rxjs'
 import { CreateAppointmentDto } from './dto/createAppointment.dto'
 import { ContactsService } from '../contacts/contacts.service'
 import { UpdateAppointmentDto } from './dto/updateAppointment.dto'
 import { CancelAppointmentDto } from './dto/cancelAppointment.dto'
+import { ResourcesService } from 'src/resources/resource.service'
 
 @Injectable()
 export class AppointmentsService {
@@ -18,6 +19,7 @@ export class AppointmentsService {
     private readonly httpService: HttpService,
     private readonly clinicConfigService: ClinicConfigService,
     private readonly contactsService: ContactsService,
+    private readonly resourceService: ResourcesService
   ) {}
 
   private async getRequestConfig(clinicId: string) {
@@ -73,6 +75,87 @@ export class AppointmentsService {
 
       throw new HttpException(
         'Failed to fetch appointments from the API.',
+        HttpStatus.BAD_GATEWAY,
+      )
+    }
+  }
+
+  async getAppointmentsByContactId(
+    clinicId: string,
+    contactId: string
+    
+  ): Promise<any> {
+    try {
+      const { url, headers } = await this.getRequestConfig(clinicId)
+
+      // const contact = await this.contactsService.getContactById(
+      //   clinicId,
+      //   contactId,
+      // )
+      // const resources = await this.resourceService.getResources(clinicId)
+
+      // const response = await lastValueFrom(
+      //   this.httpService.get(`${url}/appointments`, {
+      //     headers,
+      //   }),
+      // )
+
+      const [contact, resources, response] = await Promise.all([
+        this.contactsService.getContactById(
+          clinicId,
+          contactId,
+        ),
+        this.resourceService.getResources(clinicId),
+        lastValueFrom(
+          this.httpService.get(`${url}/appointments`, {
+            headers,
+          }),
+        )
+
+      ])
+
+      if (!contact) {
+        throw new NotFoundException(
+          `Contact with remoteId ${contactId} not found in clinic ${clinicId}`,
+        )
+      }
+
+      const appointmens = response.data.appointments;
+      const appointmentsContact = appointmens.filter(
+        (appointment) => appointment.contact.remote_id === contactId
+      );
+      
+      // Crear un mapa de remote_id -> display_name usando Object.fromEntries
+      const remoteIdToDisplayName = Object.fromEntries(
+        resources.map((resource) => [resource.remote_id, resource.display_name])
+      );
+
+      // Mapear appointmentsContact para agregar la propiedad doctor
+      const updatedAppointmentsContact = appointmentsContact.map((appointment) => ({
+        ...appointment,
+        doctor: appointment.providers
+          .map((provider) => remoteIdToDisplayName[provider.remote_id])
+          .filter(Boolean)[0] || null, // Toma el primer display_name válido o null
+        operator: appointment.resources
+          .map((resource) => remoteIdToDisplayName[resource.remote_id])
+          .filter(Boolean)[0] || null,
+        date: appointment.start_time?.split("T")[0],
+        time: appointment.start_time?.split("T")[1].slice(0,5),   
+        atention_type: "In-person",
+        paymentStatus: "Pending",  
+      }));
+
+      return updatedAppointmentsContact;
+
+    } catch (error) {
+      console.error('Error fetching contact appointments:', error)
+
+      if (error.response?.status === 404) {
+        throw new HttpException('Contact appointments not found.', HttpStatus.NOT_FOUND)
+      }
+
+      throw new HttpException(
+        'Failed to fetch contact appointments from the API.',
         HttpStatus.BAD_GATEWAY,
       )
     }
@@ -175,6 +258,7 @@ export class AppointmentsService {
       }
       const resourcesResponse = await this.getAppointmentResources(clinicId)
       const resources = resourcesResponse?.resources || []
+      
 
       providers.forEach((provider) => {
         const resource = resources.find(
