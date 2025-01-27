@@ -19,7 +19,7 @@ export class AppointmentsService {
     private readonly httpService: HttpService,
     private readonly clinicConfigService: ClinicConfigService,
     private readonly contactsService: ContactsService,
-    private readonly resourceService: ResourcesService
+    private readonly resourceService: ResourcesService,
   ) {}
 
   private async getRequestConfig(clinicId: string) {
@@ -82,8 +82,7 @@ export class AppointmentsService {
 
   async getAppointmentsByContactId(
     clinicId: string,
-    contactId: string
-    
+    contactId: string,
   ): Promise<any> {
     try {
       const { url, headers } = await this.getRequestConfig(clinicId)
@@ -101,17 +100,13 @@ export class AppointmentsService {
       // )
 
       const [contact, resources, response] = await Promise.all([
-        this.contactsService.getContactById(
-          clinicId,
-          contactId,
-        ),
+        this.contactsService.getContactById(clinicId, contactId),
         this.resourceService.getResources(clinicId),
         lastValueFrom(
           this.httpService.get(`${url}/appointments`, {
             headers,
           }),
-        )
-
+        ),
       ])
 
       if (!contact) {
@@ -120,38 +115,47 @@ export class AppointmentsService {
         )
       }
 
-      const appointmens = response.data.appointments;
+      const appointmens = response.data.appointments
       const appointmentsContact = appointmens.filter(
-        (appointment) => appointment.contact.remote_id === contactId
-      );
-      
+        (appointment) => appointment.contact.remote_id === contactId,
+      )
+
       // Crear un mapa de remote_id -> display_name usando Object.fromEntries
       const remoteIdToDisplayName = Object.fromEntries(
-        resources.map((resource) => [resource.remote_id, resource.display_name])
-      );
+        resources.map((resource) => [
+          resource.remote_id,
+          resource.display_name,
+        ]),
+      )
 
       // Mapear appointmentsContact para agregar la propiedad doctor
-      const updatedAppointmentsContact = appointmentsContact.map((appointment) => ({
-        ...appointment,
-        doctor: appointment.providers
-          .map((provider) => remoteIdToDisplayName[provider.remote_id])
-          .filter(Boolean)[0] || null, // Toma el primer display_name válido o null
-        operator: appointment.resources
-          .map((resource) => remoteIdToDisplayName[resource.remote_id])
-          .filter(Boolean)[0] || null,
-        date: appointment.start_time?.split("T")[0],
-        time: appointment.start_time?.split("T")[1].slice(0,5),   
-        atention_type: "In-person",
-        paymentStatus: "Pending",  
-      }));
+      const updatedAppointmentsContact = appointmentsContact.map(
+        (appointment) => ({
+          ...appointment,
+          doctor:
+            appointment.providers
+              .map((provider) => remoteIdToDisplayName[provider.remote_id])
+              .filter(Boolean)[0] || null, // Toma el primer display_name válido o null
+          operator:
+            appointment.resources
+              .map((resource) => remoteIdToDisplayName[resource.remote_id])
+              .filter(Boolean)[0] || null,
+          date: appointment.start_time?.split('T')[0],
+          time: appointment.start_time?.split('T')[1].slice(0, 5),
+          atention_type: 'In-person',
+          paymentStatus: 'Pending',
+        }),
+      )
 
-      return updatedAppointmentsContact;
-
+      return updatedAppointmentsContact
     } catch (error) {
       console.error('Error fetching contact appointments:', error)
 
       if (error.response?.status === 404) {
-        throw new HttpException('Contact appointments not found.', HttpStatus.NOT_FOUND)
+        throw new HttpException(
+          'Contact appointments not found.',
+          HttpStatus.NOT_FOUND,
+        )
       }
 
       throw new HttpException(
@@ -258,7 +262,6 @@ export class AppointmentsService {
       }
       const resourcesResponse = await this.getAppointmentResources(clinicId)
       const resources = resourcesResponse?.resources || []
-      
 
       providers.forEach((provider) => {
         const resource = resources.find(
@@ -386,48 +389,45 @@ export class AppointmentsService {
     }
   }
 
-  
-
-
   async getVisits(clinicId: string): Promise<
     {
-      contactId: string;
-      nextVisit: string | null;
-      lastVisit: string | null;
+      contactId: string
+      nextVisit: string | null
+      lastVisit: string | null
     }[]
   > {
     try {
       // Obtener datos desde la API externa
-      const { url, headers } = await this.getRequestConfig(clinicId);
+      const { url, headers } = await this.getRequestConfig(clinicId)
       const response = await lastValueFrom(
         this.httpService.get(`${url}/appointments`, { headers }),
-      );
-      const appointments = response.data.appointments;
+      )
+      const appointments = response.data.appointments
 
-      const now = new Date();
+      const now = new Date()
 
       // Agrupar citas por contact.remote_id con tipos explícitos
       const groupedAppointments: Record<string, any[]> = appointments.reduce(
         (acc: Record<string, any[]>, appointment) => {
-          const contactId = appointment.contact.remote_id;
+          const contactId = appointment.contact.remote_id
 
           if (!acc[contactId]) {
-            acc[contactId] = [];
+            acc[contactId] = []
           }
-          acc[contactId].push(appointment);
-          return acc;
+          acc[contactId].push(appointment)
+          return acc
         },
         {} as Record<string, any[]>, // Aseguramos que acc comienza con el tipo correcto
-      );
+      )
 
       // Procesar los grupos para calcular nextVisit y lastVisit
       const result = Object.entries(groupedAppointments).map(
         ([contactId, relevantAppointments]) => {
-          let nextVisit: string | null = null;
-          let lastVisit: string | null = null;
+          let nextVisit: string | null = null
+          let lastVisit: string | null = null
 
           relevantAppointments.forEach((appointment) => {
-            const startTime = new Date(appointment.start_time);
+            const startTime = new Date(appointment.start_time)
 
             if (
               startTime > now &&
@@ -437,32 +437,27 @@ export class AppointmentsService {
             ) {
               // Si la cita es futura y no está completada, cancelada o rota
               if (!nextVisit || startTime < new Date(nextVisit)) {
-                nextVisit = startTime.toISOString().split("T")[0];
+                nextVisit = startTime.toISOString().split('T')[0]
               }
             } else if (startTime < now && appointment.confirmed) {
               // Si la cita es pasada y está confirmada
               if (!lastVisit || startTime > new Date(lastVisit)) {
-                lastVisit = startTime.toISOString().split("T")[0];
+                lastVisit = startTime.toISOString().split('T')[0]
               }
             }
-          });
+          })
 
           return {
             contactId,
             nextVisit,
             lastVisit,
-          };
+          }
         },
-      );
+      )
 
-      return result;
+      return result
     } catch (error) {
-      throw new Error("Error fetching appointments: " + error.message);
+      throw new Error('Error fetching appointments: ' + error.message)
     }
   }
-
-
-
-
-
 }

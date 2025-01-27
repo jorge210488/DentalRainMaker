@@ -11,7 +11,12 @@ import { ContactsService } from 'src/contacts/contacts.service'
 
 @Module({
   imports: [HttpModule, ConfigModule, ClinicsModule, AppointmentsModule],
-  providers: [PatientService, ClinicConfigService, InsuranceService, ContactsService],
+  providers: [
+    PatientService,
+    ClinicConfigService,
+    InsuranceService,
+    ContactsService,
+  ],
   controllers: [PatientController],
   exports: [PatientService],
 })

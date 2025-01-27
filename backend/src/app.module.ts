@@ -56,7 +56,7 @@ import { ResourcesModule } from './resources/resource.module'
     ContactsModule,
     PatientModule,
     InsuranceModule,
-    ResourcesModule
+    ResourcesModule,
   ],
   controllers: [AppController],
   providers: [

@@ -41,8 +41,6 @@ export class InsuranceService {
     }
   }
 
-  
-
   async getInsuranceCoverageById(
     clinicId: string,
     remoteId: string,
@@ -144,15 +142,10 @@ export class InsuranceService {
     }
   }
 
-
-  async getAllInsuranceCoverage(
-    clinicId: string,
-  ): Promise<any> {
+  async getAllInsuranceCoverage(clinicId: string): Promise<any> {
     try {
-      
-
       const { url: baseUrl, headers } = await this.getRequestConfig(clinicId)
-      const remoteId = "-"
+      const remoteId = '-'
 
       const insuranceUrl = `${baseUrl}/contacts/${remoteId}/insurance`
 
@@ -160,24 +153,24 @@ export class InsuranceService {
         this.httpService.get(insuranceUrl, { headers }),
       )
 
-      
       if (!response.data) {
         throw new HttpException(
           'Insurances records not found.',
           HttpStatus.NOT_FOUND,
         )
       }
-     
 
       // Transformar los datos para extraer contactId y carrier_title
-      const transformedData = response.data.insurance_coverages.map((item: any) => {
-        const contactId = item.contact.split("/").pop(); // Extraer solo el número de la propiedad contact
-        const carrier_title = item.insurance_plan.carrier_title;
+      const transformedData = response.data.insurance_coverages.map(
+        (item: any) => {
+          const contactId = item.contact.split('/').pop() // Extraer solo el número de la propiedad contact
+          const carrier_title = item.insurance_plan.carrier_title
 
-        return { contactId, carrier_title };
-      });
+          return { contactId, carrier_title }
+        },
+      )
 
-      return transformedData;
+      return transformedData
     } catch (error) {
       console.error('Error fetching insurances', error)
 
@@ -194,8 +187,4 @@ export class InsuranceService {
       )
     }
   }
-
-
-
-
 }

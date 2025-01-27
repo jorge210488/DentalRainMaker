@@ -25,10 +25,7 @@ export class ResourcesController {
   @ApiResponse({ status: 404, description: 'Resources records not found.' })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   @Permissions('ALL_ACCESS', 'READ_OWN_USER')
-  async getAllResources(
-    @Query('clinic_id') clinic_id: string
-  ) {
+  async getAllResources(@Query('clinic_id') clinic_id: string) {
     return this.resourceService.getResources(clinic_id)
   }
-
 }

@@ -148,31 +148,31 @@ export const appointmentResources = async (
 }
 
 export const getAppointmentsByContactId = async (
-    clinicId: string,
-    contactId: string,
-    bearerToken: string,
-  ) => {
-    try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/contact/${contactId}?clinic_id=${encodeURIComponent(clinicId)}`
+  clinicId: string,
+  contactId: string,
+  bearerToken: string,
+) => {
+  try {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/contact/${contactId}?clinic_id=${encodeURIComponent(clinicId)}`
 
-      console.log('URL de la peticion', url)
+    console.log('URL de la peticion', url)
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      })
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(
-          `Failed to fetch contact appointments: ${response.status} ${response.statusText} - ${errorText}`,
-        )
-      }
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(
+        `Failed to fetch contact appointments: ${response.status} ${response.statusText} - ${errorText}`,
+      )
+    }
 
-      const appointments = await response.json()
+    const appointments = await response.json()
       console.log('Contact appointments fetched successfully:', appointments)
       return appointments
     } catch (error) {
@@ -182,104 +182,107 @@ export const getAppointmentsByContactId = async (
   }
 
 
-  export const getlistDoctors = async(
-    clinicId: string,
-    bearerToken: string,
-  ) => {
-    try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/resources?clinic_id=${encodeURIComponent(clinicId)}`
+export const getlistDoctors = async(
+  clinicId: string,
+  bearerToken: string,
+) => {
+  try {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/resources?clinic_id=${encodeURIComponent(clinicId)}`
 
-      console.log('URL de la peticion', url)
+    console.log('URL de la peticion', url)
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      })
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(
-          `Failed to fetch resources: ${response.status} ${response.statusText} - ${errorText}`,
-        )
-      }
-
-      const {resources} = await response.json()
-      console.log("los resources de la clinica",resources);
-      
-      const doctors = resources
-      .filter((resource:any) => 
-        resource.type === "PROVIDER"
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(
+        `Failed to fetch resources: ${response.status} ${response.statusText} - ${errorText}`,
       )
-      .map((doctor:any) => ({
-        ...doctor,
-        name:doctor.display_name,
-        specialty:"Dentistry"
-      }));
-
-      console.log('Doctors list fetched successfully:', doctors)
-      return doctors
-    } catch (error) {
-      console.error('Error fetching doctors list:', error)
-      throw error
     }
-      
+
+    const {resources} = await response.json()
+    console.log("los resources de la clinica",resources);
+    
+    const doctors = resources
+    .filter((resource:any) => 
+      resource.type === "PROVIDER"
+    )
+    .map((doctor:any) => ({
+      ...doctor,
+      name:doctor.display_name,
+      specialty:"Dentistry"
+    }));
+
+    console.log('Doctors list fetched successfully:', doctors)
+    return doctors
+  } catch (error) {
+    console.error('Error fetching doctors list:', error)
+    throw error
   }
-
-  interface Provider {
-    name: string;
-    remote_id: string;
-    type: string;
-  }
+    
+}
 
 
-  export const postAppointment = async (
-    clinicId: string,
-    bearerToken: string,
-    appointment:{
-      contact_id: string
-      wall_start_time:string
-      wall_end_time:string
-      providers: Provider[]
-      scheduler?:{
-          name:string;
-          remote_id:string;
-          type:string;
-      }
-      appointment_type_id?:string
-      operatory:string
-      short_description?:string
-      notes?:string
-      }
-  ) => {
-    try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/?clinic_id=${encodeURIComponent(clinicId)}`
 
-      console.log('URL de la peticion', url)
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify(appointment),
-      })
+interface Provider {
+  name: string;
+  remote_id: string;
+  type: string;
+}
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(
-          `Failed to post appointment: ${response.status} ${response.statusText} - ${errorText}`,
-        )
-      }
 
-      const appointmentCreated = await response.json()
-      console.log('Contact appointment posted successfully:', appointmentCreated)
-      return appointmentCreated
-    } catch (error) {
-      console.error('Error posting contact appointment:', error)
-      throw error
+export const postAppointment = async (
+  clinicId: string,
+  bearerToken: string,
+  appointment:{
+    contact_id: string
+    wall_start_time:string
+    wall_end_time:string
+    providers: Provider[]
+    scheduler?:{
+        name:string;
+        remote_id:string;
+        type:string;
     }
+    appointment_type_id?:string
+    operatory:string
+    short_description?:string
+    notes?:string
+    }
+) => {
+  try {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments/?clinic_id=${encodeURIComponent(clinicId)}`
+
+    console.log('URL de la peticion', url)
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify(appointment),
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(
+        `Failed to post appointment: ${response.status} ${response.statusText} - ${errorText}`,
+      )
+    }
+
+    const appointmentCreated = await response.json()
+    console.log('Contact appointment posted successfully:', appointmentCreated)
+    return appointmentCreated
+  } catch (error) {
+    console.error('Error posting contact appointment:', error)
+    throw error
   }
+}

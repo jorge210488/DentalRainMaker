@@ -120,7 +120,7 @@ export const updateNotification = async (
 export const sendNotification = async (
   notificationData: CreateNotificationDto,
   bearerToken: string,
-): Promise<void> => {
+): Promise<{ status: string }> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/notifications/send`,
@@ -140,7 +140,12 @@ export const sendNotification = async (
 
     const result = await response.json()
 
+    if (!result || !result.status) {
+      throw new Error('Unexpected response format from server.')
+    }
+
     console.log('Notification sent successfully:', result)
+    return result // { status: "Your notification was sent successfully." }
   } catch (error) {
     console.error('Error sending notification:', error)
     throw error

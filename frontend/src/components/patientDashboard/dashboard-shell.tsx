@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,6 +19,7 @@ interface DashboardShellProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function DashboardShell({ children }: DashboardShellProps) {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
 
   const routes = [
     {
@@ -77,8 +79,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
         </div>
       </aside>
 
-      {/* Movil  */}
-      <Sheet>
+      {/* Mobile Navigation */}
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button variant='ghost' className='lg:hidden'>
             <Menu className='h-6 w-6' />
@@ -94,6 +96,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 <Link
                   key={route.href}
                   href={route.href}
+                  onClick={() => setIsOpen(false)} // Close sheet when a link is clicked
                   className={cn(
                     'flex items-center rounded-lg px-3 py-2 text-sm font-medium',
                     route.active
@@ -110,7 +113,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         </SheetContent>
       </Sheet>
 
-      {/* Contenido principal */}
+      {/* Main Content */}
       <main className='flex-1 overflow-y-auto'>
         <div className='container mx-auto py-6'>{children}</div>
       </main>

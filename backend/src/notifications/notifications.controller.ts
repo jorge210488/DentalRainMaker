@@ -44,17 +44,22 @@ export class NotificationsController {
   @Post('send')
   async sendNotification(
     @Body() createNotificationDto: CreateNotificationDto,
-  ): Promise<void> {
+  ): Promise<{ status: string }> {
     console.log('NotificationsController: Received DTO', createNotificationDto)
 
     // Enviar notificación push
-    await this.notificationsService.sendPushNotification(createNotificationDto)
+    const sendResponse = await this.notificationsService.sendPushNotification(
+      createNotificationDto,
+    )
 
     // Guardar en la base de datos como notificación enviada
     await this.notificationsService.createNotification(
       createNotificationDto,
       true,
     )
+
+    console.log(sendResponse)
+    return { status: sendResponse }
   }
 
   // Guardar notificación en la base de datos sin enviar (Para pruebas Backend)

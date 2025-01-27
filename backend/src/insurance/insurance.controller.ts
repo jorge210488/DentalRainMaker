@@ -54,7 +54,6 @@ export class InsuranceController {
     return this.insuranceService.getInsuranceCoverageById(clinicId, remoteId)
   }
 
-
   @Get('/all')
   @ApiOperation({ summary: 'Get All insurances Coverage' })
   @ApiQuery({ name: 'clinicId', required: true, type: String })
@@ -62,12 +61,7 @@ export class InsuranceController {
   @ApiResponse({ status: 404, description: 'Insurances records not found.' })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   @Permissions('ALL_ACCESS', 'READ_OWN_USER')
-  async getAllInsuranceCoverage(
-    @Query('clinicId') clinicId: string
-  ) {
+  async getAllInsuranceCoverage(@Query('clinicId') clinicId: string) {
     return this.insuranceService.getAllInsuranceCoverage(clinicId)
   }
-
-  
 }
-
