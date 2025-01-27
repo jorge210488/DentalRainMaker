@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react'
 import { getDayOfWeek } from '@/utils/getDayOfWeek'
 import { postAppointment } from '@/server/appointments'
 import Swal from 'sweetalert2';
+import { clearAppointmentPost } from '@/redux/slices/appointmentPostSlice'
 
 const AppointmentConfirmation = () => {
   
@@ -15,8 +16,6 @@ const AppointmentConfirmation = () => {
   const dispatch = useDispatch()
   const appointment = useSelector((state: RootState) => state.appointmentPost);
   const {clinics} = useSelector((state: RootState) => state.clinics);
-
-  console.log("list de clinicas", clinics);
   const clinic = Array.isArray(clinics) ? clinics.find((clinic) => clinic._id === session?.user.clinicId) : null;
 
   const appointmentDetails = {
@@ -49,6 +48,8 @@ const AppointmentConfirmation = () => {
             icon: "success",
             confirmButtonText: "OK",
           });
+          dispatch(clearAppointmentPost())
+          router.push('/patientDashboard/appointments')
         } else {
           Swal.fire({
             title: "Error",
@@ -69,7 +70,7 @@ const AppointmentConfirmation = () => {
       });
     }
 
-    router.push('/patientDashboard/appointments')
+    
   }
 
   return (

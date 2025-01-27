@@ -9,9 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 
 const appointmentSlots = [
-  { date: '2025-01-15', day: 'Wednesday', times: ['8:00:00', '9:00:00', '10:00:00', '11:00:00'] },
-  { date: '2025-01-23', day: 'Thursday', times: ['10:00:00', '11:00:00', '12:00', '13:00:00'] },
-  { date: '2025-01-28', day: 'Tuesday', times: ['14:00:00', '15:00:00', '16:00', '17:00:00'] },
+  { date: '2025-02-03', day: 'Wednesday', times: ['8:00:00', '9:00:00', '10:00:00', '11:00:00'] },
+  { date: '2025-01-31', day: 'Thursday', times: ['10:00:00', '11:00:00', '12:00:00', '13:00:00'] },
+  { date: '2025-01-29', day: 'Tuesday', times: ['14:00:00', '15:00:00', '16:00:00', '17:00:00'] },
 ];
 
 const AppointmentsDateTime = () => {
