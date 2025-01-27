@@ -1,6 +1,7 @@
 import type { AuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import jwt from 'jsonwebtoken'
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -43,6 +44,7 @@ export const authOptions: AuthOptions = {
             id_token: data.token,
             user_id: data.userId,
             user_type: data.type,
+            user_views: data.views,
           }
         } catch (error) {
           console.error('Error during local login:', error)
@@ -52,7 +54,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ account, profile }) {
       if (account && profile) {
         const userPayload = {
           name: profile.name,
@@ -62,6 +64,7 @@ export const authOptions: AuthOptions = {
           provider: 'google',
           providerId: account.providerAccountId,
           type: 'PATIENT', // Default type
+          clinic_id: 'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
         }
 
         try {
@@ -75,7 +78,7 @@ export const authOptions: AuthOptions = {
 
           console.log('User registered successfully')
         } catch (err) {
-          console.error('User already registered or registration failed')
+          console.error('User already registered or registration failed', err)
         }
 
         try {
@@ -101,14 +104,26 @@ export const authOptions: AuthOptions = {
           }
 
           const data = await response.json()
+          // Decodificar el token
+          const decodedToken = jwt.decode(data.token) as jwt.JwtPayload | null
+
+          if (!decodedToken || typeof decodedToken !== 'object') {
+            throw new Error(
+              'Failed to decode token or token is not a valid object',
+            )
+          }
+
+          console.log('Decoded Token:', decodedToken)
 
           account.id_token = data.token
-          account.user_id = data.userId
-          account.user_type = data.type
+          account.user_id = decodedToken.user_id
+          account.user_type = decodedToken.type
+          account.user_views = decodedToken.views
+          account.user_clinicId = decodedToken.clinic_id
 
-          console.log('User signed in successfully', data)
+          console.log('User signed in successfully', decodedToken)
         } catch (error) {
-          console.error('Sign-in failed or Firebase token save failed')
+          console.error('Sign-in failed or Firebase token save failed', error)
           return false // Prevent sign-in
         }
       }
@@ -121,6 +136,8 @@ export const authOptions: AuthOptions = {
         token.accessToken = user?.id_token // Consistencia con GoogleProvider
         token.userId = user?.user_id
         token.type = user?.user_type
+        token.views = user?.user_views
+        token.clinicId = user?.user_clinicId
       }
 
       if (account && account.provider === 'google') {
@@ -128,6 +145,8 @@ export const authOptions: AuthOptions = {
         token.accessToken = account.id_token
         token.userId = account.user_id
         token.type = account.user_type
+        token.views = account.user_views
+        token.clinicId = account.user_clinicId
       }
 
       if (profile) {
@@ -151,12 +170,30 @@ export const authOptions: AuthOptions = {
         session.user.token = token.accessToken as string
         session.user.userId = token.userId as string
         session.user.type = token.type as string
+        session.user.views = token.views as string[]
+        session.user.clinicId = token.clinicId as string
       }
 
       return session
     },
     async redirect({ url, baseUrl }) {
-      return '/home'
+      // Si viene de iniciar sesión, redirige al dashboard
+      // if (url === '/patientDashboard') {
+      //   return '/patientDashboard'
+      // }
+
+      // // Si viene de cerrar sesión, redirige al login
+      // if (url === '/login') {
+      //   return '/login'
+      // }
+
+      // // Permite redirecciones dentro del dominio base
+      // if (url.startsWith(baseUrl)) {
+      //   return url
+      // }
+
+      // Redirección predeterminada para otros casos
+      return '/patientDashboard'
     },
   },
 }

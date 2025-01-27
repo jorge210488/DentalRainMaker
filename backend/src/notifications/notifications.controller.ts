@@ -16,9 +16,19 @@ export class NotificationsController {
   @ApiOperation({ summary: 'Guardar o actualizar token de dispositivo' })
   @Post('save')
   async saveDeviceToken(
-    @Body() { userId, token }: { userId: string; token: string },
+    @Body()
+    {
+      remoteId,
+      clinicId,
+      token,
+    }: {
+      remoteId: string
+      clinicId: string
+      token: string
+    },
   ): Promise<void> {
-    await this.notificationsService.saveDeviceToken(userId, token)
+    console.log('Received in body:', { remoteId, clinicId, token })
+    await this.notificationsService.saveDeviceToken(remoteId, clinicId, token)
   }
 
   @ApiOperation({ summary: 'Send a new push notification' })

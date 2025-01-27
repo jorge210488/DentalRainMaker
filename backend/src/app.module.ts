@@ -22,7 +22,9 @@ import { AppointmentsModule } from './appointments/appointments.module'
 import { AppointmentTypeModule } from './appointmentsType/appointmentType.module'
 import { SmsModule } from './sms/sms.module'
 import { GoHighLevelModule } from './gohighlevel/gohighlevel.module'
-
+import { ContactsModule } from './contacts/contacts.module'
+import { PatientModule } from './patients/patients.module'
+import { InsuranceModule } from './insurance/insurance.module'
 
 @Module({
   imports: [
@@ -50,6 +52,9 @@ import { GoHighLevelModule } from './gohighlevel/gohighlevel.module'
     AppointmentTypeModule,
     SmsModule,
     GoHighLevelModule,
+    ContactsModule,
+    PatientModule,
+    InsuranceModule,
   ],
   controllers: [AppController],
   providers: [

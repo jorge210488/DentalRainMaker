@@ -1,20 +1,17 @@
 [
   {
-    "clinic_name": "Sunny Health Center",
+    "clinic_name": "Unify Dental",
     "clinic_website": "https://www.sunnyhealthcenter.com"
   },
   {
-    "clinic_name": "Green Valley Clinic",
+    "clinic_name": "Unify Aesthetics",
     "clinic_website": "https://www.greenvalleyclinic.org"
   },
   {
-    "clinic_name": "Wellness & Care Hub",
+    "clinic_name": "Unify Vet",
     "clinic_website": "https://www.wellnesscarehub.net"
   },
   {
-    "clinic_name": "Family First Medical"
-  },
-  {
-    "clinic_name": "Harmony Health Group"
+    "clinic_name": "Unify Core"
   }
 ]

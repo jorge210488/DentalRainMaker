@@ -6,6 +6,8 @@ declare module 'next-auth' {
     id_token?: string // Token de acceso devuelto por el backend
     user_id?: string // ID único del usuario
     user_type?: string // Tipo de usuario (e.g., PATIENT)
+    user_views?: string[] // Vistas asociadas al usuario
+    user_clinicId?: string // ID único de la clinica del usuario
   }
 
   // Interfaz para el token JWT
@@ -19,6 +21,8 @@ declare module 'next-auth' {
     email?: string // Correo electrónico del usuario
     given_name?: string // Nombre de pila
     family_name?: string // Apellido
+    views?: string[] // Vistas asociadas al usuario
+    clinicId?: string // ID único de la clinica del usuario
   }
 
   // Interfaz para la sesión
@@ -33,6 +37,8 @@ declare module 'next-auth' {
       email?: string // Correo electrónico del usuario
       given_name?: string // Nombre de pila
       family_name?: string // Apellido
+      views?: string[] // Vistas asociadas al usuario
+      clinicId?: string // ID único de la clinica del usuario
     }
   }
 
@@ -43,5 +49,20 @@ declare module 'next-auth' {
     email?: string // Correo electrónico
     name?: string // Nombre completo
     picture?: string // URL de la imagen del perfil
+  }
+
+  interface Account {
+    provider: string
+    type: string
+    providerAccountId: string
+    access_token?: string
+    expires_at?: number
+    refresh_token?: string
+    id_token?: string
+    oauth_token?: string
+    oauth_token_secret?: string
+    state?: {
+      clinicId?: string
+    }
   }
 }

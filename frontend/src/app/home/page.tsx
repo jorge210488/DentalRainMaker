@@ -12,6 +12,8 @@ const Home: React.FC = () => {
       console.log('Token:', session?.user?.token)
       console.log('User ID:', session?.user?.userId)
       console.log('User Type:', session?.user?.type)
+      console.log('User views', session?.user?.views)
+      console.log('Clinic Id', session?.user?.clinicId)
     } else if (status === 'unauthenticated') {
       console.log('No session available')
     }

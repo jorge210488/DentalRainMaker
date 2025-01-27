@@ -1,71 +1,75 @@
-"use client"
+'use client'
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar, MessageSquare, User, FileText, Home, Menu } from 'lucide-react'
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import {
+  Calendar,
+  MessageSquare,
+  User,
+  FileText,
+  Home,
+  Menu,
+} from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 interface DashboardShellProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function DashboardShell({ children, className }: DashboardShellProps) {
+export function DashboardShell({ children }: DashboardShellProps) {
   const pathname = usePathname()
 
   const routes = [
     {
-      href: "/dashboard",
-      label: "Dashboard",
+      href: '/patientDashboard',
+      label: 'Dashboard',
       icon: Home,
-      active: pathname === "/dashboard",
+      active: pathname === '/dashboard',
     },
     {
-      href: "/dashboard/appointments",
-      label: "Appointments",
+      href: '/patientDashboard/appointments',
+      label: 'Appointments',
       icon: Calendar,
-      active: pathname === "/dashboard/appointments",
+      active: pathname === '/patientDashboard/appointments',
     },
     {
-      href: "/dashboard/messages",
-      label: "Messages",
+      href: '/patientDashboard/messages',
+      label: 'Messages',
       icon: MessageSquare,
-      active: pathname === "/dashboard/messages",
+      active: pathname === '/patientDashboard/messages',
     },
     {
-      href: "/dashboard/records",
-      label: "Records",
+      href: '/patientDashboard/records',
+      label: 'Records',
       icon: FileText,
-      active: pathname === "/dashboard/records",
+      active: pathname === '/patientDashboard/records',
     },
     {
-      href: "/dashboard/profile",
-      label: "Profile",
+      href: '/patientDashboard/profile',
+      label: 'Profile',
       icon: User,
-      active: pathname === "/dashboard/profile",
+      active: pathname === '/patientDashboard/profile',
     },
   ]
 
   return (
-    <div className="flex min-h-screen">
+    <div className='flex min-h-screen font-sans'>
       {/* Sidebar para desktop */}
-      <aside className="hidden w-64 border-r bg-[#6B8FB2] text-white lg:block">
-        <div className="flex h-full flex-col">
-          <div className="px-6 py-4">
-            <h2 className="text-lg font-semibold">Dental Rain Maker</h2>
-          </div>
-          <nav className="flex-1 space-y-1 px-3 py-4">
+      <aside className='hidden w-64 border-r bg-blue-600 text-white lg:block'>
+        <div className='flex h-full flex-col'>
+          <nav className='flex-1 space-y-1 px-3 py-4'>
             {routes.map((route) => (
               <Link
                 key={route.href}
                 href={route.href}
                 className={cn(
-                  "flex items-center rounded-lg px-3 py-2 text-sm font-medium",
+                  'flex items-center rounded-lg px-3 py-2 text-sm font-medium',
                   route.active
-                    ? "bg-white/10 text-white"
-                    : "text-white/80 hover:bg-white/10 hover:text-white"
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/80 hover:bg-white/10 hover:text-white',
                 )}
               >
-                <route.icon className="mr-3 h-5 w-5" />
+                <route.icon className='mr-3 h-5 w-5' />
                 {route.label}
               </Link>
             ))}
@@ -76,28 +80,28 @@ export function DashboardShell({ children, className }: DashboardShellProps) {
       {/* Movil  */}
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" className="lg:hidden">
-            <Menu className="h-6 w-6" />
+          <Button variant='ghost' className='lg:hidden'>
+            <Menu className='h-6 w-6' />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-64 bg-[#6B8FB2] p-0 text-white">
-          <div className="flex h-full flex-col">
-            <div className="px-6 py-4">
-              <h2 className="text-lg font-semibold">DentalCare</h2>
-            </div>
-            <nav className="flex-1 space-y-1 px-3 py-4">
+        <SheetContent
+          side='left'
+          className='w-64 bg-blue-600 p-0 font-sans text-white'
+        >
+          <div className='flex h-full flex-col'>
+            <nav className='flex-1 space-y-1 px-3 py-4'>
               {routes.map((route) => (
                 <Link
                   key={route.href}
                   href={route.href}
                   className={cn(
-                    "flex items-center rounded-lg px-3 py-2 text-sm font-medium",
+                    'flex items-center rounded-lg px-3 py-2 text-sm font-medium',
                     route.active
-                      ? "bg-white/10 text-white"
-                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/80 hover:bg-white/10 hover:text-white',
                   )}
                 >
-                  <route.icon className="mr-3 h-5 w-5" />
+                  <route.icon className='mr-3 h-5 w-5' />
                   {route.label}
                 </Link>
               ))}
@@ -107,12 +111,9 @@ export function DashboardShell({ children, className }: DashboardShellProps) {
       </Sheet>
 
       {/* Contenido principal */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="container mx-auto py-6">
-          {children}
-        </div>
+      <main className='flex-1 overflow-y-auto'>
+        <div className='container mx-auto py-6'>{children}</div>
       </main>
     </div>
   )
 }
-

@@ -1,58 +1,138 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { images } from '../../assets/index'
 import { useRouter } from 'next/navigation'
 import { LoginFormData } from '../types/auth'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
+import Swal from 'sweetalert2'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '@/redux/store'
+import { setSelectedClinic } from '@/redux/slices/clinicsSlice'
 
 export default function LoginForm() {
   const router = useRouter()
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>()
 
+  // Obtener las clínicas desde el store de Redux
+  const clinics = useSelector((state: RootState) => state.clinics.clinics)
+  const selectedClinicId = useSelector(
+    (state: RootState) => state.clinics.selectedClinicId,
+  )
+
   const onSubmit = async (data: LoginFormData) => {
     const { email, password } = data
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      provider: 'local', // Proveedor definido en authOptions
-    })
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        provider: 'local',
+        redirect: false,
+      })
 
-    if (!result?.ok) {
-      console.error('Error al iniciar sesión:', result?.error)
+      if (result?.ok) {
+        // Login exitoso
+        console.log('Login successful:', result)
+        await Swal.fire({
+          title: 'Login Successful!',
+          text: 'You have been successfully logged in.',
+          icon: 'success',
+          confirmButtonText: 'Continue',
+        })
+
+        router.push(result.url || '/patientDashboard')
+      } else {
+        // Error en el inicio de sesión
+        console.error('Login error:', result?.error)
+        throw new Error(result?.error || 'Invalid credentials')
+      }
+    } catch (error: any) {
+      // Manejo del error
+      console.error('Error during login:', error)
+      Swal.fire({
+        title: 'Login Failed',
+        text: 'Invalid email or password.',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+      })
     }
   }
 
+  const handleGoogleSignIn = async () => {
+    if (!selectedClinicId) {
+      Swal.fire({
+        title: 'Missing Information',
+        text: 'Please select a clinic.',
+        icon: 'warning',
+        confirmButtonText: 'Ok',
+      })
+      return
+    }
+
+    await signIn('google', {
+      callbackUrl: '/api/auth/callback/google',
+      // state: JSON.stringify({ clinicId: selectedClinicId }),
+    })
+  }
+
+  const handleClinicChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch(setSelectedClinic(event.target.value))
+  }
+
   return (
-    <div className='flex min-h-screen w-full'>
+    <div className='flex min-h-screen w-full font-sans'>
       {/* Left side - Form */}
       <div className='flex-1 p-8 lg:p-12'>
         <div className='mx-auto max-w-sm space-y-6'>
-          <div className='flex items-center space-x-2'>
-            <span className='font-bold'>Dental Rain Maker</span>
+          <div className='flex flex-row items-center justify-center space-x-2 pt-2'>
+            <div className='h-8 w-9 items-center justify-center space-x-2 rounded-lg bg-blue-600'>
+              <span className='p-4 text-xl font-bold text-white'>D</span>
+            </div>
+            <span className='text-xl font-bold'>DentalRainMaker</span>
           </div>
 
           <div className='space-y-2 text-center'>
             <h1 className='text-2xl font-bold tracking-tight'>Welcome!</h1>
           </div>
 
+          <div className='space-y-2'>
+            <Label htmlFor='clinic_id'>Select Clinic</Label>
+            <select
+              id='clinic_id'
+              className='w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600'
+              value={selectedClinicId || ''}
+              onChange={handleClinicChange}
+            >
+              <option value='' disabled>
+                Select Clinic
+              </option>
+              {clinics.map((clinic) => (
+                <option key={clinic._id} value={clinic._id}>
+                  {clinic.clinic_name}
+                </option>
+              ))}
+            </select>
+            {errors.clinic_id && (
+              <p className='text-sm text-red-500'>{errors.clinic_id.message}</p>
+            )}
+          </div>
+
           <Button
             variant='outline'
             type='button'
             className='w-full'
-            onClick={() => signIn('google')}
+            onClick={handleGoogleSignIn}
           >
             <svg className='mr-2 h-4 w-4' viewBox='0 0 24 24'>
               <path
@@ -114,13 +194,6 @@ export default function LoginForm() {
                   {errors.password.message}
                 </p>
               )}
-            </div>
-
-            <div className='flex items-center space-x-2'>
-              <Checkbox id='rememberMe' {...register('rememberMe')} />
-              <Label htmlFor='rememberMe' className='text-sm'>
-                Remember me
-              </Label>
             </div>
 
             <Button type='submit' className='w-full'>

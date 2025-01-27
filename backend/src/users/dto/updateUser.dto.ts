@@ -1,10 +1,4 @@
-import {
-  IsOptional,
-  IsString,
-  IsArray,
-  IsObject,
-  IsUUID,
-} from 'class-validator'
+import { IsOptional, IsString, IsArray, IsObject } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
 class AddressDTO {
@@ -158,17 +152,4 @@ export class UpdateUserDto {
     required: false,
   })
   state?: string
-
-  @IsOptional()
-  @IsArray()
-  @IsUUID(4, { each: true }) // Valida que cada elemento sea un UUID v4
-  @ApiProperty({
-    example: [
-      '550e8400-e29b-41d4-a716-446655440000',
-      '550e8400-e29b-41d4-a716-446655440001',
-    ],
-    description: 'Array of clinic IDs (UUID format)',
-    required: false,
-  })
-  clinics?: string[]
 }

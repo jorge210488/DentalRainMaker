@@ -7,8 +7,17 @@ export class DeviceToken extends Document {
   @Prop({ type: String, default: uuidv4 })
   _id: string
 
-  @Prop({ type: String, ref: 'User', required: true })
-  userId: string
+  @Prop({
+    type: String,
+    required: true,
+  })
+  remote_id: string
+
+  @Prop({
+    type: String,
+    required: true,
+  })
+  clinic_id: string
 
   @Prop({ required: true, unique: true })
   token: string

@@ -1,22 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import {
   IsString,
   IsOptional,
   IsObject,
   IsEnum,
   IsISO8601,
+  ValidateNested,
+  IsUUID,
 } from 'class-validator'
+import { Type } from 'class-transformer'
 import { NotificationType } from '../enums/notifications.enum'
 
-export class CreateNotificationDto {
-  @ApiProperty({
-    example: 'PROMOTIONAL',
-    description: 'Tipo de notificación',
-    enum: NotificationType,
-  })
-  @IsEnum(NotificationType)
-  type: NotificationType
-
+// DTO para el campo 'notification'
+class NotificationContentDto {
   @ApiProperty({
     example: '¡Descuento en blanqueamiento dental!',
     description: 'Título de la notificación',
@@ -31,22 +27,119 @@ export class CreateNotificationDto {
   @IsString()
   body: string
 
+  @ApiPropertyOptional({
+    example:
+      'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png',
+    description: 'Imagen a mostrar en la notificación (opcional)',
+  })
+  @IsString()
+  @IsOptional()
+  image?: string =
+    'https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png'
+}
+
+// DTO para el campo 'data'
+class NotificationDataDto {
   @ApiProperty({
-    example: { key1: 'value1', key2: 'value2' },
-    description:
-      'Datos adicionales para personalizar la notificación (opcional)',
+    example: 'REMINDER',
+    description: 'Tipo de notificación',
+    enum: NotificationType,
+  })
+  @IsEnum(NotificationType)
+  type: NotificationType
+
+  @ApiProperty({
+    example: '/promotions/123',
+    description: 'Ruta asociada a la notificación (opcional)',
     required: false,
   })
   @IsOptional()
-  @IsObject()
-  data?: Record<string, string>
+  @IsString()
+  url?: string
 
   @ApiProperty({
-    example: '12345',
+    example: 'DENTAL20',
+    description: 'Código promocional asociado a la notificación (opcional)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  promoCode?: string
+
+  @ApiProperty({
+    example: '987654321',
+    description: 'ID de la cita asociada a la notificación (opcional)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  appointmentId?: string
+}
+
+// DTO para el campo 'webpush.fcm_options'
+class WebpushFcmOptionsDto {
+  @ApiPropertyOptional({
+    example: 'https://dental-rain-maker.vercel.app/',
+    description:
+      'Enlace que se abrirá al hacer clic en la notificación (opcional)',
+  })
+  @IsString()
+  @IsOptional()
+  link?: string = 'https://dental-rain-maker.vercel.app/'
+}
+
+class WebpushDto {
+  @ApiProperty({
+    type: WebpushFcmOptionsDto,
+    description: 'Opciones específicas de FCM para webpush',
+  })
+  @ValidateNested()
+  @Type(() => WebpushFcmOptionsDto)
+  fcm_options: WebpushFcmOptionsDto
+}
+
+export class CreateNotificationDto {
+  @ApiProperty({
+    type: NotificationContentDto,
+    description: 'Información principal de la notificación',
+  })
+  @ValidateNested()
+  @Type(() => NotificationContentDto)
+  notification: NotificationContentDto
+
+  @ApiProperty({
+    example: '804',
     description: 'ID del usuario al que pertenece la notificación',
   })
   @IsString()
-  userId: string
+  remote_id: string
+
+  @IsString({ message: 'El clinic_id debe ser una cadena de texto' })
+  @IsUUID(4, { each: true })
+  @ApiProperty({
+    example: 'fb8ce23f-8fed-4911-8fdf-ed4a5c9dd306',
+    description: 'Identificador de la clinica en (UUID format)',
+  })
+  clinic_id: string
+
+  @ApiProperty({
+    type: NotificationDataDto,
+    description: 'Datos adicionales para personalizar la notificación',
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => NotificationDataDto)
+  data?: NotificationDataDto
+
+  @ApiPropertyOptional({
+    type: WebpushDto,
+    description: 'Configuraciones de webpush (opcional)',
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => WebpushDto)
+  webpush?: WebpushDto
 
   @ApiProperty({
     example: '2025-01-10T10:00:00.000Z',

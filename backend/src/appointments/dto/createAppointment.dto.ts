@@ -25,8 +25,8 @@ export class CreateAppointmentDto {
     example: 'Consultation with Dr. Smith',
   })
   @IsString()
-  @IsNotEmpty()
-  name: string
+  @IsOptional()
+  name?: string
 
   @ApiProperty({
     description: 'Remote identifier for external systems (optional)',
@@ -86,8 +86,8 @@ export class CreateAppointmentDto {
   })
   @IsDate()
   @Type(() => Date)
-  @IsNotEmpty()
-  end_time: Date
+  @IsOptional()
+  end_time?: Date
 
   @ApiProperty({
     description: 'Wall start time of the appointment (optional)',
@@ -216,27 +216,48 @@ export class CreateAppointmentDto {
   @IsOptional()
   broken?: boolean
 
-  @ApiProperty({
-    description: 'ID of the doctor',
-    example: '61b7d88a78989f2b1c5e4d45',
-  })
-  @IsString()
-  @IsNotEmpty()
-  doctor_id: string
+  // @ApiProperty({
+  //   description: 'ID of the doctor',
+  //   example: '61b7d88a78989f2b1c5e4d45',
+  // })
+  // @IsString()
+  // @IsNotEmpty()
+  // doctor_id: string
 
-  @ApiProperty({
-    description: 'ID of the clinic',
-    example: '61b7d88a78989f2b1c5e4d45',
-  })
-  @IsString()
-  @IsNotEmpty()
-  clinic_id: string
+  // @ApiProperty({
+  //   description: 'ID of the clinic',
+  //   example: '61b7d88a78989f2b1c5e4d45',
+  // })
+  // @IsString()
+  // @IsNotEmpty()
+  // clinic_id: string
+
+  // @ApiProperty({
+  //   description: 'Additional data for the appointment',
+  //   example: { key: 'value' },
+  // })
+  // @IsObject()
+  // @IsOptional()
+  // additional_data: Record<string, unknown>
 
   @ApiProperty({
     description: 'Additional data for the appointment',
-    example: { key: 'value' },
+    example: {
+      doctor_id: '61b7d88a78989f2b1c5e4d45',
+      doctor_name: 'Dr. Smith',
+      clinic_id: '61b7d88a78989f2b1c5e4d45',
+      clinic_name: 'Main Clinic',
+      paid: false,
+    },
+    required: false,
   })
   @IsObject()
   @IsOptional()
-  additional_data: Record<string, unknown>
+  additional_data?: {
+    doctor_id: string
+    doctor_name: string
+    clinic_id: string
+    clinic_name: string
+    paid: boolean
+  }
 }

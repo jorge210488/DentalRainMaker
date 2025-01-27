@@ -1,128 +1,95 @@
-import {
-  Injectable,
-  NotFoundException,
-  Logger,
-  BadRequestException,
-} from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Appointment, AppointmentDocument } from './schemas/appointment.schema'
-import { Clinic, ClinicDocument } from 'src/clinics/schemas/clinic.schema'
-import { CreateAppointmentDto } from './dto/createAppointment.dto'
-import { User, UserDocument } from 'src/users/schemas/user.schema'
-import {
-  AppointmentType,
-  AppointmentTypeDocument,
-} from 'src/appointmentsType/schemas/appointmentType.schema'
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { ClinicConfigService } from 'src/config/clinicsConfig.service';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AppointmentsService {
-  private readonly logger = new Logger(AppointmentsService.name)
   constructor(
-    @InjectModel(Appointment.name)
-    private readonly appointmentModel: Model<AppointmentDocument>,
-    @InjectModel(Clinic.name)
-    private readonly clinicModel: Model<ClinicDocument>,
-    @InjectModel(User.name)
-    private readonly userModel: Model<UserDocument>,
-    @InjectModel(AppointmentType.name)
-    private readonly appointmentTypeModel: Model<AppointmentTypeDocument>,
+    private readonly httpService: HttpService,
+    private readonly clinicConfigService: ClinicConfigService,
   ) {}
 
-  async create(
-    createAppointmentDto: CreateAppointmentDto,
-  ): Promise<Appointment> {
-    // Validar si el contact_id existe en la colección User
-    const [user, doctor, clinic, appointmentType] = await Promise.all([
-      this.userModel.findById(createAppointmentDto.contact_id).exec(),
-      this.userModel.findById(createAppointmentDto.doctor_id).exec(),
-      this.clinicModel.findById(createAppointmentDto.clinic_id).exec(),
-      this.appointmentTypeModel
-        .findById(createAppointmentDto.appointment_type_id)
-        .exec(),
-    ])
-    console.log('Usuario', user)
-    console.log('Doctor', doctor)
-    console.log('Clinica', clinic)
-    console.log('Tipo de cita', appointmentType)
-
-    if (!user) {
-      throw new NotFoundException(
-        `User with ID ${createAppointmentDto.contact_id} not found`,
-      )
-    }
-    if (!doctor) {
-      throw new NotFoundException(
-        `Doctor with ID ${createAppointmentDto.contact_id} not found`,
-      )
-    }
-    if (!clinic) {
-      throw new NotFoundException(
-        `Clinic with ID ${createAppointmentDto.clinic_id} not found`,
-      )
-    }
-    if (!appointmentType) {
-      throw new NotFoundException(
-        `Appointment Type with ID ${createAppointmentDto.appointment_type_id} not found`,
-      )
+  private async getRequestConfig(clinicId: string) {
+      try {
+        const { apiUrl, bearerToken, connectorId, consumerId } =
+          await this.clinicConfigService.getConfig(clinicId)
+  
+        return {
+          url: `${apiUrl}/appointments`,
+          headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${bearerToken}`,
+            'connector-id': connectorId,
+            'consumer-id': consumerId,
+          },
+        }
+      } catch (error) {
+        console.error('Error building request config:', error)
+        throw new HttpException(
+          'Failed to build request config.',
+          HttpStatus.BAD_REQUEST,
+        )
+      }
     }
 
-    const appointment = new this.appointmentModel(createAppointmentDto)
-    return appointment.save()
-  }
-
-  async getAppointments(): Promise<AppointmentDocument[]> {
-    return this.appointmentModel.find().exec()
-  }
-
-  async getAppointmentById(_id: string): Promise<AppointmentDocument> {
-    const appointment = await this.appointmentModel.findById(_id).exec()
-    if (!appointment) {
-      throw new NotFoundException(`Appointment with ID "${_id}" not found`)
+    async getVisits(
+      clinicId: string,
+      contactId: string,
+    ): Promise<{ nextVisit: string | null; lastVisit: string | null }> {
+      try {
+        // Obtener datos desde la API externa
+        const { url, headers } = await this.getRequestConfig(clinicId);
+    
+        const response = await lastValueFrom(this.httpService.get(url, { headers }));
+        const appointments = response.data.appointments;
+    
+        const now = new Date();
+    
+        // Filtrar por contact_id
+        const filteredAppointments = appointments.filter(
+          (appointment) => appointment.contact.remote_id === contactId,
+        );
+        
+    
+        // Filtrar y ordenar para nextVisit
+        const futureAppointments = filteredAppointments
+          .filter((appointment) => {
+            const startTime = new Date(appointment.start_time);
+            return (
+              startTime > now &&
+              !appointment.completed &&
+              !appointment.cancelled &&
+              !appointment.broken
+            );
+          })
+          .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
+    
+        const nextVisit = futureAppointments.length > 0
+          ? new Date(futureAppointments[0].start_time).toISOString().split('T')[0]
+          : null;
+    
+        // Filtrar y ordenar para lastVisit
+        const pastAppointments = filteredAppointments
+          .filter((appointment) => {
+            const startTime = new Date(appointment.start_time);
+            return startTime < now && appointment.confirmed;
+          })
+          .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime());
+    
+        const lastVisit = pastAppointments.length > 0
+          ? new Date(pastAppointments[0].start_time).toISOString().split('T')[0]
+          : null;
+    
+        return { nextVisit, lastVisit };
+      } catch (error) {
+        throw new Error('Error fetching appointments: ' + error.message);
+      }
     }
-    return appointment
-  }
+    
 
-  async updateAppointment(
-    _id: string,
-    updateAppointmentDto: CreateAppointmentDto,
-  ): Promise<AppointmentDocument> {
-    const updatedAppointment = await this.appointmentModel
-      .findByIdAndUpdate(_id, updateAppointmentDto, {
-        new: true,
-      })
-      .exec()
-    if (!updatedAppointment) {
-      throw new NotFoundException('Appointment not found')
-    }
-    return updatedAppointment
-  }
 
-  async updateStatusAppointment(
-    _id: string,
-    field: 'confirmed' | 'cancelled' | 'completed' | 'broken',
-    value: boolean,
-  ): Promise<AppointmentDocument> {
-    // Validar el campo
-    if (!['confirmed', 'cancelled', 'completed', 'broken'].includes(field)) {
-      throw new BadRequestException(`Invalid field: ${field}`)
-    }
 
-    // Buscar el appointment
-    const appointment = await this.appointmentModel.findById(_id)
-    if (!appointment) {
-      throw new NotFoundException(`Appointment with ID ${_id} not found`)
-    }
-
-    // Actualizar el estado
-    appointment[field] = value
-    return await appointment.save()
-  }
-
-  async deleteAppointment(_id: string): Promise<void> {
-    const result = await this.appointmentModel.findByIdAndDelete(_id).exec()
-    if (!result) {
-      throw new NotFoundException('Appointment not found')
-    }
-  }
+   
 }

@@ -19,6 +19,7 @@ export class SmsController {
   @ApiResponse({ status: 400, description: 'Validation error.' })
   @Post('send')
   async sendSms(@Body() sendSmsDto: SendSmsDto): Promise<{ status: string }> {
+    console.log('Mensaje enviado', sendSmsDto)
     await this.smsService.sendSms(sendSmsDto)
     return { status: 'SMS sent successfully' }
   }
