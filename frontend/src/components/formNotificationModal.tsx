@@ -67,7 +67,7 @@ export function FormNotificationModal({
   const onSubmitForm: SubmitHandler<NotificationFormData> = async (data) => {
     try {
       if (session?.user?.token) {
-        const notificationDto = {
+        const notificationDto: any = {
           remote_id,
           clinic_id: session?.user?.clinicId || '',
           notification: {
@@ -77,28 +77,43 @@ export function FormNotificationModal({
           data: {
             type: data.type,
           },
-          webpush: {
+        }
+
+        if (data.link) {
+          notificationDto.webpush = {
             fcm_options: {
               link: data.link,
             },
-          },
+          }
         }
 
-        await sendNotification(notificationDto, session.user.token)
+        const response = await sendNotification(
+          notificationDto,
+          session.user.token,
+        )
 
-        setNotificationOpen(false)
+        if (response.status === 'Notifications sent successfully') {
+          console.log('Notification sent successfully:', response)
 
-        await Swal.fire({
-          title: 'Success',
-          text: 'Notification sent successfully.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-          allowOutsideClick: true,
-        })
+          // Close the modal before showing Swal
+          setNotificationOpen(false)
+
+          // Show success Swal
+          await Swal.fire({
+            title: 'Success',
+            text: response.status,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            allowOutsideClick: true,
+          })
+        } else {
+          throw new Error('Unexpected response format.')
+        }
       }
     } catch (error) {
-      console.error('Failed to send notification:', error)
+      console.error('Failed to send email:', error)
 
+      // Close the modal before showing Swal
       setNotificationOpen(false)
 
       // Show error Swal
@@ -206,7 +221,7 @@ export function FormNotificationModal({
             variant='secondary'
             onClick={handleSubmit(async (data) => {
               if (session?.user?.token && session?.user?.userId) {
-                const notificationDto = {
+                const notificationDto: any = {
                   remote_id: session.user.userId, // Enviar al mismo usuario
                   clinic_id: session?.user?.clinicId || '',
                   notification: {
@@ -216,11 +231,15 @@ export function FormNotificationModal({
                   data: {
                     type: data.type,
                   },
-                  webpush: {
+                }
+
+                // Solo agregar `webpush` si existe `data.link`
+                if (data.link) {
+                  notificationDto.webpush = {
                     fcm_options: {
-                      link: data.link || '',
+                      link: data.link,
                     },
-                  },
+                  }
                 }
 
                 try {
