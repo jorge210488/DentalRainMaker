@@ -10,7 +10,7 @@ const Header = () => {
     <header className="mb-6">
       <div className="mb-8 flex items-center justify-center gap-6">
         <div
-          onClick={() => router.push('/patientDashboard/scheduled-appointment/in-person')}
+          onClick={() => router.push('/patientDashboard/scheduled-appointment/chooseDoctor')}
           className="flex cursor-pointer items-center"
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white">
@@ -19,7 +19,7 @@ const Header = () => {
           <span className="ml-2 text-sm font-semibold">Doctor</span>
         </div>
         <div
-          onClick={() => router.push('/patientDashboard/scheduled-appointment/in-person/search-date')}
+          onClick={() => router.push('/patientDashboard/scheduled-appointment/search-date')}
           className="flex cursor-pointer items-center"
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white">

@@ -33,7 +33,7 @@ const DoctorItem = ({ doctor, router }: DoctorItemProps) => {
       notes: doctor.name
     }))
     
-    router.push('/patientDashboard/scheduled-appointment/in-person/search-date')
+    router.push('/patientDashboard/scheduled-appointment/search-date')
   }
 
 

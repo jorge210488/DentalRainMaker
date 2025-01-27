@@ -26,7 +26,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({ selectedTime }) => {
       operatory: "resources/operatory_1"
     }))
     
-    router.push('/patientDashboard/scheduled-appointment/in-person/confirm')
+    router.push('/patientDashboard/scheduled-appointment/confirm')
   }
 
   return (
