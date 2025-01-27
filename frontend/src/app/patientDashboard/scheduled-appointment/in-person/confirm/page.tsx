@@ -3,25 +3,74 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
+import { useSession } from 'next-auth/react'
+import { getDayOfWeek } from '@/utils/getDayOfWeek'
+import { postAppointment } from '@/server/appointments'
+import Swal from 'sweetalert2';
 
 const AppointmentConfirmation = () => {
+  
+  const router = useRouter()
+  const { data: session } = useSession();
+  const dispatch = useDispatch()
+  const appointment = useSelector((state: RootState) => state.appointmentPost);
+  const {clinics} = useSelector((state: RootState) => state.clinics);
+
+  console.log("list de clinicas", clinics);
+  const clinic = Array.isArray(clinics) ? clinics.find((clinic) => clinic._id === session?.user.clinicId) : null;
+
   const appointmentDetails = {
     type: 'In-person',
-    day: 'Thursday',
-    date: '01/23/2025',
-    time: '3:00 PM',
-    location: 'South Clinic - Arequipa - Odontology',
-    doctor: 'Dr. Babilonia Curaca, Sandra',
-    patient: 'Jose Antonio Rojas Huaman',
+    day: getDayOfWeek(appointment.wall_start_time.slice(0, 10)),
+    date: appointment.wall_start_time.slice(0, 10),
+    time: appointment.wall_start_time.slice(11),
+    location: clinic?.clinic_name,
+    doctor: appointment.notes,
+    patient: session?.user.given_name + " " + session?.user.family_name,
     insurance: 'Pacifico EPS',
     cost: '$35',
   }
-  const router = useRouter()
-  const dispatch = useDispatch()
-  const appointment = useSelector((state: RootState) => state.appointmentPost)
-
-  console.log("asi quedo el appointmne", appointment);
   
+  console.log("asi quedo el appointmne", appointment);
+
+  const handleAppointmentConfirm = async() =>{
+    try {
+      if(session?.user.clinicId && session.user.token){
+        const response = await postAppointment(
+          session.user.clinicId,
+          session.user.token,
+          appointment
+        );
+
+        if(response) {
+          Swal.fire({
+            title: "Success",
+            text: "The appointment has been created successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred while creating the appointment.",
+            icon: "error",
+            confirmButtonText: "Try Again",
+          });
+        }
+
+
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Connection Error",
+        text: "Failed to connect to the server. Please try again later.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+
+    router.push('/patientDashboard/appointments')
+  }
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
@@ -122,7 +171,7 @@ const AppointmentConfirmation = () => {
             Cancel
           </button>
           <button
-            onClick={() => router.push('/patientDashboard/appointments')}
+            onClick={handleAppointmentConfirm}
             className='rounded-lg bg-green-500 px-6 py-2 text-white hover:bg-green-600'
           >
             Confirm

@@ -30,6 +30,7 @@ const DoctorItem = ({ doctor, router }: DoctorItemProps) => {
         remote_id: String(doctor.remote_id),
         type: "PROVIDER"
       }],
+      notes: doctor.name
     }))
     
     router.push('/patientDashboard/scheduled-appointment/in-person/search-date')

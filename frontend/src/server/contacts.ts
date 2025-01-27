@@ -132,7 +132,6 @@ export const updateContact = async (
         body: JSON.stringify(updateContactDto),
       },
     )
-    console.log('respuesta del server',response);
     
     if (!response.ok) {
       throw new Error('Failed to update contact.')
