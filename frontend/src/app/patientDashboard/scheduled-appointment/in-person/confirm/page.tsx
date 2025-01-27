@@ -1,6 +1,8 @@
 'use client'
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
 
 const AppointmentConfirmation = () => {
   const appointmentDetails = {
@@ -15,6 +17,11 @@ const AppointmentConfirmation = () => {
     cost: '$35',
   }
   const router = useRouter()
+  const dispatch = useDispatch()
+  const appointment = useSelector((state: RootState) => state.appointmentPost)
+
+  console.log("asi quedo el appointmne", appointment);
+  
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>

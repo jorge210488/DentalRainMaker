@@ -4,6 +4,8 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { updateAppointmentPost } from '@/redux/slices/appointmentPostSlice';
+import { addOneHour } from '@/utils/addOneHour';
 
 type ConfirmButtonProps = {
   selectedTime: string | null;
@@ -15,8 +17,10 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({ selectedTime }) => {
   const appointment = useSelector((state: RootState) => state.appointmentPost)
 
   const handleSelectTime = () =>{
-    console.log("esta es la hora elegida", selectedTime);
-    console.log("cita con fecha", appointment);
+    dispatch(updateAppointmentPost({
+        wall_start_time: appointment.wall_start_time + " " + selectedTime,
+        wall_end_time: appointment.wall_end_time + " " + addOneHour(String(selectedTime))
+    }))
     
     router.push('/patientDashboard/scheduled-appointment/in-person/confirm')
   }
