@@ -1,7 +1,15 @@
 'use client'
 
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
+import Image from 'next/image'
+import { CircleAlert } from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { RootState } from '@/redux/store'
 import { updateNotification } from '@/server/notifications'
 import { markNotificationAsRead } from '@/redux/slices/notificationsSlice'
@@ -13,16 +21,14 @@ interface NotificationModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export function NotificationModal({
-  isOpen,
-  setIsOpen,
-}: NotificationModalProps) {
+const NotificationModal = ({ isOpen, setIsOpen }: NotificationModalProps) => {
   const notifications = useSelector(
     (state: RootState) => state.notifications.notifications,
   )
   const clinics = useSelector((state: RootState) => state.clinics.clinics)
   const { data: session } = useSession()
   const dispatch = useDispatch()
+  const [showAll, setShowAll] = useState(false)
 
   const handleNotificationClick = async (
     notificationId: string,
@@ -30,17 +36,12 @@ export function NotificationModal({
   ) => {
     try {
       if (session?.user?.token) {
-        // Actualiza la notificación en el backend
         await updateNotification(
           notificationId,
           { isRead: true },
           session.user.token,
         )
-
-        // Actualiza el estado del slice
         dispatch(markNotificationAsRead(notificationId))
-
-        // Redirige al enlace
         window.location.href = link
       }
     } catch (error) {
@@ -48,76 +49,76 @@ export function NotificationModal({
     }
   }
 
-  // Ordenar las notificaciones por createdAt, de más nueva a más vieja
   const sortedNotifications = [...notifications].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   )
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className='w-[90%] font-sans sm:max-w-[425px]'>
-        <DialogHeader className='flex items-center justify-between'>
-          <h2 className='text-lg font-bold'>Notifications</h2>
+      <DialogContent className='w-[90%] max-w-md font-sans sm:max-w-lg'>
+        <DialogHeader>
+          <DialogTitle>Notifications</DialogTitle>
         </DialogHeader>
-
-        <div className='space-y-6'>
-          {sortedNotifications.length > 0 ? (
-            sortedNotifications.map((notification, index) => {
+        <div
+          className={`space-y-4 ${showAll ? 'max-h-[400px] overflow-y-auto' : 'max-h-[300px] overflow-hidden'}`}
+        >
+          {sortedNotifications
+            .slice(0, showAll ? sortedNotifications.length : 5)
+            .map((notification, index) => {
               const clinic = clinics.find(
                 (clinic: Clinic) => clinic._id === notification.clinic_id,
               )
               const clinicName = clinic?.clinic_name || 'Unknown Clinic'
 
               return (
-                <div
+                <a
                   key={notification.id}
-                  className={`border-b border-gray-300 pb-4 ${
-                    index === 0 ? 'mt-2 border-t pt-4' : ''
-                  } ${
-                    !notification.isRead
-                      ? 'bg-[#f0f8ff]' // Fondo azul claro si isRead es false
-                      : ''
-                  }`}
+                  href={notification.link}
+                  className='relative flex cursor-pointer items-center border-b border-gray-100 px-4 py-3 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700'
+                  onClick={() =>
+                    handleNotificationClick(notification.id, notification.link)
+                  }
                 >
-                  <div
-                    className='cursor-pointer space-y-2'
-                    onClick={() =>
-                      handleNotificationClick(
-                        notification.id,
-                        notification.link,
-                      )
-                    }
-                  >
-                    {/* Fila 1: Type */}
-                    <div className='flex justify-end text-sm font-medium text-gray-600'>
-                      {notification.type}
-                    </div>
-
-                    {/* Fila 2: Title */}
-                    <div className='text-base font-bold text-gray-900'>
-                      {notification.title}
-                    </div>
-
-                    {/* Fila 3: Body */}
-                    <div className='text-sm text-gray-700'>
-                      {notification.body}
-                    </div>
-
-                    {/* Fila 4: Clinic Name */}
-                    <div className='flex justify-end text-sm font-medium text-gray-500'>
-                      {clinicName}
+                  <div className='flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-white p-1 shadow-md'>
+                    <Image
+                      className='rounded-full'
+                      src='https://res.cloudinary.com/deflfnoba/image/upload/v1736293681/DentalRainMaker%20Frontend/xpt6bwxwovvscuh3irci.png'
+                      alt='avatar'
+                      width={60}
+                      height={60}
+                    />
+                  </div>
+                  <div className='mx-2 flex w-full flex-col text-sm text-gray-600 dark:text-white'>
+                    <span className='font-bold'>{notification.title}</span>
+                    <span>{notification.body}</span>
+                    <div className='flex justify-between'>
+                      <span className='text-blue-500 hover:underline'>
+                        {clinicName}
+                      </span>
+                      <span className='text-gray-500'>{notification.type}</span>
                     </div>
                   </div>
-                </div>
+                  {!notification.isRead && (
+                    <CircleAlert
+                      className='absolute right-2 top-2 text-red-500'
+                      size={18}
+                    />
+                  )}
+                </a>
               )
-            })
-          ) : (
-            <div className='text-center text-gray-600'>
-              No notifications available.
-            </div>
-          )}
+            })}
         </div>
+        {!showAll && sortedNotifications.length > 5 && (
+          <button
+            onClick={() => setShowAll(true)}
+            className='block w-full bg-gray-800 py-2 text-center font-bold text-white hover:underline dark:bg-gray-700'
+          >
+            See all notifications
+          </button>
+        )}
       </DialogContent>
     </Dialog>
   )
 }
+
+export default NotificationModal
