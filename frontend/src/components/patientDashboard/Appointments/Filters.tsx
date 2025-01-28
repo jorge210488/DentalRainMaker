@@ -19,7 +19,7 @@ const Filters = ({
           onClick={() => setPrimaryFilter('History')}
           className={`rounded-lg px-4 py-2 ${
             primaryFilter === 'History'
-              ? 'bg-green-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
@@ -29,7 +29,7 @@ const Filters = ({
           onClick={() => setPrimaryFilter('Upcoming')}
           className={`rounded-lg px-4 py-2 ${
             primaryFilter === 'Upcoming'
-              ? 'bg-green-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
@@ -43,7 +43,7 @@ const Filters = ({
           onClick={() => setSecondaryFilter('All')}
           className={`rounded-lg px-4 py-2 ${
             secondaryFilter === 'All'
-              ? 'bg-green-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
@@ -53,7 +53,7 @@ const Filters = ({
           onClick={() => setSecondaryFilter('In-person')}
           className={`rounded-lg px-4 py-2 ${
             secondaryFilter === 'In-person'
-              ? 'bg-green-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
@@ -63,7 +63,7 @@ const Filters = ({
           onClick={() => setSecondaryFilter('Virtual')}
           className={`rounded-lg px-4 py-2 ${
             secondaryFilter === 'Virtual'
-              ? 'bg-green-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >

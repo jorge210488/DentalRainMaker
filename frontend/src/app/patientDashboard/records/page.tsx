@@ -57,7 +57,7 @@ export default function RecordsPage() {
   const [treatments, setTreatments] = useState<Treatment[]>(mockTreatments)
 
   return (
-    <div className='mx-auto p-6 lg:lg:min-w-[160vh]'>
+    <div className='mx-auto p-6 lg:max-w-[80%]'>
       <div className='mb-6 flex items-center justify-between'>
         <div>
           <h1 className='text-2xl font-semibold text-gray-900'>
