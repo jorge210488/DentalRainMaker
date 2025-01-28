@@ -10,6 +10,7 @@ import {
   FileText,
   Home,
   Menu,
+  Group,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -33,6 +34,12 @@ export function DashboardShell({ children }: DashboardShellProps) {
       label: 'Appointments',
       icon: Calendar,
       active: pathname === '/patientDashboard/appointments',
+    },
+    {
+      href: '/patientDashboard/patients',
+      label: 'Patients',
+      icon: Group,
+      active: pathname === '/patientDashboard/patients',
     },
     {
       href: '/patientDashboard/messages',
