@@ -20,7 +20,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { NotificationModal } from '@/components/notificationsModal'
+import NotificationModal from '@/components/notificationsModal'
 import { fetchNotificationsByUser } from '@/server/notifications'
 import { setNotifications } from '@/redux/slices/notificationsSlice'
 import { RootState } from '@/redux/store'
