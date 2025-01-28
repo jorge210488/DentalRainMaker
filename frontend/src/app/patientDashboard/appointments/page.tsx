@@ -1,19 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { Calendar, MapPin, Plus, User2, Video } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { useEffect, useState } from 'react'
 import Header from '@/components/patientDashboard/Appointments/Header'
 import Filters from '@/components/patientDashboard/Appointments/Filters'
@@ -35,31 +21,35 @@ export type Appointment = {
 const today = new Date().toISOString().split('T')[0]
 
 export default function AppointmentsDashboard() {
-  const { data: session } = useSession();
+  const { data: session } = useSession()
   const [primaryFilter, setPrimaryFilter] = useState<'History' | 'Upcoming'>(
     'Upcoming',
   )
   const [secondaryFilter, setSecondaryFilter] = useState<
     'All' | 'In-person' | 'Virtual'
   >('All')
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([])
 
   useEffect(() => {
     const initializeAppointments = async () => {
       try {
-        if (session?.user?.token && session?.user?.clinicId && session?.user?.userId) {
+        if (
+          session?.user?.token &&
+          session?.user?.clinicId &&
+          session?.user?.userId
+        ) {
           const response = await getAppointmentsByContactId(
             session.user.clinicId,
             session.user.userId,
-            session.user.token
-          );
-          setAppointments(response);
+            session.user.token,
+          )
+          setAppointments(response)
         }
       } catch (error) {
-        console.error('Error initializing user appointments:', error);
+        console.error('Error initializing user appointments:', error)
       }
-    };
-    initializeAppointments();
+    }
+    initializeAppointments()
   }, [session])
 
   const filteredAppointments = appointments.filter((appointment) => {
@@ -75,17 +65,19 @@ export default function AppointmentsDashboard() {
   })
 
   return (
-    <div className='min-h-screen bg-gray-100 p-6'>
-      <main className='ml-24'>
-      <Header />
-        <Filters
-          primaryFilter={primaryFilter}
-          setPrimaryFilter={setPrimaryFilter}
-          secondaryFilter={secondaryFilter}
-          setSecondaryFilter={setSecondaryFilter}
-        />
-        <AppointmentsList appointments={filteredAppointments} />
-      </main>
+    <div className='min-h-screen w-full bg-gray-100'>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <main className='py-4 sm:py-6 lg:py-8'>
+          <Header />
+          <Filters
+            primaryFilter={primaryFilter}
+            setPrimaryFilter={setPrimaryFilter}
+            secondaryFilter={secondaryFilter}
+            setSecondaryFilter={setSecondaryFilter}
+          />
+          <AppointmentsList appointments={filteredAppointments} />
+        </main>
+      </div>
     </div>
   )
 }

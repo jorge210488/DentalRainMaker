@@ -17,11 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className='overflow-y-hidden font-sans'>
+      <body className='overflow-y-auto font-sans'>
         <div className='flex h-screen bg-gray-50'>
           <DashboardShell />
-          <div className='flex flex-1 flex-col sm:min-w-[100%] lg:min-w-[100%]'>
-            <main className='flex-1 overflow-y-auto p-2 sm:absolute'>
+          <div className='flex h-full flex-1 flex-col overflow-y-scroll sm:min-w-[100%] lg:min-w-[100%]'>
+            <main className='min-w-[80%] flex-1 p-2 sm:absolute'>
               {children}
             </main>
           </div>
