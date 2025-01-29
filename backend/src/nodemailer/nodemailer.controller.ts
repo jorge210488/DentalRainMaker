@@ -45,7 +45,7 @@ export class NodemailerController {
 
       // Return a proper JSON object
       console.log(sendResponse)
-      return { status: sendResponse } // Ensure consistent response format
+      return sendResponse // Ensure consistent response format
     } catch (error) {
       console.error('Error in NodemailerController:', error.message)
       throw new Error('Failed to send or save the email.')

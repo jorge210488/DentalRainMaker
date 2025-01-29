@@ -152,7 +152,7 @@ export class NodemailerService {
     }
   }
 
-  async sendEmail(createEmailDto: CreateEmailDto): Promise<string> {
+  async sendEmail(createEmailDto: CreateEmailDto): Promise<{ status: string }> {
     const path = require('path')
     const fs = require('fs')
 
@@ -209,7 +209,7 @@ export class NodemailerService {
       console.log(
         `Email sent to ${createEmailDto.to}. Response: ${info.response}`,
       )
-      return 'Your email was sent successfully.'
+      return { status: 'Your email was sent successfully.' }
     } catch (error) {
       console.error('Error sending email:', error.message)
     }
