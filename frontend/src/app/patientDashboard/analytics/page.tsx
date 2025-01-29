@@ -9,14 +9,12 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <DashboardShell>
-      <div className='p-8'>
-        <DashboardHeader
-          heading='Welcome back, Doctor'
-          text='Manage your dental care journey'
-        />
-        <LookerStudioEmbed />
-      </div>
-    </DashboardShell>
+    <div className='p-8'>
+      <DashboardHeader
+        heading='Welcome back, Doctor'
+        text='Manage your dental care journey'
+      />
+      <LookerStudioEmbed />
+    </div>
   )
 }

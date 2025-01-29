@@ -11,6 +11,7 @@ import {
   Home,
   Menu,
   Group,
+  BarChart2,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -36,12 +37,6 @@ export function DashboardShell({ children }: DashboardShellProps) {
       active: pathname === '/patientDashboard/appointments',
     },
     {
-      href: '/patientDashboard/patients',
-      label: 'Patients',
-      icon: Group,
-      active: pathname === '/patientDashboard/patients',
-    },
-    {
       href: '/patientDashboard/messages',
       label: 'Messages',
       icon: MessageSquare,
@@ -58,6 +53,18 @@ export function DashboardShell({ children }: DashboardShellProps) {
       label: 'Profile',
       icon: User,
       active: pathname === '/patientDashboard/profile',
+    },
+    {
+      href: '/patientDashboard/patients',
+      label: 'Patients',
+      icon: Group,
+      active: pathname === '/patientDashboard/patients',
+    },
+    {
+      href: '/patientDashboard/analytics',
+      label: 'Analytics',
+      icon: BarChart2,
+      active: pathname === '/patientDashboard/patients',
     },
   ]
 
@@ -76,6 +83,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   route.active
                     ? 'bg-white/10 text-white'
                     : 'text-white/80 hover:bg-white/10 hover:text-white',
+                  route.label === 'Patients' && 'text-blue-600',
+                  route.label === 'Analytics' && 'text-blue-600',
                 )}
               >
                 <route.icon className='mr-3 h-5 w-5' />
@@ -103,7 +112,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 <Link
                   key={route.href}
                   href={route.href}
-                  onClick={() => setIsOpen(false)} // Close sheet when a link is clicked
+                  onClick={() => setIsOpen(false)}
                   className={cn(
                     'flex items-center rounded-lg px-3 py-2 text-sm font-medium',
                     route.active
