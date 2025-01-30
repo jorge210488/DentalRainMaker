@@ -39,28 +39,19 @@ export default function LoginForm() {
         email,
         password,
         provider: 'local',
-        redirect: false,
+        callbackUrl: '/', // 🔹 Forzar actualización de sesión después del login
       })
-      console.log('Login result:', result)
 
-      if (result?.ok) {
-        // Login exitoso
-        console.log('Login successful:', result)
-        await Swal.fire({
-          title: 'Login Successful!',
-          text: 'You have been successfully logged in.',
+      if (!result?.error) {
+        Swal.fire({
+          title: 'Login Successful',
+          text: 'Welcome back!',
           icon: 'success',
-          confirmButtonText: 'Continue',
-        })
 
-        router.push(result.url || '/patientDashboard')
-      } else {
-        // Error en el inicio de sesión
-        console.error('Login error:', result?.error)
-        throw new Error(result?.error || 'Invalid credentials')
+          confirmButtonText: 'Ok',
+        })
       }
-    } catch (error: any) {
-      // Manejo del error
+    } catch (error) {
       console.error('Error during login:', error)
       Swal.fire({
         title: 'Login Failed',

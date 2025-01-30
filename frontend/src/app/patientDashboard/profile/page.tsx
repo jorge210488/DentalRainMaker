@@ -15,11 +15,6 @@ import {
 } from '@/components/patientDashboard/formsPatientProfile'
 import { Separator } from '@/components/ui/separator'
 import { Mail, Phone, Plus } from 'lucide-react'
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { setUser } from '@/redux/slices/userSlice'
-import { fetchContactById } from '@/server/contacts'
-import { useSession } from 'next-auth/react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import {
@@ -42,7 +37,6 @@ export interface PatientProfile {
 }
 
 const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
-  // Reemplazar cualquier carácter que no sea un número
   event.target.value = event.target.value.replace(/[^0-9]/g, '')
 }
 
@@ -52,32 +46,7 @@ export default function PatientProfile() {
   const [emailOpen, setEmailOpen] = useState(false)
   const [addressOpen, setAddressOpen] = useState(false)
 
-  const dispatch = useDispatch()
-  const { data: session } = useSession()
-
-  useEffect(() => {
-    const loadUserProfile = async () => {
-      try {
-        if (
-          session?.user?.token &&
-          session?.user?.userId &&
-          session?.user?.clinicId
-        ) {
-          const userData = await fetchContactById(
-            session.user.clinicId,
-            session.user.userId,
-            session.user.token,
-          )
-          dispatch(setUser(userData))
-        }
-      } catch (error) {
-        console.error('Failed to fetch user profile:', error)
-      }
-    }
-
-    loadUserProfile()
-  }, [dispatch, session])
-
+  // 🔹 Obtener datos del usuario desde Redux
   const {
     given_name,
     family_name,
