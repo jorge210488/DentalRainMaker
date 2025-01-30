@@ -1,17 +1,22 @@
-import { Body, Controller, Post, HttpCode } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { Body, Controller, Post, HttpCode, Get, Query } from '@nestjs/common'
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/createUser.dto'
 import { LoginUserDto } from './dto/loginUser.dto'
 import { UserDocument } from '../users/schemas/user.schema'
 import { Public } from '../decorators/public.decorator'
 
-@Public()
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @HttpCode(201)
   @Post('signup')
   async signup(
@@ -26,6 +31,7 @@ export class AuthController {
     }
   }
 
+  @Public()
   @Post('signin')
   @HttpCode(201)
   @ApiOperation({
@@ -42,5 +48,20 @@ export class AuthController {
   async signin(@Body() userData: LoginUserDto) {
     console.log('datos recibidos', userData)
     return this.authService.signin(userData)
+  }
+
+  @ApiBearerAuth()
+  @Get('employeers')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Get all users that are not of type PATIENT',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns a list of users that are not patients.',
+  })
+  async getNonPatientUsers(@Query('clinic_id') clinic_id: string) {
+    console.log('Fetching non-patient users for clinic:', clinic_id)
+    return this.authService.getNonPatientUsers(clinic_id)
   }
 }

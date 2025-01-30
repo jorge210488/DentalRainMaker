@@ -14,7 +14,7 @@
       "CREATE_APPOINTMENT",
       "UPDATE_APPOINTMENT"
     ],
-    "views": ["USER_PROFILE", "USER_APPOINTMENTS"]
+    "views": ["USER_PROFILE", "USER_APPOINTMENTS", "PATIENT_DASHBOARD"]
   },
   {
     "name": "EMPLOYEER",
@@ -26,7 +26,7 @@
       "CREATE_APPOINTMENT",
       "UPDATE_APPOINTMENT"
     ],
-    "views": ["USER_PROFILE", "USER_APPOINTMENTS"]
+    "views": ["USER_PROFILE", "PATIENTS_APPOINTMENTS", "ADMIN_DASHBOARD"]
   },
   {
     "name": "VENDOR",
