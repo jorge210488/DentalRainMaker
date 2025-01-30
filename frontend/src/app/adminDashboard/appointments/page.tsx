@@ -1,81 +1,88 @@
 'use client'
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
-import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell';
 
-type Appointment = {
-  id: number;
-  date: string;
-  patientName: string;
-  diagnosis: string;
-};
+import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 
-type DoctorAppointments = {
-  id: number;
-  name: string;
-  specialty: string;
-  appointments: Appointment[];
-};
+import { fetchAppointments } from '@/server/appointments'
+import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
+import { AppointmentList } from '@/components/AdminDashboard/Appointments/AppointmentsList'
+import { SearchAndSort } from '@/components/AdminDashboard/Appointments/SearchAndSort'
 
-const doctorAppointmentsData: { [key: number]: DoctorAppointments } = {
-  1: {
-    id: 1,
-    name: 'Dr. Smith',
-    specialty: 'Ortodoncia',
-    appointments: [
-      {
-        id: 101,
-        date: '2023-12-10',
-        patientName: 'John Doe',
-        diagnosis: 'Maloclusión leve',
-      },
-      {
-        id: 102,
-        date: '2023-10-05',
-        patientName: 'Jane Roe',
-        diagnosis: 'Limpieza regular',
-      },
-    ],
-  },
-};
+export default function Home() {
+  const [allAppointments, setAllAppointments] = useState<IAppointment[]>([])
+  const [filteredAppointments, setFilteredAppointments] = useState<IAppointment[]>([])
 
-export default function DoctorAppointmentsPage() {
-  
-//   const { id } = useParams();
-//   const doctor = doctorAppointmentsData[Number(id)];
-    const doctor = doctorAppointmentsData[1];
-//   if (!doctor) {
-//     return <div className="p-6">Doctor no encontrado.</div>;
-//   }
+  const [currentPage, setCurrentPage] = useState(1)
+  const [searchQuery, setSearchQuery] = useState<string>('') // Búsqueda
+
+
+  const [refreshAppointments, setRefreshAppointments] = useState(false)
+
+  const { data: session } = useSession()
+  const appointmentsPerPage = 10 // Number of items per page
+
+  useEffect(() => {
+    const initializeAppointments = async () => {
+      try {
+        if (session?.user?.token && session?.user?.clinicId) {
+          const response = await fetchAppointments(
+            session.user.clinicId,
+            session.user.token,
+          )
+          setAllAppointments(response)
+          setFilteredAppointments(response)
+        }
+      } catch (error) {
+        console.error('Error initializing appointments:', error)
+      }
+    }
+    initializeAppointments()
+  }, [session, refreshAppointments])
+
+  const handleRefreshAppointments = () => setRefreshAppointments((prev) => !prev)
+
+  // Manejar el cambio en la barra de búsqueda
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value)
+  }
+
+
+  // Filtrar y ordenar citas
+  useEffect(() => {
+    let updatedAppointments = [...allAppointments]
+
+    // Filtro de búsqueda
+    if (searchQuery) {
+      updatedAppointments = updatedAppointments.filter((appointment) =>
+        appointment.doctor.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    }
+
+    setCurrentPage(1)
+    setFilteredAppointments(updatedAppointments)
+  }, [searchQuery, allAppointments])
 
   return (
     <DashboardShell>
-      <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold mb-4">Citas del Doctor</h1>
-      <div className="bg-white shadow rounded-lg p-4 mb-6">
-        <h2 className="text-lg font-semibold mb-2">Información del Doctor</h2>
-        <p><strong>Nombre:</strong> {doctor.name}</p>
-        <p><strong>Especialidad:</strong> {doctor.specialty}</p>
-      </div>
+      <div className='min-h-screen bg-gray-100 p-6'>
+        <h1 className='mb-4 text-2xl font-bold'>Appointments List</h1>
 
-      <div className="bg-white shadow rounded-lg p-4">
-        <h2 className="text-lg font-semibold mb-2">Listado de Citas</h2>
-        <ul className="divide-y divide-gray-200">
-          {doctor.appointments.map((appointment) => (
-            <li key={appointment.id} className="py-2">
-              <Link href={`/adminDashboard/appointments/${appointment.id}`} className="text-blue-600 hover:underline">
-                
-                  <p><strong>Fecha:</strong> {appointment.date}</p>
-                  <p><strong>Paciente:</strong> {appointment.patientName}</p>
-                  <p><strong>Diagnóstico:</strong> {appointment.diagnosis}</p>
-                
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {/* Componente de búsqueda y ordenamiento */}
+        <SearchAndSort
+          searchQuery={searchQuery}
+          onSearch={handleSearch}
+        />
+
+        <AppointmentList
+          appointments={filteredAppointments}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          appointmentsPerPage={appointmentsPerPage}
+        />
+
+        
       </div>
-    </div>
     </DashboardShell>
-    
-  );
+  )
 }

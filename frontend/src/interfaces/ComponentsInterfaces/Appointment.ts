@@ -11,7 +11,7 @@ interface Resource {
     type: string;
     display_name: string;
 }
-//HAY QUE CAMBIAR ESTA INTERFACE PARA QUE SEA PROPIA DE LA RESPUESTA DEL BACKEND Y USARLA EN EL FRONTEND
+
 export interface IAppointment {
     name: string;
     remote_id: string;
@@ -23,10 +23,10 @@ export interface IAppointment {
         family_name: string;
     };
     location?: string;
-    start_time:string;
+    start_time?:string;
     end_time?:string;
-    wall_start_time?:string;
-    wall_end_time?:string;
+    wall_start_time:string;
+    wall_end_time:string;
     time_zone?:string;
     providers?: Provider[];
     scheduler?:{
@@ -47,5 +47,11 @@ export interface IAppointment {
     additional_data?: {};  
     create_time?:string;
     update_time?:string;
+    doctor: string,
+    operator: string,
+    date: string,
+    time: string,
+    atention_type: string,
+    paymentStatus: string
     
 }

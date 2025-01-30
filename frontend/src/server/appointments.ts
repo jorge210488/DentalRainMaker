@@ -4,7 +4,7 @@ import {
 } from '@/redux/types/appointment.interface'
 
 export const fetchAppointments = async (
-  clinicId: string,
+  clinic_id: string,
   bearerToken: string,
   options: {
     pageSize?: number
@@ -14,7 +14,7 @@ export const fetchAppointments = async (
   } = {},
 ) => {
   try {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments?clinicId=${encodeURIComponent(clinicId)}`
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments?clinic_id=${encodeURIComponent(clinic_id)}`
 
     const queryParams = new URLSearchParams()
     if (options.pageSize) {
