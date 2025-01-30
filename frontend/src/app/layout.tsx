@@ -1,13 +1,14 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { SessionProvider, signOut, useSession } from 'next-auth/react'
+import { SessionProvider, signOut } from 'next-auth/react'
 import { Provider } from 'react-redux'
 import store from '@/redux/store'
 import './globals.css'
 import FirebaseNotification from '@/components/firebaseNotification'
 import AppInitializer from '@/components/appInitializer'
-import Header from '@/components/patientDashboard/header' // Importa tu componente Header
+import SessionAppInitializer from '@/components/sessionAppInitializer'
+import Header from '@/components/patientDashboard/header'
 
 export default function RootLayout({
   children,
@@ -28,13 +29,16 @@ export default function RootLayout({
       <body>
         <SessionProvider>
           <Provider store={store}>
-            {/* Componente que maneja el guardado del token */}
             <FirebaseNotification />
             <AppInitializer>
-              {/* Mostrar el Header solo si la ruta no está en la lista de exclusión */}
+              {/* 🔹 Mueve `useSession()` dentro de SessionProvider */}
+              <SessionAppInitializer />
+
+              {/* 🔹 Renderiza el Header inmediatamente */}
               {!excludeHeader.includes(pathname) && (
                 <Header onLogout={handleLogout} />
               )}
+
               {children}
             </AppInitializer>
           </Provider>

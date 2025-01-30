@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Bell, Calendar, Menu, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -20,13 +20,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import NotificationModal from '@/components/notificationsModal'
-import { fetchNotificationsByUser } from '@/server/notifications'
-import { setNotifications } from '@/redux/slices/notificationsSlice'
 import { RootState } from '@/redux/store'
 import { useSession } from 'next-auth/react'
 import { clearUser } from '@/redux/slices/userSlice'
 import { clearNotifications } from '@/redux/slices/notificationsSlice'
+import NotificationModal from '../notificationsModal'
 
 interface SiteHeaderProps {
   onLogout: () => void
@@ -37,32 +35,10 @@ export default function Header({ onLogout }: SiteHeaderProps) {
   const dispatch = useDispatch()
   const { data: session } = useSession()
 
+  // 🔹 Obtener `unreadCount` desde Redux (manteniendo su funcionalidad)
   const unreadCount = useSelector(
     (state: RootState) => state.notifications.unreadCount,
   )
-
-  useEffect(() => {
-    const loadNotifications = async () => {
-      try {
-        if (
-          session?.user?.token &&
-          session?.user?.userId &&
-          session?.user?.clinicId
-        ) {
-          const notifications = await fetchNotificationsByUser(
-            session.user.clinicId,
-            session.user.userId,
-            session.user.token,
-          )
-          dispatch(setNotifications(notifications))
-        }
-      } catch (error) {
-        console.error('Failed to fetch notifications:', error)
-      }
-    }
-
-    loadNotifications()
-  }, [dispatch, session])
 
   const handleLogout = () => {
     dispatch(clearUser())
