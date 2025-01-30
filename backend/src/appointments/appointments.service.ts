@@ -12,6 +12,7 @@ import { ContactsService } from '../contacts/contacts.service'
 import { UpdateAppointmentDto } from './dto/updateAppointment.dto'
 import { CancelAppointmentDto } from './dto/cancelAppointment.dto'
 import { ResourcesService } from 'src/resources/resource.service'
+import { convertDateTime } from 'src/utils/convertDateTime'
 
 @Injectable()
 export class AppointmentsService {
@@ -58,14 +59,47 @@ export class AppointmentsService {
     try {
       const { url, headers } = await this.getRequestConfig(clinicId)
 
-      const response = await lastValueFrom(
-        this.httpService.get(`${url}/appointments`, {
-          headers,
-          params: queryParams,
+      const [resources, response] = await Promise.all([
+        this.resourceService.getResources(clinicId),
+        lastValueFrom(
+          this.httpService.get(`${url}/appointments`, {
+            headers,
+            params: queryParams,
+          }),
+        ),
+      ])
+
+      const appointments = response.data.appointments;
+
+      // Crear un mapa de remote_id -> display_name usando Object.fromEntries
+      const remoteIdToDisplayName = Object.fromEntries(
+        resources.map((resource) => [
+          resource.remote_id,
+          resource.display_name,
+        ]),
+      )
+
+      // Mapear appointments para agregar propiedades adicionales
+      const updatedAppointments = appointments.map(
+        (appointment) => ({
+          ...appointment,
+          doctor:
+            appointment.providers
+              .map((provider) => remoteIdToDisplayName[provider.remote_id])
+              .filter(Boolean)[0] || null, // Toma el primer display_name válido o null
+          operator:
+            appointment.resources
+              .map((resource) => remoteIdToDisplayName[resource.remote_id])
+              .filter(Boolean)[0] || null,
+          date: appointment.wall_start_time.split(" ")[0],
+          time: appointment.wall_start_time.split(' ')[1],
+          atention_type: 'In-person',
+          paymentStatus: 'Pending',
         }),
       )
 
-      return response.data
+      return updatedAppointments
+
     } catch (error) {
       console.error('Error fetching appointments:', error)
 
@@ -86,18 +120,6 @@ export class AppointmentsService {
   ): Promise<any> {
     try {
       const { url, headers } = await this.getRequestConfig(clinicId)
-
-      // const contact = await this.contactsService.getContactById(
-      //   clinicId,
-      //   contactId,
-      // )
-      // const resources = await this.resourceService.getResources(clinicId)
-
-      // const response = await lastValueFrom(
-      //   this.httpService.get(`${url}/appointments`, {
-      //     headers,
-      //   }),
-      // )
 
       const [contact, resources, response] = await Promise.all([
         this.contactsService.getContactById(clinicId, contactId),

@@ -17,15 +17,15 @@ export function MetricsCards() {
 
   // 🔹 Obtener la próxima cita (la más cercana a la fecha actual)
   const nextAppointment = appointments
-    .filter((appointment) => new Date(appointment.start_time) >= today)
+    .filter((appointment) => appointment.start_time && new Date(appointment.start_time) >= today)
     .sort(
       (a, b) =>
-        new Date(a.start_time).getTime() - new Date(b.start_time).getTime(),
+        new Date(a.start_time ?? 0).getTime() - new Date(b.start_time ?? 0).getTime(),
     )[0]
 
   // 🔹 Contar la cantidad de citas futuras
   const upcomingAppointmentsCount = appointments.filter(
-    (appointment) => new Date(appointment.start_time) >= today,
+    (appointment) => appointment.start_time && new Date(appointment.start_time) >= today,
   ).length
 
   return (
@@ -42,7 +42,7 @@ export function MetricsCards() {
           {nextAppointment ? (
             <>
               <div className='text-2xl font-bold'>
-                {new Date(nextAppointment.start_time).toLocaleDateString(
+                {nextAppointment.start_time && new Date(nextAppointment.start_time).toLocaleDateString(
                   'en-US',
                   {
                     month: 'short',
