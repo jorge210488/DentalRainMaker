@@ -3,11 +3,11 @@ import NextAuth from 'next-auth'
 declare module 'next-auth' {
   // Interfaz para el objeto `User`
   interface User {
-    id_token?: string // Token de acceso devuelto por el backend
-    user_id?: string // ID único del usuario
-    user_type?: string // Tipo de usuario (e.g., PATIENT)
-    user_views?: string[] // Vistas asociadas al usuario
-    user_clinicId?: string // ID único de la clinica del usuario
+    token?: string // 🔹 Se cambia de `id_token` a `token`
+    userId?: string // 🔹 Se cambia de `user_id` a `userId`
+    type?: string
+    views?: string[]
+    clinicId?: string
   }
 
   // Interfaz para el token JWT
