@@ -14,7 +14,7 @@ export const fetchAppointments = async (
   } = {},
 ) => {
   try {
-    let url = `http://localhost:3200/appointments?clinic_id=${encodeURIComponent(clinic_id)}`
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/appointments?clinic_id=${encodeURIComponent(clinic_id)}`
 
     const queryParams = new URLSearchParams()
     if (options.pageSize) {
