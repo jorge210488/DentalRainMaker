@@ -18,6 +18,12 @@ import { JwtService } from '@nestjs/jwt'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
 import { ContactsService } from '../contacts/contacts.service'
 
+interface Contact {
+  primary_email_address: string
+  given_name?: string
+  family_name?: string
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -72,7 +78,7 @@ export class AuthService {
               address: email,
             },
           ],
-          type: type || 'PATIENT', // Default to 'PATIENT' if type is not provided
+          type: 'PATIENT', // Agregar type || 'PATIENT' una vez se pueda crear otro tipo de type
         }
 
         try {
@@ -206,5 +212,45 @@ export class AuthService {
     return {
       token,
     }
+  }
+
+  async getNonPatientUsers(clinic_id: string) {
+    const credentials = await this.credentialModel
+      .find({ clinic_id })
+      .populate('type')
+      .exec()
+
+    const nonPatientCredentials = credentials.filter(
+      (credential) => credential.type.name !== 'PATIENT',
+    )
+
+    if (nonPatientCredentials.length === 0) {
+      return []
+    }
+
+    const emails = nonPatientCredentials.map((cred) => cred.email)
+
+    const contactsResponse = await this.contactsService.getContacts(clinic_id)
+
+    const contactMap = new Map<string, Contact>(
+      contactsResponse.contacts.map((contact: Contact) => [
+        contact.primary_email_address,
+        contact,
+      ]),
+    )
+
+    return nonPatientCredentials.map((cred) => {
+      const contact = contactMap.get(cred.email) || ({} as Contact)
+      return {
+        email: cred.email,
+        type: cred.type.name,
+        given_name: contact.given_name || null,
+        family_name: contact.family_name || null,
+        permissions: cred.type.permissions || [],
+        views: cred.type.views || [],
+        credential_id: cred._id,
+        remote_id: cred.remote_id,
+      }
+    })
   }
 }

@@ -54,12 +54,13 @@ export const authOptions: AuthOptions = {
 
           // Retornar los datos necesarios
           return {
-            id: decodedToken.userId,
-            id_token: data.token,
-            user_id: decodedToken.user_id,
-            user_type: decodedToken.type,
-            user_views: decodedToken.views,
-            user_clinicId: decodedToken.clinic_id,
+            id: decodedToken.user_id, // 🔹 Se asegura de usar `user_id` (coherente con el token)
+            token: data.token, // 🔹 Se renombra `id_token` a `token` (más intuitivo)
+            userId: decodedToken.user_id, // 🔹 Se mantiene coherente con `session()`
+            type: decodedToken.type,
+            views: decodedToken.views,
+            clinicId: decodedToken.clinic_id,
+            provider: 'credentials',
           }
         } catch (error) {
           console.error('Error during local login:', error)
@@ -150,13 +151,13 @@ export const authOptions: AuthOptions = {
       // console.log('JWT Callback - Account:', account)
       // console.log('JWT Callback - User:', user)
 
-      if (account && account.provider === 'credentials' && user) {
-        // Datos de credentials
-        token.accessToken = user?.id_token // Consistencia con GoogleProvider
-        token.userId = user?.user_id
-        token.type = user?.user_type
-        token.views = user?.user_views
-        token.clinicId = user?.user_clinicId
+      if (account) {
+        token.accessToken = account.access_token || user?.token
+        token.userId = user?.userId
+        token.type = user?.type
+        token.views = user?.views
+        token.clinicId = user?.clinicId
+        token.provider = account.provider
       }
 
       if (account && account.provider === 'google') {

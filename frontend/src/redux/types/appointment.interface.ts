@@ -47,33 +47,28 @@ export interface AppointmentTypesState {
   types: AppointmentType[]
 }
 
-
 // ****** INTERFACE FOR POST APPOINTMENT *******
 
 interface Provider {
-  name: string;
-  remote_id: string;
-  type: string;
+  name: string
+  remote_id: string
+  type: string
 }
 
-
-
 export interface AppointmentPostState {
-    
-    contact_id: string
-    wall_start_time:string
-    wall_end_time:string
-    providers: Provider[]
-    scheduler?:{
-        name:string;
-        remote_id:string;
-        type:string;
-    }
-    appointment_type_id?:string
-    operatory:string
-    short_description?:string
-    notes?:string
-        
+  contact_id: string
+  wall_start_time: string
+  wall_end_time: string
+  providers: Provider[]
+  scheduler?: {
+    name: string
+    remote_id: string
+    type: string
+  }
+  appointment_type_id?: string
+  operatory: string
+  short_description?: string
+  notes?: string
 }
 
 /* EJEMPLO COMO SE DEBE ENVIAR LA DATA POST APPOINTMENT 
@@ -97,4 +92,3 @@ export interface AppointmentPostState {
   "operatory": "resources/operatory_5"
   
 } */
-
