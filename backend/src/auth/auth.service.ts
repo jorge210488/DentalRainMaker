@@ -17,6 +17,7 @@ import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
 import { ContactsService } from '../contacts/contacts.service'
+import { UpdateUserDto } from './dto/updateUser.dto'
 
 interface Contact {
   primary_email_address: string
@@ -248,7 +249,41 @@ export class AuthService {
         family_name: contact.family_name || null,
         permissions: cred.type.permissions || [],
         views: cred.type.views || [],
+        credential_id: cred._id,
+        remote_id: cred.remote_id,
       }
     })
+  }
+
+  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<any> {
+    const { type, clinic_id } = updateUserDto
+
+    const credential = await this.credentialModel.findById(id).populate('type')
+    if (!credential) {
+      throw new NotFoundException(`User with ID ${id} not found.`)
+    }
+
+    if (type) {
+      const role = await this.roleModel.findOne({ name: type })
+      if (!role) {
+        throw new BadRequestException(`Role ${type} not found.`)
+      }
+      credential.type = role // 🔹 Asignamos el objeto completo en lugar de solo el _id
+    }
+
+    if (clinic_id) credential.clinic_id = clinic_id
+
+    await credential.save()
+
+    return {
+      message: 'User successfully updated',
+      user: {
+        email: credential.email,
+        type: credential.type.name,
+        clinic_id: credential.clinic_id,
+        permissions: credential.type.permissions,
+        views: credential.type.views,
+      },
+    }
   }
 }
