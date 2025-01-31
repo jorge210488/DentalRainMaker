@@ -248,6 +248,8 @@ export class AuthService {
         family_name: contact.family_name || null,
         permissions: cred.type.permissions || [],
         views: cred.type.views || [],
+        credential_id: cred._id,
+        remote_id: cred.remote_id,
       }
     })
   }
