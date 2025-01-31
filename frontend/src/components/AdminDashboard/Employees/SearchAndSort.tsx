@@ -13,7 +13,7 @@ export const SearchAndSort: React.FC<SearchAndSortProps> = ({
     <div className='mb-4 flex items-center gap-4'>
       <input
         type='text'
-        placeholder='Search by employee name...'
+        placeholder='Search by doctor name...'
         className='w-full rounded border px-4 py-2'
         value={searchQuery}
         onChange={onSearch}
