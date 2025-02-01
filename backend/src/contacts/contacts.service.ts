@@ -4,12 +4,15 @@ import { lastValueFrom } from 'rxjs'
 import { ClinicConfigService } from '../config/clinicsConfig.service'
 import { UpdateContactDto } from './dtos/updateContact.dto'
 import { CreatePatientDto } from './dtos/createPatient.dto'
+import { BrevoService } from 'src/brevo/brevo.service'
+import { CreateBrevoContactDto } from 'src/brevo/dto/createBrevoContact.dto'
 
 @Injectable()
 export class ContactsService {
   constructor(
     private readonly httpService: HttpService,
     private readonly clinicConfigService: ClinicConfigService,
+    private readonly brevoService: BrevoService,
   ) {}
 
   private async getRequestConfig(clinicId: string) {
@@ -110,7 +113,7 @@ export class ContactsService {
   ): Promise<any> {
     try {
       // Reutilizar getContactById para verificar si el contacto existe
-      await this.getContactById(clinicId, remoteId)
+      const existingContact = await this.getContactById(clinicId, remoteId)
 
       const { url: baseUrl, headers } = await this.getRequestConfig(clinicId)
 
@@ -122,6 +125,28 @@ export class ContactsService {
       const response = await lastValueFrom(
         this.httpService.patch(contactUrl, updateContactDto, { headers }),
       )
+
+      const phoneEntry = updateContactDto.phone_numbers?.find(
+        (phone) => phone.type === 'MOBILE' && phone.number, // 🔹 Usa el string "MOBILE" en vez de un enum
+      )
+
+      if (phoneEntry) {
+        const brevoContactDto: CreateBrevoContactDto = {
+          given_name: existingContact.given_name || undefined,
+          family_name: existingContact.family_name || undefined,
+          primary_email_address:
+            existingContact.primary_email_address || undefined,
+          phone_number: phoneEntry.number, // 🔹 Se toma correctamente del DTO
+          clinic_id: clinicId,
+        }
+
+        await this.brevoService.registerContact(brevoContactDto)
+        console.log('✅ Contact updated in Brevo:', brevoContactDto)
+      } else {
+        console.log(
+          'ℹ️ No valid mobile phone number provided, skipping Brevo update.',
+        )
+      }
 
       return response.data
     } catch (error) {
@@ -148,6 +173,21 @@ export class ContactsService {
       const response = await lastValueFrom(
         this.httpService.post(url, createPatientDto, { headers }),
       )
+
+      const brevoContactDto: CreateBrevoContactDto = {
+        given_name: createPatientDto.given_name || undefined,
+        family_name: createPatientDto.family_name || undefined,
+        primary_email_address:
+          createPatientDto.email_addresses?.[0]?.address || undefined,
+        clinic_id: clinicId,
+      }
+
+      if (brevoContactDto.primary_email_address) {
+        await this.brevoService.registerContact(brevoContactDto)
+        console.log('✅ Contact created at Brevo:', brevoContactDto)
+      } else {
+        console.warn('⚠️ Not valid email')
+      }
 
       return response.data
     } catch (error) {

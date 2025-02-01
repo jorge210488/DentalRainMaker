@@ -8,9 +8,16 @@ import { ClinicsModule } from 'src/clinics/clinics.module'
 import { AppointmentsModule } from 'src/appointments/appointments.module'
 import { InsuranceService } from 'src/insurance/insurance.service'
 import { ContactsService } from 'src/contacts/contacts.service'
+import { BrevoModule } from 'src/brevo/brevo.module'
 
 @Module({
-  imports: [HttpModule, ConfigModule, ClinicsModule, AppointmentsModule],
+  imports: [
+    HttpModule,
+    ConfigModule,
+    ClinicsModule,
+    AppointmentsModule,
+    BrevoModule,
+  ],
   providers: [
     PatientService,
     ClinicConfigService,
