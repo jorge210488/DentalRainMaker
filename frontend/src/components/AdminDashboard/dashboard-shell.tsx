@@ -33,6 +33,12 @@ export function DashboardShell({ children }: DashboardShellProps) {
       active: pathname === '/adminDashboard/patients',
     },
     {
+      href: '/adminDashboard/employees',
+      label: 'Employees',
+      icon: User,
+      active: pathname === '/adminDashboard/employees',
+    },
+    {
       href: '/adminDashboard/appointments',
       label: 'Appointments',
       icon: Calendar,
