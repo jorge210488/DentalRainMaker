@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import AppointmentCard from '@/components/MainComponents/AppointmentCard/AppointmentCard'
 import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
-import { fetchUserAppointmentsTest } from '@/server/Appointment/appoinmentsApi'
+import { fetchUserAppointmentsTest } from '@/server/Appointment/appointmentsApi'
 
 const UpcomingAppointments: React.FC = () => {
   const { data: session, status } = useSession()

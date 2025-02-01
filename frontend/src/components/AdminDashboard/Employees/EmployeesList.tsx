@@ -8,6 +8,7 @@ type EmployeeListProps = {
   currentPage: number
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>
   employeesPerPage: number
+  setSelectedEmployee: React.Dispatch<React.SetStateAction<Employee | null>>
 }
 
 export const EmployeesList: React.FC<EmployeeListProps> = ({
@@ -15,6 +16,7 @@ export const EmployeesList: React.FC<EmployeeListProps> = ({
   currentPage,
   setCurrentPage,
   employeesPerPage,
+  setSelectedEmployee
   
 }) => {
   const totalPages = Math.ceil(employees.length / employeesPerPage)
@@ -49,7 +51,7 @@ export const EmployeesList: React.FC<EmployeeListProps> = ({
               <td className='p-2'>
                 <button
                   className='text-blue-500 hover:underline'
-                  onClick={() => {}}
+                  onClick={() => setSelectedEmployee(employee)}
                 >
                   {employee.given_name+" "+employee.family_name}
                 </button>

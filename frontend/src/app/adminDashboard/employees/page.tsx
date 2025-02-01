@@ -1,6 +1,7 @@
 'use client'
 
 import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell'
+import { EmployeeModal } from '@/components/AdminDashboard/Employees/EmployeeModal'
 import { EmployeesList } from '@/components/AdminDashboard/Employees/EmployeesList'
 import { SearchAndSort } from '@/components/AdminDashboard/Employees/SearchAndSort'
 import { Employee } from '@/interfaces/ComponentsInterfaces/Employee'
@@ -17,6 +18,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string>('') // Búsqueda
 
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
 
   const [refreshEmployees, setRefreshEmployees] = useState(false)
 
@@ -41,7 +43,7 @@ export default function Home() {
     initializeEmployees()
   }, [session, refreshEmployees])
 
-  const handleRefreshAppointments = () => setRefreshEmployees((prev) => !prev)
+  const handleRefreshEmployees = () => setRefreshEmployees((prev) => !prev)
 
   // Manejar el cambio en la barra de búsqueda
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +82,17 @@ export default function Home() {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           employeesPerPage={employeesPerPage}
+          setSelectedEmployee={setSelectedEmployee}
         />
+
+        {/* Modal for Employee Details */}
+        {selectedEmployee && (
+          <EmployeeModal
+            employee={selectedEmployee}
+            refreshEmployee={handleRefreshEmployees}
+            closeEmployeeModal={() => setSelectedEmployee(null)}
+          />
+        )}
 
         
       </div>
