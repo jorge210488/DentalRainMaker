@@ -215,7 +215,7 @@ export const authOptions: AuthOptions = {
       }
 
       // Redirección predeterminada para otros casos
-      return '/patientDashboard'
+      return '/pages/patientDashboard'
     },
   },
 }

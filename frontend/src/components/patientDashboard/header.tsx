@@ -124,14 +124,6 @@ export default function Header({ onLogout }: SiteHeaderProps) {
 
         {/* Desktop Navigation */}
         <div className='ml-auto hidden items-center space-x-2 md:flex'>
-          <Button
-            variant='ghost'
-            size='icon'
-            className='text-white hover:bg-blue-500'
-          >
-            <Calendar className='h-5 w-5' />
-            <span className='sr-only'>Calendar</span>
-          </Button>
           <div className='relative'>
             <Button
               variant='ghost'
@@ -148,39 +140,6 @@ export default function Header({ onLogout }: SiteHeaderProps) {
               </div>
             )}
           </div>
-
-          <Button
-            variant='ghost'
-            size='icon'
-            className='text-white hover:bg-blue-500'
-          >
-            <Settings className='h-5 w-5' />
-            <span className='sr-only'>Settings</span>
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant='ghost'
-                size='icon'
-                className='relative h-8 w-8 rounded-full'
-              >
-                <Avatar className='h-8 w-8'>
-                  <AvatarImage src='/placeholder-user.jpg' alt='Dr. Smith' />
-                  <AvatarFallback>DS</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuItem className='font-sans'>Profile</DropdownMenuItem>
-              <DropdownMenuItem className='font-sans'>
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className='font-sans' onClick={handleLogout}>
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
 

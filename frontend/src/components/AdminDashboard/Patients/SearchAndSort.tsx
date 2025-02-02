@@ -14,7 +14,7 @@ export const SearchAndSort: React.FC<SearchAndSortProps> = ({
   onSort,
 }) => {
   return (
-    <div className='mb-4 flex items-center gap-4'>
+    <div className='mb-4 flex items-center gap-4 font-sans'>
       <input
         type='text'
         placeholder='Buscar por nombre...'

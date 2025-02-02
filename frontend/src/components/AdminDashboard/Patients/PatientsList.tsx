@@ -32,7 +32,7 @@ export const PatientList: React.FC<PatientListProps> = ({
   )
 
   return (
-    <div>
+    <div className='font-sans'>
       <div className='mb-4 flex justify-end'>
         <button
           onClick={() => setIsCreateModalOpen(true)}

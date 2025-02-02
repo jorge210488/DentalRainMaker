@@ -1,29 +1,29 @@
 'use client'
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
+import { useParams } from 'next/navigation'
+import Link from 'next/link'
 
 type Treatment = {
-  type: string;
-  cost: number;
-  progress: number;
-  exams: string[];
-};
+  type: string
+  cost: number
+  progress: number
+  exams: string[]
+}
 
 type Appointment = {
-  id: number;
-  date: string;
-  doctor: string;
-  diagnosis: string;
-};
+  id: number
+  date: string
+  doctor: string
+  diagnosis: string
+}
 
 type PatientDetail = {
-  id: number;
-  name: string;
-  age: number;
-  insurance: string;
-  treatments: Treatment;
-  appointments: Appointment[];
-};
+  id: number
+  name: string
+  age: number
+  insurance: string
+  treatments: Treatment
+  appointments: Appointment[]
+}
 
 const patientData: { [key: number]: PatientDetail } = {
   1: {
@@ -260,34 +260,46 @@ const patientData: { [key: number]: PatientDetail } = {
       },
     ],
   },
-};
+}
 
 export default function PatientDetailPage() {
-  const { id } = useParams();
-  const patient = patientData[Number(id)];
+  const { id } = useParams()
+  const patient = patientData[Number(id)]
 
   if (!patient) {
-    return <div className="p-6">Paciente no encontrado.</div>;
+    return <div className='p-6'>Paciente no encontrado.</div>
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold mb-4">Detalle del Paciente</h1>
-      <div className="bg-white shadow rounded-lg p-4 mb-6">
-        <h2 className="text-lg font-semibold mb-2">Información del Paciente</h2>
-        <p><strong>Nombre:</strong> {patient.name}</p>
-        <p><strong>Edad:</strong> {patient.age}</p>
-        <p><strong>Seguro:</strong> {patient.insurance}</p>
+    <div className='min-h-screen bg-gray-100 p-6'>
+      <h1 className='mb-4 text-2xl font-bold'>Detalle del Paciente</h1>
+      <div className='mb-6 rounded-lg bg-white p-4 shadow'>
+        <h2 className='mb-2 text-lg font-semibold'>Información del Paciente</h2>
+        <p>
+          <strong>Nombre:</strong> {patient.name}
+        </p>
+        <p>
+          <strong>Edad:</strong> {patient.age}
+        </p>
+        <p>
+          <strong>Seguro:</strong> {patient.insurance}
+        </p>
       </div>
 
-      <div className="bg-white shadow rounded-lg p-4 mb-6">
-        <h2 className="text-lg font-semibold mb-2">Tratamiento Actual</h2>
-        <p><strong>Tipo:</strong> {patient.treatments.type}</p>
-        <p><strong>Costo:</strong> ${patient.treatments.cost}</p>
-        <p><strong>Progreso:</strong> {patient.treatments.progress}%</p>
+      <div className='mb-6 rounded-lg bg-white p-4 shadow'>
+        <h2 className='mb-2 text-lg font-semibold'>Tratamiento Actual</h2>
+        <p>
+          <strong>Tipo:</strong> {patient.treatments.type}
+        </p>
+        <p>
+          <strong>Costo:</strong> ${patient.treatments.cost}
+        </p>
+        <p>
+          <strong>Progreso:</strong> {patient.treatments.progress}%
+        </p>
         <div>
-          <h3 className="text-md font-medium mt-2">Exámenes:</h3>
-          <ul className="list-disc pl-5">
+          <h3 className='text-md mt-2 font-medium'>Exámenes:</h3>
+          <ul className='list-disc pl-5'>
             {patient.treatments.exams.map((exam, index) => (
               <li key={index}>{exam}</li>
             ))}
@@ -295,22 +307,29 @@ export default function PatientDetailPage() {
         </div>
       </div>
 
-      <div className="bg-white shadow rounded-lg p-4">
-        <h2 className="text-lg font-semibold mb-2">Historial de Citas</h2>
-        <ul className="divide-y divide-gray-200">
+      <div className='rounded-lg bg-white p-4 shadow'>
+        <h2 className='mb-2 text-lg font-semibold'>Historial de Citas</h2>
+        <ul className='divide-y divide-gray-200'>
           {patient.appointments.map((appointment) => (
-            <li key={appointment.id} className="py-2">
-              <Link href={`/adminDashboard/appointments/${appointment.id}`} className="text-blue-600 hover:underline">
-                
-                  <p><strong>Fecha:</strong> {appointment.date}</p>
-                  <p><strong>Doctor:</strong> {appointment.doctor}</p>
-                  <p><strong>Diagnóstico:</strong> {appointment.diagnosis}</p>
-                
+            <li key={appointment.id} className='py-2'>
+              <Link
+                href={`/adminDashboard/appointments/${appointment.id}`}
+                className='text-blue-600 hover:underline'
+              >
+                <p>
+                  <strong>Fecha:</strong> {appointment.date}
+                </p>
+                <p>
+                  <strong>Doctor:</strong> {appointment.doctor}
+                </p>
+                <p>
+                  <strong>Diagnóstico:</strong> {appointment.diagnosis}
+                </p>
               </Link>
             </li>
           ))}
         </ul>
       </div>
     </div>
-  );
+  )
 }

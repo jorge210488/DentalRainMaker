@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { PatientProfile } from '@/app/patientDashboard/profile/page'
+import { PatientProfile } from '@/app/pages/profile/page'
 import { Dispatch, SetStateAction } from 'react'
 
 interface EmailDialogProps {
