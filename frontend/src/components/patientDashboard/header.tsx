@@ -47,7 +47,7 @@ export default function Header({ onLogout }: SiteHeaderProps) {
   }
 
   return (
-    <header className='sticky top-0 z-50 w-full border-b bg-blue-600 font-sans sm:w-[127vw]'>
+    <header className='absolute top-0 z-50 w-full border-b bg-blue-600 font-sans sm:w-[127vw]'>
       <div className='container flex h-16 items-center px-4'>
         {/* Logo Section */}
         <div className='flex items-center gap-2'>

@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
 import { DashboardHeader } from '@/components/patientDashboard/dashboard-header'
-import { DashboardShell } from '@/components/AdminDashboard/dashboard-shell'
 import LookerStudioEmbed from '@/components/LookerStudioEmbed'
 export const metadata: Metadata = {
   title: 'Dashboard | Dental Rain Maker',
@@ -9,14 +8,12 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <DashboardShell>
-      <div className='p-8'>
-        <DashboardHeader
-          heading='Welcome back, Doctor'
-          text='Manage your dental care journey'
-        />
-        <LookerStudioEmbed />
-      </div>
-    </DashboardShell>
+    <div className='p-8'>
+      <DashboardHeader
+        heading='Welcome back, Doctor'
+        text='Manage your dental care journey'
+      />
+      <LookerStudioEmbed />
+    </div>
   )
 }
