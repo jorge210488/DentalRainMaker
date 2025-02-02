@@ -6,6 +6,7 @@ import { Credential, CredentialSchema } from './schemas/credential.schema'
 import { Role, RoleSchema } from '../roles/schemas/role.schema'
 import { ContactsModule } from 'src/contacts/contacts.module'
 import { NodemailerModule } from 'src/nodemailer/nodemailer.module'
+import { BrevoModule } from 'src/brevo/brevo.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { NodemailerModule } from 'src/nodemailer/nodemailer.module'
     ]),
     ContactsModule,
     NodemailerModule,
+    BrevoModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

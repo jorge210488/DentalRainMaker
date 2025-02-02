@@ -6,6 +6,7 @@ import { UpdateContactDto } from './dtos/updateContact.dto'
 import { CreatePatientDto } from './dtos/createPatient.dto'
 import { BrevoService } from 'src/brevo/brevo.service'
 import { CreateBrevoContactDto } from 'src/brevo/dto/createBrevoContact.dto'
+import { ClinicsService } from 'src/clinics/clinics.service'
 
 @Injectable()
 export class ContactsService {
@@ -13,6 +14,7 @@ export class ContactsService {
     private readonly httpService: HttpService,
     private readonly clinicConfigService: ClinicConfigService,
     private readonly brevoService: BrevoService,
+    private readonly clinicsService: ClinicsService,
   ) {}
 
   private async getRequestConfig(clinicId: string) {
@@ -127,7 +129,7 @@ export class ContactsService {
       )
 
       const phoneEntry = updateContactDto.phone_numbers?.find(
-        (phone) => phone.type === 'MOBILE' && phone.number, // 🔹 Usa el string "MOBILE" en vez de un enum
+        (phone) => phone.type === 'MOBILE' && phone.number,
       )
 
       if (phoneEntry) {
@@ -136,7 +138,7 @@ export class ContactsService {
           family_name: existingContact.family_name || undefined,
           primary_email_address:
             existingContact.primary_email_address || undefined,
-          phone_number: phoneEntry.number, // 🔹 Se toma correctamente del DTO
+          phone_number: phoneEntry.number,
           clinic_id: clinicId,
         }
 
@@ -205,5 +207,77 @@ export class ContactsService {
         HttpStatus.BAD_GATEWAY,
       )
     }
+  }
+
+  async preloadContactsToBrevo(): Promise<void> {
+    console.log('🔹 Iniciando precarga de contactos en Brevo...')
+
+    // 1️⃣ Obtener todas las clínicas
+    const clinics = await this.clinicsService.findAll()
+    if (!clinics.length) {
+      console.warn('⚠️ No hay clínicas registradas.')
+      return
+    }
+
+    for (const clinic of clinics) {
+      // console.log(
+      //   `🔹 Procesando clínica: ${clinic.clinic_name} (ID: ${clinic._id})`,
+      // )
+
+      try {
+        // 2️⃣ Obtener todos los contactos de la clínica
+        const contactsResponse = await this.getContacts(clinic._id)
+        if (!contactsResponse?.contacts?.length) {
+          console.warn(
+            `⚠️ No hay contactos en la clínica ${clinic.clinic_name}`,
+          )
+          continue
+        }
+
+        // 3️⃣ Registrar cada contacto en Brevo
+        for (const contact of contactsResponse.contacts) {
+          if (!contact.primary_email_address) {
+            // console.warn(
+            //   `⚠️ Contacto sin email en clínica ${clinic.clinic_name}, saltando...`,
+            // )
+            continue
+          }
+
+          // 🔹 Obtener el número de teléfono móvil (si existe)
+          const mobilePhone = contact.phone_numbers?.find(
+            (phone) => phone.type === 'MOBILE' && phone.number,
+          )?.number
+
+          // 🔹 Crear DTO para Brevo
+          const brevoContactDto: CreateBrevoContactDto = {
+            given_name: contact.given_name || undefined,
+            family_name: contact.family_name || undefined,
+            primary_email_address: contact.primary_email_address,
+            phone_number: mobilePhone || undefined,
+            clinic_id: clinic._id,
+          }
+
+          // 🔹 Registrar en Brevo
+          try {
+            await this.brevoService.registerContact(brevoContactDto)
+            // console.log(
+            //   `✅ Contacto registrado en Brevo: ${contact.primary_email_address}`,
+            // )
+          } catch (error) {
+            // console.error(
+            //   `❌ Error al registrar contacto ${contact.primary_email_address} en Brevo:`,
+            //   error.message,
+            // )
+          }
+        }
+      } catch (error) {
+        // console.error(
+        //   `❌ Error al obtener contactos de la clínica ${clinic.clinic_name}:`,
+        //   error.message,
+        // )
+      }
+    }
+
+    console.log('✅ Precarga de contactos en Brevo completada.')
   }
 }

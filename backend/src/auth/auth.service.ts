@@ -18,6 +18,8 @@ import { JwtService } from '@nestjs/jwt'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
 import { ContactsService } from '../contacts/contacts.service'
 import { UpdateUserDto } from './dto/updateUser.dto'
+import { BrevoService } from 'src/brevo/brevo.service'
+import { CreateBrevoContactDto } from 'src/brevo/dto/createBrevoContact.dto'
 
 interface Contact {
   primary_email_address: string
@@ -35,6 +37,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly nodemailerService: NodemailerService,
     private readonly contactsService: ContactsService,
+    private readonly brevoService: BrevoService,
   ) {}
 
   async signup(createUserDto: CreateUserDto): Promise<any> {
@@ -138,6 +141,25 @@ export class AuthService {
     })
     console.log('Credential to be saved:', credential)
     await credential.save()
+
+    // Guardar en Brevo el contacto
+    const brevoContactDto: CreateBrevoContactDto = {
+      given_name: given_name || undefined,
+      family_name: family_name || undefined,
+      primary_email_address: email,
+      clinic_id,
+    }
+
+    try {
+      await this.brevoService.registerContact(brevoContactDto)
+      console.log('✅ Contact created in Brevo:', brevoContactDto)
+    } catch (error) {
+      console.error('❌ Error registering contact in Brevo:', error.message)
+      throw new HttpException(
+        'Failed to register contact in Brevo.',
+        HttpStatus.BAD_GATEWAY,
+      )
+    }
 
     // Enviar correo de bienvenida
     await this.nodemailerService.sendRegistrationEmail(

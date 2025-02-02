@@ -1,8 +1,7 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common'
 import { PermissionsService } from './permissions/permissions.service'
 import { RolesService } from './roles/roles.service'
-import { AuthService } from './auth/auth.service'
-import { UsersService } from './users/users.service'
+import { ContactsService } from './contacts/contacts.service'
 import { ClinicsService } from './clinics/clinics.service'
 import { FirebaseAdmin } from './config/firebaseAdmin'
 
@@ -14,8 +13,7 @@ export class PreloadService implements OnModuleInit {
     private readonly permissionsService: PermissionsService,
     private readonly rolesService: RolesService,
     private readonly clinicsService: ClinicsService,
-    private readonly authService: AuthService,
-    private readonly usersService: UsersService,
+    private readonly contactsService: ContactsService,
     private readonly firebaseAdmin: FirebaseAdmin,
   ) {}
 
@@ -39,13 +37,9 @@ export class PreloadService implements OnModuleInit {
       await this.clinicsService.preloadClinics()
       this.logger.log('Clinics preload completed.')
 
-      // Preload Auth Users
-      // await this.authService.preloadUsers()
-      // this.logger.log('Auth users preload completed.')
-
-      // Preload Updated Users
-      // await this.usersService.preloadUpdateUsers()
-      // this.logger.log('Updated users preload completed.')
+      // Preload Brevo Contacts
+      await this.contactsService.preloadContactsToBrevo()
+      this.logger.log('Brevo Contacts preload completed.')
     } catch (error) {
       this.logger.error('Error during preload process:', error.message)
     }
