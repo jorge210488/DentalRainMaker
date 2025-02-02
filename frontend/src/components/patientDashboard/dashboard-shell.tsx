@@ -107,7 +107,7 @@ export function DashboardShell({
   return (
     <div className='flex min-h-screen font-sans'>
       {/* Sidebar para desktop */}
-      <aside className='fixed z-[1] hidden w-64 border-r bg-blue-600 text-white lg:block lg:h-[90.2%]'>
+      <aside className='fixed z-[1] hidden w-64 border-r bg-blue-600 text-white lg:bottom-0 lg:block lg:h-[90.2%]'>
         <div className='flex h-full flex-col'>
           <nav className='flex-1 space-y-1 px-3 py-4'>
             {routes.map((route) => (

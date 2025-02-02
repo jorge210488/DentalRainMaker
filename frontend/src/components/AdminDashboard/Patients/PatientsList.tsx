@@ -1,5 +1,6 @@
 import React from 'react'
 import { Patient } from '@/interfaces/ComponentsInterfaces/Patient'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 type PatientListProps = {
   patients: Patient[]
@@ -53,25 +54,29 @@ export const PatientList: React.FC<PatientListProps> = ({
             <th className='p-2'>Treatment Active</th>
           </tr>
         </thead>
-        <tbody>
-          {paginatedPatients.map((patient) => (
-            <tr key={patient.remote_id} className='hover:bg-gray-100'>
-              <td className='p-2'>
-                <button
-                  className='text-blue-500 hover:underline'
-                  onClick={() => setSelectedPatient(patient)}
-                >
-                  {patient.fullname}
-                </button>
-              </td>
-              <td className='p-2'>{patient.age}</td>
-              <td className='p-2'>{patient.insurance}</td>
-              <td className='p-2'>{patient.nextVisit}</td>
-              <td className='p-2'>{patient.lastVisit}</td>
-              <td className='p-2'>{patient.activeTreatment ? 'Sí' : 'No'}</td>
-            </tr>
-          ))}
-        </tbody>
+        {paginatedPatients.length === 0 ? (
+          <ClipLoader color='blue' className='relative left-[400%] top-[50%]' />
+        ) : (
+          <tbody>
+            {paginatedPatients.map((patient) => (
+              <tr key={patient.remote_id} className='hover:bg-gray-100'>
+                <td className='p-2'>
+                  <button
+                    className='text-blue-500 hover:underline'
+                    onClick={() => setSelectedPatient(patient)}
+                  >
+                    {patient.fullname}
+                  </button>
+                </td>
+                <td className='p-2'>{patient.age}</td>
+                <td className='p-2'>{patient.insurance}</td>
+                <td className='p-2'>{patient.nextVisit}</td>
+                <td className='p-2'>{patient.lastVisit}</td>
+                <td className='p-2'>{patient.activeTreatment ? 'Sí' : 'No'}</td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
 
       <div className='mt-4 flex items-center justify-center'>

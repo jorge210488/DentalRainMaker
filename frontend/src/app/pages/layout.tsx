@@ -75,8 +75,8 @@ export default function RootLayout({
             setLogoutDialog={setLogoutDialog}
             handleLogout={handleLogout}
           />
-          <div className='flex h-full flex-1 flex-col overflow-y-scroll sm:min-w-[100%] lg:min-w-[100%]'>
-            <main className='min-w-[80%] flex-1 p-2 sm:absolute lg:absolute lg:right-0'>
+          <div className='flex h-full flex-1 flex-col overflow-y-scroll sm:absolute sm:min-w-[100%] lg:min-w-[100%]'>
+            <main className='min-w-[80%] flex-1 p-2 lg:absolute lg:right-0 lg:top-10'>
               {children}
               {logoutDialog === true && (
                 <LogoutModal

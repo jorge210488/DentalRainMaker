@@ -1,6 +1,6 @@
 import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
 import React from 'react'
-
+import ClipLoader from 'react-spinners/ClipLoader'
 
 type AppointmentListProps = {
   appointments: IAppointment[]
@@ -14,7 +14,6 @@ export const AppointmentList: React.FC<AppointmentListProps> = ({
   currentPage,
   setCurrentPage,
   appointmentsPerPage,
-  
 }) => {
   const totalPages = Math.ceil(appointments.length / appointmentsPerPage)
 
@@ -31,8 +30,6 @@ export const AppointmentList: React.FC<AppointmentListProps> = ({
 
   return (
     <div>
-      
-
       <table className='w-full border-collapse text-left'>
         <thead>
           <tr className='border-b'>
@@ -47,28 +44,39 @@ export const AppointmentList: React.FC<AppointmentListProps> = ({
             <th className='p-2'>Broken?</th>
           </tr>
         </thead>
-        <tbody>
-          {paginatedAppointments.map((appointment) => (
-            <tr key={appointment.remote_id} className='hover:bg-gray-100'>
-              <td className='p-2'>
-                <button
-                  className='text-blue-500 hover:underline'
-                  onClick={() => {}}
-                >
-                  {appointment.remote_id}
-                </button>
-              </td>
-              <td className='p-2'>{appointment.contact.given_name+" "+appointment.contact.family_name}</td>
-              <td className='p-2'>{appointment.wall_start_time}</td>
-              <td className='p-2'>{appointment.doctor}</td>
-              <td className='p-2'>{appointment.operator}</td>
-              <td className='p-2'>{appointment.confirmed ? 'Yes' : 'No'}</td>
-              <td className='p-2'>{appointment.cancelled ? 'Yes' : 'No'}</td>
-              <td className='p-2'>{appointment.completed ? 'Yes' : 'No'}</td>
-              <td className='p-2'>{appointment.broken ? 'Yes' : 'No'}</td>
-            </tr>
-          ))}
-        </tbody>
+        {paginatedAppointments.length === 0 ? (
+          <ClipLoader
+            color='blue'
+            className='relative left-[900%] sm:right-[50%]'
+          />
+        ) : (
+          <tbody>
+            {paginatedAppointments.map((appointment) => (
+              <tr key={appointment.remote_id} className='hover:bg-gray-100'>
+                <td className='p-2'>
+                  <button
+                    className='text-blue-500 hover:underline'
+                    onClick={() => {}}
+                  >
+                    {appointment.remote_id}
+                  </button>
+                </td>
+                <td className='p-2'>
+                  {appointment.contact.given_name +
+                    ' ' +
+                    appointment.contact.family_name}
+                </td>
+                <td className='p-2'>{appointment.wall_start_time}</td>
+                <td className='p-2'>{appointment.doctor}</td>
+                <td className='p-2'>{appointment.operator}</td>
+                <td className='p-2'>{appointment.confirmed ? 'Yes' : 'No'}</td>
+                <td className='p-2'>{appointment.cancelled ? 'Yes' : 'No'}</td>
+                <td className='p-2'>{appointment.completed ? 'Yes' : 'No'}</td>
+                <td className='p-2'>{appointment.broken ? 'Yes' : 'No'}</td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
 
       <div className='mt-4 flex items-center justify-center'>
