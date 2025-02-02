@@ -1,4 +1,13 @@
-import { Body, Controller, Post, HttpCode, Get, Query } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Post,
+  Put,
+  Param,
+  HttpCode,
+  Get,
+  Query,
+} from '@nestjs/common'
 import {
   ApiTags,
   ApiOperation,
@@ -10,6 +19,7 @@ import { CreateUserDto } from './dto/createUser.dto'
 import { LoginUserDto } from './dto/loginUser.dto'
 import { UserDocument } from '../users/schemas/user.schema'
 import { Public } from '../decorators/public.decorator'
+import { UpdateUserDto } from './dto/updateUser.dto'
 
 @ApiTags('auth')
 @Controller('auth')
@@ -63,5 +73,26 @@ export class AuthController {
   async getNonPatientUsers(@Query('clinic_id') clinic_id: string) {
     console.log('Fetching non-patient users for clinic:', clinic_id)
     return this.authService.getNonPatientUsers(clinic_id)
+  }
+
+  @ApiBearerAuth()
+  @Put(':id')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Update user details',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found',
+  })
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.authService.updateUser(id, updateUserDto)
   }
 }

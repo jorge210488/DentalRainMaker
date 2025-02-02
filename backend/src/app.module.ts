@@ -25,6 +25,7 @@ import { ContactsModule } from './contacts/contacts.module'
 import { PatientModule } from './patients/patients.module'
 import { InsuranceModule } from './insurance/insurance.module'
 import { ResourcesModule } from './resources/resource.module'
+import { BrevoModule } from './brevo/brevo.module'
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { ResourcesModule } from './resources/resource.module'
     PatientModule,
     InsuranceModule,
     ResourcesModule,
+    BrevoModule,
   ],
   controllers: [AppController],
   providers: [

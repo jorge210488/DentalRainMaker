@@ -4,7 +4,6 @@ import { ContactsModule } from 'src/contacts/contacts.module'
 import { NodemailerController } from './nodemailer.controller'
 import { MongooseModule } from '@nestjs/mongoose'
 import { Nodemailer, NodemailerSchema } from './schemas/nodemailer.schema'
-import { BrevoService } from './brevo.service'
 
 @Module({
   imports: [
@@ -13,7 +12,7 @@ import { BrevoService } from './brevo.service'
       { name: Nodemailer.name, schema: NodemailerSchema },
     ]),
   ],
-  providers: [NodemailerService, BrevoService],
+  providers: [NodemailerService],
   controllers: [NodemailerController],
   exports: [NodemailerService],
 })
