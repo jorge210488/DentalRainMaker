@@ -3,6 +3,7 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  Logger,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
@@ -13,9 +14,14 @@ import {
 } from './schemas/brevoCompany.schema'
 import { CreateBrevoCompanyDto } from './dto/createBrevoCompany.dto'
 import { CreateBrevoContactDto } from './dto/createBrevoContact.dto'
+import {
+  BrevoWebhookEvent,
+  BrevoWebhookEventDocument,
+} from './schemas/brevoWebhookEvent.schema'
 
 @Injectable()
 export class BrevoService {
+  private readonly logger = new Logger(BrevoService.name)
   private readonly apiKey: string
   private readonly brevoBaseUrl = 'https://api.brevo.com/v3/companies'
   private readonly smtpBaseUrl = 'https://api.brevo.com/v3/smtp/email'
@@ -25,6 +31,8 @@ export class BrevoService {
     private readonly configService: ConfigService,
     @InjectModel(BrevoCompany.name)
     private brevoCompanyModel: Model<BrevoCompanyDocument>,
+    @InjectModel(BrevoWebhookEvent.name)
+    private readonly brevoWebhookEventModel: Model<BrevoWebhookEventDocument>,
   ) {
     this.apiKey = this.configService.get<string>('BREVO_API_KEY')
     if (!this.apiKey) {
@@ -143,6 +151,7 @@ export class BrevoService {
       attributes: {
         FIRSTNAME: given_name,
         LASTNAME: family_name,
+        CLINICNAME: company.clinic_name,
         SMS: phone_number,
         WHATSAPP: phone_number,
       },
@@ -151,10 +160,10 @@ export class BrevoService {
       updateEnabled: true, // 📌 Si el contacto ya existe, lo actualiza en lugar de fallar
     }
 
-    console.log(
-      '🔹 Enviando contacto a Brevo:',
-      JSON.stringify(payload, null, 2),
-    )
+    // console.log(
+    //   '🔹 Enviando contacto a Brevo:',
+    //   JSON.stringify(payload, null, 2),
+    // )
 
     try {
       const response = await axios.post(this.brevoContactUrl, payload, {
@@ -164,20 +173,40 @@ export class BrevoService {
         },
       })
 
-      console.log(
-        `✅ Contacto registrado en Brevo con email: ${primary_email_address}`,
-        response.data,
-      )
+      // console.log(
+      //   `✅ Contacto registrado en Brevo con email: ${primary_email_address}`,
+      //   response.data,
+      // )
       return {
         message: 'Contact registered successfully',
         contact: response.data,
       }
     } catch (error) {
-      console.error(
-        '❌ Error al registrar contacto en Brevo:',
-        error.response?.data || error.message,
-      )
+      // console.error(
+      //   '❌ Error al registrar contacto en Brevo:',
+      //   error.response?.data || error.message,
+      // )
       throw new BadRequestException('Failed to register contact in Brevo.')
+    }
+  }
+
+  async processBrevoWebhook(data: any) {
+    try {
+      const event = new this.brevoWebhookEventModel({
+        eventId: data.messageId || null,
+        email: data.email || null,
+        eventType: data.event,
+        timestamp: data.date || new Date(),
+        metadata: data,
+      })
+
+      await event.save()
+      this.logger.log(`✅ Webhook guardado: ${JSON.stringify(data)}`)
+
+      return { message: 'Webhook processed successfully', event }
+    } catch (error) {
+      this.logger.error('❌ Error procesando el webhook:', error)
+      throw new Error('Failed to process Brevo webhook')
     }
   }
 }

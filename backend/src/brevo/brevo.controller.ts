@@ -77,4 +77,18 @@ export class BrevoController {
       throw new BadRequestException(error.message)
     }
   }
+
+  @ApiOperation({ summary: 'Handle Brevo webhook events' })
+  @ApiResponse({ status: 200, description: 'Webhook processed successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid webhook data' })
+  @Post('email-campaign')
+  async handleBrevoWebhook(@Body() body: any) {
+    console.log('📩 Webhook recibido de Brevo:', JSON.stringify(body, null, 2))
+
+    if (!body || !body.event) {
+      throw new BadRequestException('Invalid webhook data')
+    }
+
+    return await this.brevoService.processBrevoWebhook(body)
+  }
 }
