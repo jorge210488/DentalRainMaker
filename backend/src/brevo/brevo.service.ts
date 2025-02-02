@@ -193,7 +193,7 @@ export class BrevoService {
   async processBrevoWebhook(data: any) {
     try {
       const event = new this.brevoWebhookEventModel({
-        eventId: data.messageId || null,
+        eventId: data.id || null,
         email: data.email || null,
         eventType: data.event,
         timestamp: data.date || new Date(),
