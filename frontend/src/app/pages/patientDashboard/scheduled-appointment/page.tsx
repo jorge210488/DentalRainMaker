@@ -53,7 +53,7 @@ export default function AppointmentScheduler() {
             <Card
               onClick={() =>
                 router.push(
-                  '/patientDashboard/scheduled-appointment/chooseDoctor',
+                  '/pages/patientDashboard/scheduled-appointment/chooseDoctor',
                 )
               }
               className='group relative cursor-pointer overflow-hidden transition-all hover:shadow-lg dark:bg-gray-800'
@@ -86,7 +86,7 @@ export default function AppointmentScheduler() {
             <Card
               onClick={() =>
                 router.push(
-                  '/patientDashboard/scheduled-appointment/chooseDoctor',
+                  '/pages/patientDashboard/scheduled-appointment/chooseDoctor',
                 )
               }
               className='group relative cursor-pointer overflow-hidden transition-all hover:shadow-lg dark:bg-gray-800'

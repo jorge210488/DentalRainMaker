@@ -28,7 +28,6 @@ export const PatientModal: React.FC<PatientModalProps> = ({
   const [smsOpen, setSmsOpen] = useState(false)
   const [emailOpen, setEmailOpen] = useState(false)
   const [notificationOpen, setNotificationOpen] = useState(false)
-  
 
   const handleUpdatePatient = (updatedPatient: Patient) => {
     console.log('Updated Patient:', updatedPatient)
@@ -37,8 +36,8 @@ export const PatientModal: React.FC<PatientModalProps> = ({
 
   return (
     <>
-      {!isEditModalOpen  && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
+      {!isEditModalOpen && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 font-sans'>
           <div className='relative max-h-screen w-full max-w-4xl overflow-y-auto rounded-lg bg-white p-6 shadow-lg'>
             <button
               className='absolute right-2 top-2 text-gray-500 hover:text-black'
@@ -50,8 +49,7 @@ export const PatientModal: React.FC<PatientModalProps> = ({
               Patient Details
             </h2>
 
-            <PatientDetails patient={patient}/>
-
+            <PatientDetails patient={patient} />
 
             <div className='flex justify-between gap-x-4'>
               <button
@@ -85,7 +83,6 @@ export const PatientModal: React.FC<PatientModalProps> = ({
                 Close
               </button>
             </div>
-
           </div>
         </div>
       )}
@@ -129,7 +126,6 @@ export const PatientModal: React.FC<PatientModalProps> = ({
           family_name={patient.family_name}
         />
       </Dialog>
-
     </>
   )
 }

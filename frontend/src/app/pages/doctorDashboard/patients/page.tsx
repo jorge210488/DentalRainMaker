@@ -84,45 +84,43 @@ export default function Home() {
   }, [searchQuery, sortField, sortOrder, allPatients])
 
   return (
-    <DashboardShell>
-      <div className='min-h-screen bg-gray-100 p-6'>
-        <h1 className='mb-4 text-2xl font-bold'>Patients List</h1>
+    <div className='min-h-screen bg-gray-100 p-6 font-sans'>
+      <h1 className='mb-4 text-2xl font-bold'>Patients List</h1>
 
-        {/* Componente de búsqueda y ordenamiento */}
-        <SearchAndSort
-          searchQuery={searchQuery}
-          onSearch={handleSearch}
-          sortField={sortField}
-          sortOrder={sortOrder}
-          onSort={handleSort}
+      {/* Componente de búsqueda y ordenamiento */}
+      <SearchAndSort
+        searchQuery={searchQuery}
+        onSearch={handleSearch}
+        sortField={sortField}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+      />
+
+      <PatientList
+        patients={filteredPatients}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        patientsPerPage={patientsPerPage}
+        setSelectedPatient={setSelectedPatient}
+        setIsCreateModalOpen={setIsCreateModalOpen}
+      />
+
+      {/* Modal for Patient Details */}
+      {selectedPatient && (
+        <PatientModal
+          patient={selectedPatient}
+          refreshPatient={handleRefreshPatients}
+          closePatientModal={() => setSelectedPatient(null)}
         />
+      )}
 
-        <PatientList
-          patients={filteredPatients}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          patientsPerPage={patientsPerPage}
-          setSelectedPatient={setSelectedPatient}
-          setIsCreateModalOpen={setIsCreateModalOpen}
+      {/* Modal for Create New Patient */}
+      {isCreateModalOpen && (
+        <PatientCreateModal
+          onCreatePatient={handleRefreshPatients}
+          closeCreateModal={() => setIsCreateModalOpen(false)}
         />
-
-        {/* Modal for Patient Details */}
-        {selectedPatient && (
-          <PatientModal
-            patient={selectedPatient}
-            refreshPatient={handleRefreshPatients}
-            closePatientModal={() => setSelectedPatient(null)}
-          />
-        )}
-
-        {/* Modal for Create New Patient */}
-        {isCreateModalOpen && (
-          <PatientCreateModal
-            onCreatePatient={handleRefreshPatients}
-            closeCreateModal={() => setIsCreateModalOpen(false)}
-          />
-        )}
-      </div>
-    </DashboardShell>
+      )}
+    </div>
   )
 }
