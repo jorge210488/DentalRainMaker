@@ -1,7 +1,9 @@
+'use client'
+
 import { Metadata } from 'next'
 import { DashboardHeader } from '@/components/patientDashboard/dashboard-header'
 import LookerStudioEmbed from '@/components/LookerStudioEmbed'
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Dashboard | Dental Rain Maker',
   description: 'Manage your dental care and appointments',
 }
