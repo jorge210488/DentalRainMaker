@@ -5,10 +5,12 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiBody,
+  ApiExcludeEndpoint,
 } from '@nestjs/swagger'
 import { BrevoService } from './brevo.service'
 import { CreateBrevoCompanyDto } from './dto/createBrevoCompany.dto'
 import { CreateBrevoContactDto } from './dto/createBrevoContact.dto'
+import { Public } from '../decorators/public.decorator'
 
 @ApiBearerAuth()
 @ApiTags('brevo')
@@ -78,9 +80,8 @@ export class BrevoController {
     }
   }
 
-  @ApiOperation({ summary: 'Handle Brevo webhook events' })
-  @ApiResponse({ status: 200, description: 'Webhook processed successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid webhook data' })
+  @Public()
+  @ApiExcludeEndpoint()
   @Post('email-campaign')
   async handleBrevoWebhook(@Body() body: any) {
     console.log('📩 Webhook recibido de Brevo:', JSON.stringify(body, null, 2))
