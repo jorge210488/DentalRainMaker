@@ -39,36 +39,45 @@ export function DashboardShell({
 
   const routes = [
     {
-      href: '/pages/patientDashboard',
+      id: 'DASHBOARD',
+      href: '',
+      hrefPat: '/pages/patientDashboard',
+      hrefDoc: '/pages/doctorDashboard',
+      hrefAdm: '/pages/adminDashboard',
       label: 'Dashboard',
       icon: Home,
       active: pathname === '/pages/dashboard',
     },
     {
+      id: 'PATIENTS',
       href: '/pages/doctorDashboard/patients',
       label: 'Patients',
       icon: Users,
       active: pathname === '/pages/dashboard',
     },
     {
+      id: 'APPOINTMENTS_PATIENT',
       href: '/pages/patientDashboard/appointments',
       label: 'Appointments',
       icon: Calendar,
       active: pathname === '/pages/patientDashboard/appointments',
     },
     {
+      id: 'APPOINTMENTS_DOCTOR',
       href: '/pages/doctorDashboard/appointments',
       label: 'Appointments',
       icon: Calendar,
       active: pathname === '/pages/doctorDashboard/appointments',
     },
     {
+      id: 'EMPLOYEES',
       href: '',
       label: 'Employees',
       icon: PersonStanding,
       active: pathname === '',
     },
     {
+      id: 'CLINICS',
       href: '',
       label: 'Clinics',
       icon: Hospital,
@@ -76,12 +85,14 @@ export function DashboardShell({
     },
 
     {
+      id: 'MESSAGES',
       href: '',
       label: 'Messages',
       icon: MessageSquare,
       active: pathname === '',
     },
     {
+      id: 'RECORDS',
       href: '/pages/patientDashboard/records',
       label: 'Records',
       icon: FileText,
@@ -112,8 +123,16 @@ export function DashboardShell({
           <nav className='flex-1 space-y-1 px-3 py-4'>
             {routes.map((route) => (
               <Link
-                key={route.href}
-                href={route.href}
+                key={route.id}
+                href={
+                  route.label === 'Dashboard'
+                    ? session?.user?.type === 'PATIENT'
+                      ? (route.hrefPat ?? '')
+                      : session?.user?.type === 'DOCTOR'
+                        ? (route.hrefDoc ?? '')
+                        : (route.hrefAdm ?? '')
+                    : route.href
+                }
                 className={cn(
                   'flex items-center rounded-lg px-3 py-2 text-sm font-medium',
                   route.active
