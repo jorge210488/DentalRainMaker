@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { PreloadService } from './preload.service'
-import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
 import { RolesModule } from './roles/roles.module'
 import { PermissionsModule } from './permissions/permissions.module'
@@ -30,7 +29,6 @@ import { BrevoModule } from './brevo/brevo.module'
 @Module({
   imports: [
     AuthModule,
-    UsersModule,
     RolesModule,
     PermissionsModule,
     ConfigModule.forRoot({

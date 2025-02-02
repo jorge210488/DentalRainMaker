@@ -17,7 +17,6 @@ import {
 import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/createUser.dto'
 import { LoginUserDto } from './dto/loginUser.dto'
-import { UserDocument } from '../users/schemas/user.schema'
 import { Public } from '../decorators/public.decorator'
 import { UpdateUserDto } from './dto/updateUser.dto'
 
@@ -29,9 +28,7 @@ export class AuthController {
   @Public()
   @HttpCode(201)
   @Post('signup')
-  async signup(
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<{ message: string; user: UserDocument }> {
+  async signup(@Body() createUserDto: CreateUserDto): Promise<any> {
     console.log('Data received from frontend (signup):', createUserDto)
     const user = await this.authService.signup(createUserDto)
 

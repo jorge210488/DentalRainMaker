@@ -6,14 +6,12 @@ import {
 } from './schemas/appointmentType.schema'
 import { AppointmentTypeController } from './appointmentType.controller'
 import { AppointmentTypeService } from './appointmentType.service'
-import { UsersModule } from 'src/users/users.module'
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: AppointmentType.name, schema: AppointmentTypeSchema },
     ]),
-    UsersModule,
   ],
   controllers: [AppointmentTypeController],
   providers: [AppointmentTypeService],
