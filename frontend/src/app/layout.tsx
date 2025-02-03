@@ -9,9 +9,6 @@ import FirebaseNotification from '@/components/firebaseNotification'
 import AppInitializer from '@/components/appInitializer'
 import SessionAppInitializer from '@/components/sessionAppInitializer'
 import Header from '@/components/patientDashboard/header'
-import Script from 'next/script'
-
-const brevoClientKey = process.env.NEXT_PUBLIC_BREVO_CLIENT_KEY
 
 export default function RootLayout({
   children,
@@ -30,22 +27,6 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        {/* 🔹 Agregar JS Tracker de Brevo */}
-        <Script
-          src='https://cdn.brevo.com/js/sdk-loader.js'
-          strategy='beforeInteractive'
-        />
-        <Script id='brevo-init' strategy='beforeInteractive'>
-          {`
-            window.Brevo = window.Brevo || [];
-            Brevo.push([
-                "init",
-                {
-                    client_key: "axvrkeiu9fp4fwkd5l6xvwr6", 
-                }
-            ]);
-          `}
-        </Script>
         <SessionProvider>
           <Provider store={store}>
             <FirebaseNotification />
