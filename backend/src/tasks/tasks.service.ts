@@ -204,7 +204,7 @@ export class TasksService {
             },
             webpush: {
               fcm_options: {
-                link: `${this.frontendUrl}/patientDashboard/appointments`,
+                link: `${this.frontendUrl}/pages/patientDashboard/appointments`,
               },
             },
           }

@@ -14,7 +14,13 @@
       "CREATE_APPOINTMENT",
       "UPDATE_APPOINTMENT"
     ],
-    "views": ["USER_PROFILE", "USER_APPOINTMENTS", "PATIENT_DASHBOARD"]
+    "views": [
+      "COMMON",
+      "DASHBOARD",
+      "APPOINTMENTS_PATIENT",
+      "RECORDS",
+      "MESSAGES"
+    ]
   },
   {
     "name": "EMPLOYEER",
@@ -26,16 +32,22 @@
       "CREATE_APPOINTMENT",
       "UPDATE_APPOINTMENT"
     ],
-    "views": ["USER_PROFILE", "PATIENTS_APPOINTMENTS", "ADMIN_DASHBOARD"]
+    "views": [
+      "COMMON",
+      "EMPLOYEES",
+      "PATIENTS",
+      "APPOINTMENTS_DOCTOR",
+      "MESSAGES"
+    ]
   },
   {
     "name": "VENDOR",
     "permissions": ["UPDATE_USER", "DELETE_USER", "READ_OWN_USER"],
-    "views": ["USER_PROFILE"]
+    "views": ["COMMON"]
   },
   {
     "name": "OTHER",
     "permissions": ["UPDATE_USER", "DELETE_USER", "READ_OWN_USER"],
-    "views": ["USER_PROFILE"]
+    "views": ["COMMON"]
   }
 ]
