@@ -1,4 +1,11 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Query,
+  Post,
+  Body,
+  BadRequestException,
+} from '@nestjs/common'
 import {
   ApiTags,
   ApiOperation,
@@ -6,6 +13,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiExcludeEndpoint,
+  ApiQuery,
 } from '@nestjs/swagger'
 import { BrevoService } from './brevo.service'
 import { CreateBrevoCompanyDto } from './dto/createBrevoCompany.dto'
@@ -91,5 +99,34 @@ export class BrevoController {
     }
 
     return await this.brevoService.processBrevoWebhook(body)
+  }
+
+  @ApiOperation({
+    summary: 'Sync SMS history from Brevo and store/update in DB',
+  })
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+    example: '2024-02-01',
+    description: 'Start date for SMS history',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: false,
+    example: '2024-02-07',
+    description: 'End date for SMS history',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'SMS history synchronized successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Error fetching SMS history' })
+  @Get('sync-sms')
+  async syncSmsHistory(
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    console.log('🔹 Sincronizando historial de SMS...')
+    return await this.brevoService.syncSmsHistory(startDate, endDate)
   }
 }

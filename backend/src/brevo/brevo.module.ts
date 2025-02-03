@@ -9,6 +9,7 @@ import {
   BrevoWebhookEvent,
   BrevoWebhookEventSchema,
 } from './schemas/brevoWebhookEvent.schema'
+import { BrevoSms, BrevoSmsSchema } from './schemas/brevoSms.schema'
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import {
     MongooseModule.forFeature([
       { name: BrevoCompany.name, schema: BrevoCompanySchema },
       { name: BrevoWebhookEvent.name, schema: BrevoWebhookEventSchema },
+      { name: BrevoSms.name, schema: BrevoSmsSchema },
     ]),
   ],
   providers: [BrevoService, BrevoWebhookAuthMiddleware],

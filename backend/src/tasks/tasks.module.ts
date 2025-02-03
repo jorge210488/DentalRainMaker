@@ -10,6 +10,7 @@ import { Clinic, ClinicSchema } from 'src/clinics/schemas/clinic.schema'
 import { AppointmentsModule } from 'src/appointments/appointments.module'
 import { NodemailerModule } from 'src/nodemailer/nodemailer.module'
 import { SmsModule } from 'src/sms/sms.module'
+import { BrevoModule } from 'src/brevo/brevo.module'
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SmsModule } from 'src/sms/sms.module'
     AppointmentsModule,
     NodemailerModule,
     SmsModule,
+    BrevoModule,
   ],
   controllers: [TasksController],
   providers: [TasksService],

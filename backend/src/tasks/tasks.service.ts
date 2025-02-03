@@ -11,6 +11,7 @@ import { AppointmentsService } from 'src/appointments/appointments.service'
 import { NodemailerService } from 'src/nodemailer/nodemailer.service'
 import { SmsService } from 'src/sms/sms.service'
 import { ConfigService } from '@nestjs/config'
+import { BrevoService } from 'src/brevo/brevo.service'
 
 @Injectable()
 export class TasksService {
@@ -25,6 +26,7 @@ export class TasksService {
     private readonly appointmentsService: AppointmentsService,
     private readonly nodemailerService: NodemailerService,
     private readonly smsService: SmsService,
+    private readonly brevoService: BrevoService,
     private readonly configService: ConfigService,
   ) {
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL')

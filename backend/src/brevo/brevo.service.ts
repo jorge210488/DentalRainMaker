@@ -18,6 +18,7 @@ import {
   BrevoWebhookEvent,
   BrevoWebhookEventDocument,
 } from './schemas/brevoWebhookEvent.schema'
+import { BrevoSms, BrevoSmsDocument } from './schemas/brevoSms.schema'
 
 @Injectable()
 export class BrevoService {
@@ -26,6 +27,8 @@ export class BrevoService {
   private readonly brevoBaseUrl = 'https://api.brevo.com/v3/companies'
   private readonly smtpBaseUrl = 'https://api.brevo.com/v3/smtp/email'
   private readonly brevoContactUrl = 'https://api.brevo.com/v3/contacts'
+  private readonly brevoSmsUrl =
+    'https://api.brevo.com/v3/transactionalSMS/statistics/reports'
 
   constructor(
     private readonly configService: ConfigService,
@@ -33,6 +36,8 @@ export class BrevoService {
     private brevoCompanyModel: Model<BrevoCompanyDocument>,
     @InjectModel(BrevoWebhookEvent.name)
     private readonly brevoWebhookEventModel: Model<BrevoWebhookEventDocument>,
+    @InjectModel(BrevoSms.name)
+    private readonly brevoSmsModel: Model<BrevoSmsDocument>,
   ) {
     this.apiKey = this.configService.get<string>('BREVO_API_KEY')
     if (!this.apiKey) {
@@ -207,6 +212,54 @@ export class BrevoService {
     } catch (error) {
       this.logger.error('❌ Error procesando el webhook:', error)
       throw new Error('Failed to process Brevo webhook')
+    }
+  }
+
+  async syncSmsHistory(startDate?: string, endDate?: string) {
+    try {
+      let url = this.brevoSmsUrl
+      if (startDate && endDate) {
+        url += `?startDate=${startDate}&endDate=${endDate}`
+      }
+
+      const response = await axios.get(url, {
+        headers: {
+          'api-key': this.apiKey,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      // 📌 Validar si hay mensajes en la respuesta
+      const smsList = response.data.messages || []
+
+      if (smsList.length === 0) {
+        console.log('⚠ No hay SMS en el rango de fechas proporcionado.')
+        return { message: 'No SMS found for the given period.', count: 0 }
+      }
+
+      for (const sms of smsList) {
+        await this.brevoSmsModel.updateOne(
+          { messageId: sms.messageId }, // 📌 Si ya existe, actualiza el estado
+          {
+            $set: {
+              recipient: sms.recipient,
+              status: sms.status,
+              content: sms.content,
+              sentAt: sms.sentAt ? new Date(sms.sentAt) : null,
+            },
+          },
+          { upsert: true }, // 📌 Crea el registro si no existe
+        )
+      }
+
+      console.log(`✅ ${smsList.length} SMS sincronizados en la base de datos.`)
+      return { message: 'SMS history synchronized', count: smsList.length }
+    } catch (error) {
+      console.error(
+        '❌ Error al obtener el historial de SMS:',
+        error.response?.data || error.message,
+      )
+      throw new BadRequestException('Failed to fetch SMS history from Brevo.')
     }
   }
 }
