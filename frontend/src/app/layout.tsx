@@ -30,24 +30,22 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        {/* 🔹 Agregar JS Tracker de Brevo con variable de entorno */}
+        {/* 🔹 Agregar JS Tracker de Brevo */}
         <Script
           src='https://cdn.brevo.com/js/sdk-loader.js'
           strategy='beforeInteractive'
         />
-        {brevoClientKey && (
-          <Script id='brevo-init' strategy='beforeInteractive'>
-            {`
-              window.Brevo = window.Brevo || [];
-              Brevo.push([
-                  "init",
-                  {
-                      client_key: "${brevoClientKey}",
-                  }
-              ]);
-            `}
-          </Script>
-        )}
+        <Script id='brevo-init' strategy='beforeInteractive'>
+          {`
+            window.Brevo = window.Brevo || [];
+            Brevo.push([
+                "init",
+                {
+                    client_key: "axvrkeiu9fp4fwkd5l6xvwr6", 
+                }
+            ]);
+          `}
+        </Script>
         <SessionProvider>
           <Provider store={store}>
             <FirebaseNotification />
