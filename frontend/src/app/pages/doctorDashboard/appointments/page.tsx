@@ -11,11 +11,12 @@ import { SearchAndSort } from '@/components/AdminDashboard/Appointments/SearchAn
 
 export default function Home() {
   const [allAppointments, setAllAppointments] = useState<IAppointment[]>([])
-  const [filteredAppointments, setFilteredAppointments] = useState<IAppointment[]>([])
+  const [filteredAppointments, setFilteredAppointments] = useState<
+    IAppointment[]
+  >([])
 
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string>('') // Búsqueda
-
 
   const [refreshAppointments, setRefreshAppointments] = useState(false)
 
@@ -40,13 +41,13 @@ export default function Home() {
     initializeAppointments()
   }, [session, refreshAppointments])
 
-  const handleRefreshAppointments = () => setRefreshAppointments((prev) => !prev)
+  const handleRefreshAppointments = () =>
+    setRefreshAppointments((prev) => !prev)
 
   // Manejar el cambio en la barra de búsqueda
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
   }
-
 
   // Filtrar y ordenar citas
   useEffect(() => {
@@ -64,25 +65,18 @@ export default function Home() {
   }, [searchQuery, allAppointments])
 
   return (
-    <DashboardShell>
-      <div className='min-h-screen bg-gray-100 p-6'>
-        <h1 className='mb-4 text-2xl font-bold'>Appointments List</h1>
+    <div className='min-h-screen bg-gray-100 p-6'>
+      <h1 className='mb-4 text-2xl font-bold'>Appointments List</h1>
 
-        {/* Componente de búsqueda y ordenamiento */}
-        <SearchAndSort
-          searchQuery={searchQuery}
-          onSearch={handleSearch}
-        />
+      {/* Componente de búsqueda y ordenamiento */}
+      <SearchAndSort searchQuery={searchQuery} onSearch={handleSearch} />
 
-        <AppointmentList
-          appointments={filteredAppointments}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          appointmentsPerPage={appointmentsPerPage}
-        />
-
-        
-      </div>
-    </DashboardShell>
+      <AppointmentList
+        appointments={filteredAppointments}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        appointmentsPerPage={appointmentsPerPage}
+      />
+    </div>
   )
 }

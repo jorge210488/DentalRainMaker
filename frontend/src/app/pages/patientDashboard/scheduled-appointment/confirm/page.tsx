@@ -6,17 +6,18 @@ import { RootState } from '@/redux/store'
 import { useSession } from 'next-auth/react'
 import { getDayOfWeek } from '@/utils/getDayOfWeek'
 import { postAppointment } from '@/server/appointments'
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'
 import { clearAppointmentPost } from '@/redux/slices/appointmentPostSlice'
 
 const AppointmentConfirmation = () => {
-  
   const router = useRouter()
-  const { data: session } = useSession();
+  const { data: session } = useSession()
   const dispatch = useDispatch()
-  const appointment = useSelector((state: RootState) => state.appointmentPost);
-  const {clinics} = useSelector((state: RootState) => state.clinics);
-  const clinic = Array.isArray(clinics) ? clinics.find((clinic) => clinic._id === session?.user.clinicId) : null;
+  const appointment = useSelector((state: RootState) => state.appointmentPost)
+  const { clinics } = useSelector((state: RootState) => state.clinics)
+  const clinic = Array.isArray(clinics)
+    ? clinics.find((clinic) => clinic._id === session?.user.clinicId)
+    : null
 
   const appointmentDetails = {
     type: 'In-person',
@@ -25,52 +26,48 @@ const AppointmentConfirmation = () => {
     time: appointment.wall_start_time.slice(11),
     location: clinic?.clinic_name,
     doctor: appointment.notes,
-    patient: session?.user.given_name + " " + session?.user.family_name,
+    patient: session?.user.given_name + ' ' + session?.user.family_name,
     insurance: 'Pacifico EPS',
     cost: '$35',
   }
-  
-  console.log("asi quedo el appointmne", appointment);
 
-  const handleAppointmentConfirm = async() =>{
+  console.log('asi quedo el appointment', appointment)
+
+  const handleAppointmentConfirm = async () => {
     try {
-      if(session?.user.clinicId && session.user.token){
+      if (session?.user.clinicId && session.user.token) {
         const response = await postAppointment(
           session.user.clinicId,
           session.user.token,
-          appointment
-        );
+          appointment,
+        )
 
-        if(response) {
+        if (response) {
           Swal.fire({
-            title: "Success",
-            text: "The appointment has been created successfully.",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
+            title: 'Success',
+            text: 'The appointment has been created successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
           dispatch(clearAppointmentPost())
-          router.push('/patientDashboard/appointments')
+          router.push('/pages/patientDashboard/appointments')
         } else {
           Swal.fire({
-            title: "Error",
-            text: "An error occurred while creating the appointment.",
-            icon: "error",
-            confirmButtonText: "Try Again",
-          });
+            title: 'Error',
+            text: 'An error occurred while creating the appointment.',
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+          })
         }
-
-
       }
     } catch (error) {
       Swal.fire({
-        title: "Connection Error",
-        text: "Failed to connect to the server. Please try again later.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+        title: 'Connection Error',
+        text: 'Failed to connect to the server. Please try again later.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
     }
-
-    
   }
 
   return (
@@ -79,7 +76,9 @@ const AppointmentConfirmation = () => {
         <div className='mb-8 flex items-center justify-center gap-6'>
           <div
             onClick={() =>
-              router.push('/patientDashboard/scheduled-appointment/chooseDoctor')
+              router.push(
+                '/pages/patientDashboard/scheduled-appointment/chooseDoctor',
+              )
             }
             className='flex cursor-pointer items-center'
           >
@@ -91,7 +90,7 @@ const AppointmentConfirmation = () => {
           <div
             onClick={() =>
               router.push(
-                '/patientDashboard/scheduled-appointment/search-date',
+                '/pages/patientDashboard/scheduled-appointment/search-date',
               )
             }
             className='flex cursor-pointer items-center'
@@ -104,7 +103,7 @@ const AppointmentConfirmation = () => {
           <div
             onClick={() =>
               router.push(
-                '/patientDashboard/scheduled-appointment/confirm',
+                '/pages/patientDashboard/scheduled-appointment/confirm',
               )
             }
             className='flex cursor-pointer items-center'
@@ -166,7 +165,7 @@ const AppointmentConfirmation = () => {
 
         <div className='mt-6 flex justify-between'>
           <button
-            onClick={() => router.push('/patientDashboard/appointments')}
+            onClick={() => router.push('/pages/patientDashboard/appointments')}
             className='rounded-lg bg-red-500 px-6 py-2 text-white hover:bg-red-600'
           >
             Cancel

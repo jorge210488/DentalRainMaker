@@ -1,5 +1,5 @@
 import AppointmentCard from './AppointmentCard'
-import { Appointment } from '@/app/patientDashboard/appointments/page'
+import { Appointment } from '@/app/pages/patientDashboard/appointments/page'
 
 type AppointmentsListProps = {
   appointments: Appointment[]

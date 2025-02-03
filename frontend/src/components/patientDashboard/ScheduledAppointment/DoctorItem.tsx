@@ -15,27 +15,28 @@ type DoctorItemProps = {
   router: any
 }
 
-
-
 const DoctorItem = ({ doctor, router }: DoctorItemProps) => {
   const dispatch = useDispatch()
 
   const appointment = useSelector((state: RootState) => state.appointmentPost)
 
-  const handleSelectDoctor=()=>{
-    console.log("id del doctor select",doctor.remote_id);
-    dispatch(updateAppointmentPost({
-      providers: [{
-        name: 'resources/'+doctor.remote_id,
-        remote_id: String(doctor.remote_id),
-        type: "PROVIDER"
-      }],
-      notes: doctor.name
-    }))
-    
-    router.push('/patientDashboard/scheduled-appointment/search-date')
-  }
+  const handleSelectDoctor = () => {
+    console.log('id del doctor select', doctor.remote_id)
+    dispatch(
+      updateAppointmentPost({
+        providers: [
+          {
+            name: 'resources/' + doctor.remote_id,
+            remote_id: String(doctor.remote_id),
+            type: 'PROVIDER',
+          },
+        ],
+        notes: doctor.name,
+      }),
+    )
 
+    router.push('/pages/patientDashboard/scheduled-appointment/search-date')
+  }
 
   return (
     <li className='flex items-center justify-between rounded-lg bg-white p-4 shadow-md'>
