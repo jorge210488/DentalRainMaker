@@ -57,7 +57,7 @@ export default function RecordsPage() {
   const [treatments, setTreatments] = useState<Treatment[]>(mockTreatments)
 
   return (
-    <div className='mx-auto p-6 lg:max-w-[80%]'>
+    <div className='absolute left-0 mx-auto p-6 lg:max-w-[100%]'>
       <div className='mb-6 flex items-center justify-between'>
         <div>
           <h1 className='text-2xl font-semibold text-gray-900'>
@@ -67,9 +67,6 @@ export default function RecordsPage() {
             View and manage patient treatment history
           </p>
         </div>
-        <Button variant='default' className='bg-blue-600 hover:bg-blue-700'>
-          Export Records
-        </Button>
       </div>
 
       {/* Filters Section */}

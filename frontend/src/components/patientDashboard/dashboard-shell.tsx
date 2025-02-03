@@ -99,6 +99,9 @@ export function DashboardShell({
       active: pathname === '/pages/patientDashboard/records',
     },
   ]
+  const routesForMapping = routes.filter((route) =>
+    (session?.user?.views ?? []).includes(route.id),
+  )
 
   const common = [
     {
@@ -118,10 +121,10 @@ export function DashboardShell({
   return (
     <div className='flex min-h-screen font-sans'>
       {/* Sidebar para desktop */}
-      <aside className='fixed z-[1] hidden w-64 border-r bg-blue-600 text-white lg:bottom-0 lg:block lg:h-[90.2%]'>
+      <aside className='fixed z-[1] hidden w-60 border-r bg-blue-600 text-white lg:top-[7%] lg:block lg:h-[93%]'>
         <div className='flex h-full flex-col'>
           <nav className='flex-1 space-y-1 px-3 py-4'>
-            {routes.map((route) => (
+            {routesForMapping.map((route) => (
               <Link
                 key={route.id}
                 href={
@@ -176,20 +179,28 @@ export function DashboardShell({
       {/* Mobile Navigation */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button variant='ghost' className='lg:hidden'>
+          <Button variant='ghost' className='z-10 lg:hidden'>
             <Menu className='h-6 w-6' />
           </Button>
         </SheetTrigger>
         <SheetContent
           side='left'
-          className='h-[92%] w-64 bg-blue-600 p-0 font-sans text-white'
+          className='h-[100%] w-64 bg-blue-600 p-0 font-sans text-white'
         >
           <div className='flex h-full flex-col'>
             <nav className='flex-1 space-y-1 px-3 py-4'>
-              {routes.map((route) => (
+              {routesForMapping.map((route) => (
                 <Link
                   key={route.href}
-                  href={route.href}
+                  href={
+                    route.label === 'Dashboard'
+                      ? session?.user?.type === 'PATIENT'
+                        ? (route.hrefPat ?? '')
+                        : session?.user?.type === 'DOCTOR'
+                          ? (route.hrefDoc ?? '')
+                          : (route.hrefAdm ?? '')
+                      : route.href
+                  }
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     'flex items-center rounded-lg px-3 py-2 text-sm font-medium',
@@ -213,7 +224,7 @@ export function DashboardShell({
                       ? () => {
                           setLogoutDialog(true)
                         }
-                      : undefined
+                      : () => setIsOpen(false)
                   }
                   className={cn(
                     'flex items-center rounded-lg px-3 py-2 text-sm font-medium',

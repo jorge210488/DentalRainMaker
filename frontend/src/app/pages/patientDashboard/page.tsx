@@ -17,7 +17,7 @@ export default function DashboardPage() {
   const { given_name } = useSelector((state: RootState) => state.user)
 
   return (
-    <div className='absolute right-0 overflow-y-scroll p-8 lg:max-w-[100%]'>
+    <div className='absolute right-0 overflow-y-scroll lg:left-0 lg:top-[10vh] lg:max-w-[100%]'>
       <DashboardHeader
         heading={`Welcome back, ${given_name}`}
         text='Manage your dental care journey'

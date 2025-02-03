@@ -8,8 +8,11 @@ type SearchBarProps = {
 
 const SearchBar = ({ searchTerm, setSearchTerm }: SearchBarProps) => {
   return (
-    <div className='mb-6'>
-      <label htmlFor='search' className='mb-2 block text-sm font-medium text-gray-700'>
+    <div className='mb-6 lg:w-[90vw]'>
+      <label
+        htmlFor='search'
+        className='mb-2 block text-sm font-medium text-gray-700'
+      >
         Search for a doctor
       </label>
       <input

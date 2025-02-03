@@ -14,7 +14,7 @@ import { MarketingMetrics } from '@/components/patientDashboard/marketing-metric
 
 export default function DashboardPage() {
   return (
-    <div className='space-y-6 font-sans'>
+    <div className='absolute left-4 top-[15%] space-y-6 font-sans md:left-10 lg:top-[7vh]'>
       <div>
         <h2 className='text-2xl font-bold tracking-tight text-black'>
           Practice Overview
