@@ -29,6 +29,7 @@ export default function AppointmentsDashboard() {
     'All' | 'In-person' | 'Virtual'
   >('All')
   const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const initializeAppointments = async () => {
@@ -43,7 +44,9 @@ export default function AppointmentsDashboard() {
             session.user.userId,
             session.user.token,
           )
+          response.length === 0 && setLoading(false)
           setAppointments(response)
+          setLoading(false)
         }
       } catch (error) {
         console.error('Error initializing user appointments:', error)
@@ -65,7 +68,7 @@ export default function AppointmentsDashboard() {
   })
 
   return (
-    <div className='min-h-screen w-full bg-gray-100'>
+    <div className='absolute left-0 min-h-screen w-full bg-gray-100'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <main className='py-4 sm:py-6 lg:py-8'>
           <Header />
@@ -75,7 +78,10 @@ export default function AppointmentsDashboard() {
             secondaryFilter={secondaryFilter}
             setSecondaryFilter={setSecondaryFilter}
           />
-          <AppointmentsList appointments={filteredAppointments} />
+          <AppointmentsList
+            loading={loading}
+            appointments={filteredAppointments}
+          />
         </main>
       </div>
     </div>

@@ -1,14 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { format, isSameDay, parseISO } from 'date-fns'
-import { CalendarIcon, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
-
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import { Card } from '@/components/ui/card'
-
 import React, { useState } from 'react'
 import Header from '@/components/patientDashboard/ScheduledAppointment/Header'
 import CalendarComponent from '@/components/patientDashboard/ScheduledAppointment/Calendar'
@@ -66,7 +57,7 @@ export default function AppointmentsDateTime() {
   console.log('asi va quedando la cita', appointment)
 
   return (
-    <div className='min-h-screen bg-gray-100 p-6'>
+    <div className='absolute left-0 flex min-h-screen w-[100%] flex-col items-center bg-gray-100 p-6'>
       <Header />
       <div className='text-center'>
         <h1 className='mb-4 text-2xl font-bold'>Date and Time</h1>

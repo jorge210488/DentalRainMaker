@@ -25,7 +25,7 @@ export default function AppointmentScheduler() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800'>
+    <div className='absolute left-0 min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800'>
       <div className='container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-8 sm:px-6 lg:px-8'>
         <motion.div
           initial={{ opacity: 0, y: -20 }}

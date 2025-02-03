@@ -48,7 +48,7 @@ export default function DoctorSelectionPage() {
   )
 
   return (
-    <div className='min-h-screen bg-gray-100 p-6'>
+    <div className='absolute left-0 flex min-h-screen w-[100%] flex-col items-center bg-gray-100 p-6'>
       <header className='mb-6'>
         {/* Header content */}
         <h1 className='text-center text-xl font-semibold'>

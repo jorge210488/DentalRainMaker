@@ -10,7 +10,7 @@ const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <div className='p-8'>
+    <div className='absolute left-2 w-[100%] p-8'>
       <DashboardHeader
         heading='Welcome back, Doctor'
         text='Manage your dental care journey'

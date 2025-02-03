@@ -71,7 +71,7 @@ const AppointmentConfirmation = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gray-100 p-6'>
+    <div className='absolute left-0 min-h-screen w-[100%] bg-gray-100 p-6'>
       <header className='mb-6'>
         <div className='mb-8 flex items-center justify-center gap-6'>
           <div
