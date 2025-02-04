@@ -8,6 +8,7 @@ import {
   HttpCode,
   UseGuards,
   Query,
+  BadRequestException,
 } from '@nestjs/common'
 import {
   ApiTags,
@@ -16,6 +17,7 @@ import {
   ApiResponse,
   ApiQuery,
   ApiParam,
+  ApiExcludeEndpoint,
 } from '@nestjs/swagger'
 import { RolesGuard } from '../guards/role.guard'
 import { PermissionsGuard } from '../guards/permission.guard'
@@ -24,6 +26,8 @@ import { Permissions } from '../decorators/permissions.decorator'
 import { CreateAppointmentDto } from './dto/createAppointment.dto'
 import { UpdateAppointmentDto } from './dto/updateAppointment.dto'
 import { CancelAppointmentDto } from './dto/cancelAppointment.dto'
+import { Public } from '../decorators/public.decorator'
+import { CreateSurveyResponseDto } from './dto/createSurveyResponse.dto'
 
 @ApiTags('appointments')
 @ApiBearerAuth()
@@ -233,5 +237,21 @@ export class AppointmentsController {
       appointmentId,
       cancelAppointmentDto,
     )
+  }
+
+  @Public()
+  @ApiExcludeEndpoint()
+  @HttpCode(201)
+  @Post()
+  async receiveSurveyResponse(@Body() data: CreateSurveyResponseDto) {
+    console.log('📩 Survey response received:', JSON.stringify(data, null, 2))
+
+    if (!data.appointment_id || !data.clinic_id) {
+      throw new BadRequestException(
+        'Invalid survey data: Missing appointment_id or clinic_id',
+      )
+    }
+
+    return await this.appointmentsService.createSurveyResponse(data)
   }
 }
