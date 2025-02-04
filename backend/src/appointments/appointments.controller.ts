@@ -32,11 +32,11 @@ import { CreateSurveyResponseDto } from './dto/createSurveyResponse.dto'
 @ApiTags('appointments')
 @ApiBearerAuth()
 @Controller('appointments')
-@UseGuards(RolesGuard, PermissionsGuard)
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Get()
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiQuery({
     name: 'page_size',
     required: false,
@@ -87,6 +87,7 @@ export class AppointmentsController {
   }
 
   @Get('contact/:contact_id')
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiQuery({
     name: 'clinic_id',
     required: true,
@@ -110,6 +111,7 @@ export class AppointmentsController {
   }
 
   @Get('appointmenttypes')
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiQuery({
     name: 'clinic_id',
     required: true,
@@ -121,6 +123,7 @@ export class AppointmentsController {
   }
 
   @Get('resources')
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiQuery({
     name: 'clinic_id',
     required: true,
@@ -132,6 +135,7 @@ export class AppointmentsController {
   }
 
   @Get('visits')
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiQuery({
     name: 'clinic_id',
     required: true,
@@ -143,6 +147,7 @@ export class AppointmentsController {
   }
 
   @Get(':appointment_id')
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiQuery({
     name: 'clinic_id',
     required: true,
@@ -167,6 +172,7 @@ export class AppointmentsController {
 
   @HttpCode(201)
   @Post()
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiOperation({ summary: 'Create a new appointment' })
   @ApiQuery({
     name: 'clinic_id',
@@ -185,6 +191,7 @@ export class AppointmentsController {
   }
 
   @Patch(':appointment_id')
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiOperation({ summary: 'Update contact by remote ID' })
   @ApiQuery({ name: 'clinicId', required: true, type: String })
   @ApiResponse({
@@ -207,6 +214,7 @@ export class AppointmentsController {
   }
 
   @Post(':appointment_id/cancel')
+  @UseGuards(RolesGuard, PermissionsGuard)
   @ApiOperation({ summary: 'Cancel an appointment' })
   @ApiQuery({
     name: 'clinic_id',
