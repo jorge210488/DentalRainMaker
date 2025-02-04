@@ -31,7 +31,7 @@ Los datos se obtienen desde una API REST externa.
 
 Se implementan dos Cloud Functions:
 
-Función de Extracción: Obtiene los datos desde la API y los almacena en raw-api-data.
+Función de Extracción: Obtiene los datos desde la API y los almacena en almacen-data.
 
 Función de Transformación: Procesa los datos JSON, elimina columnas innecesarias y los convierte a CSV, almacenándolos en clean-api-data.
 
