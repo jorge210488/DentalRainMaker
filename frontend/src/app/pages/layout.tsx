@@ -12,8 +12,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 const inter = Inter({ subsets: ['latin'] })
-import { clearUser } from '@/redux/slices/userSlice'
-import { clearNotifications } from '@/redux/slices/notificationsSlice'
 import { signOut } from 'next-auth/react'
 
 const metadata: Metadata = {

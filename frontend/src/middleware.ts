@@ -24,9 +24,19 @@ export async function middleware(request: NextRequest) {
   }
 
   if (session && pathname === '/login') {
-    return NextResponse.redirect(
-      new URL('/pages/patientDashboard', request.url),
-    )
+    const user = session.user as { type: string }
+    switch (user.type) {
+      case 'PATIENT':
+        return NextResponse.redirect(
+          new URL('/pages/patientDashboard', request.url),
+        )
+        break
+      case 'EMPLOYEER':
+        return NextResponse.redirect(
+          new URL('/pages/doctorDashboard', request.url),
+        )
+        break
+    }
   }
 
   return NextResponse.next()
