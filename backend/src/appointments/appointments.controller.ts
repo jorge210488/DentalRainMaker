@@ -242,7 +242,7 @@ export class AppointmentsController {
   @Public()
   @ApiExcludeEndpoint()
   @HttpCode(201)
-  @Post()
+  @Post('survey')
   async receiveSurveyResponse(@Body() data: CreateSurveyResponseDto) {
     console.log('📩 Survey response received:', JSON.stringify(data, null, 2))
 
