@@ -494,4 +494,54 @@ export class AppointmentsService {
   ): Promise<SurveyResponse> {
     return this.surveyResponseModel.create(data)
   }
+
+  async getSurveysByClinic(clinicId: string): Promise<SurveyResponse[]> {
+    try {
+      const surveys = await this.surveyResponseModel
+        .find({ clinic_id: clinicId })
+        .exec()
+
+      if (!surveys.length) {
+        throw new NotFoundException(
+          `No surveys found for clinic ID: ${clinicId}`,
+        )
+      }
+
+      return surveys
+    } catch (error) {
+      console.error('Error fetching surveys by clinic:', error)
+      throw new HttpException(
+        'Failed to fetch surveys from the database.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      )
+    }
+  }
+
+  async getSurveyByAppointment(
+    clinicId: string,
+    appointmentId: string,
+  ): Promise<SurveyResponse> {
+    try {
+      const survey = await this.surveyResponseModel
+        .findOne({
+          clinic_id: clinicId,
+          appointment_id: appointmentId,
+        })
+        .exec()
+
+      if (!survey) {
+        throw new NotFoundException(
+          `No survey found for clinic ID: ${clinicId} and appointment ID: ${appointmentId}`,
+        )
+      }
+
+      return survey
+    } catch (error) {
+      console.error('Error fetching survey by appointment:', error)
+      throw new HttpException(
+        'Failed to fetch survey from the database.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      )
+    }
+  }
 }

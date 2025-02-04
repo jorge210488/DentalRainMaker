@@ -1,15 +1,23 @@
 import { Transform } from 'class-transformer'
-import { IsString, IsInt, Min, Max, IsOptional } from 'class-validator'
+import { IsString, IsInt, Min, Max, IsOptional, IsEmail } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class CreateSurveyResponseDto {
+  @IsEmail()
+  @ApiProperty({ example: 'patient@example.com', description: 'Patient email' })
+  email: string
+
   @IsString()
   @ApiProperty({ example: '1234567890', description: 'Appointment ID' })
   appointment_id: string
 
   @IsString()
-  @ApiProperty({ example: '0987654321', description: 'Clinic ID' })
-  clinic_id: string
+  @Transform(({ value }) => value.replace(/\s+/g, '+')) // Reemplaza espacios con '+'
+  @ApiProperty({
+    example: 'Unify+Dental',
+    description: 'Clinic Name (formatted)',
+  })
+  clinic_name: string
 
   @Transform(({ value }) => parseInt(value, 10))
   @IsInt()
@@ -58,7 +66,7 @@ export class CreateSurveyResponseDto {
     description: 'Did the doctor listen to concerns? (1-5)',
     required: false,
   })
-  doctor_listened: number
+  doctor_listened?: number
 
   @Transform(({ value }) => (value ? parseInt(value, 10) : null))
   @IsInt()
@@ -69,7 +77,7 @@ export class CreateSurveyResponseDto {
     description: 'Would recommend doctor? (1-5)',
     required: false,
   })
-  recommend_doctor: number
+  recommend_doctor?: number
 
   @IsOptional()
   @IsString()

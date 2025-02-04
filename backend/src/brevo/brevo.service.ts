@@ -262,4 +262,49 @@ export class BrevoService {
       throw new BadRequestException('Failed to fetch SMS history from Brevo.')
     }
   }
+
+  async sendSurveyEmail(
+    email: string,
+    given_name: string,
+    family_name: string,
+    wall_start_time: string,
+    clinic_name: string,
+    survey_url: string,
+  ) {
+    try {
+      const payload = {
+        sender: { email: 'jorge.martinezgarcia.jam1@gmail.com' }, // 📌 Cambia por tu email autorizado en Brevo
+        to: [{ email }],
+        templateId: 11, // 📌 ID del template en Brevo
+        params: {
+          given_name,
+          family_name,
+          wall_start_time,
+          clinic_name,
+          url: survey_url, // 📌 Se pasa el link de la encuesta
+        },
+      }
+
+      console.log(
+        '📩 Enviando email de encuesta:',
+        JSON.stringify(payload, null, 2),
+      )
+
+      const response = await axios.post(this.smtpBaseUrl, payload, {
+        headers: {
+          'api-key': this.apiKey,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      console.log(`✅ Encuesta enviada a ${email}`, response.data)
+      return response.data
+    } catch (error) {
+      console.error(
+        '❌ Error al enviar encuesta:',
+        error.response?.data || error.message,
+      )
+      throw new Error('Failed to send survey email.')
+    }
+  }
 }

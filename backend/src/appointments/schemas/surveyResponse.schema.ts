@@ -6,10 +6,13 @@ export type SurveyResponseDocument = SurveyResponse & Document
 @Schema({ timestamps: true })
 export class SurveyResponse {
   @Prop({ required: true })
+  email: string
+
+  @Prop({ required: true })
   appointment_id: string
 
   @Prop({ required: true })
-  clinic_id: string
+  clinic_name: string
 
   @Prop({ required: true, min: 1, max: 5 })
   satisfaction: number

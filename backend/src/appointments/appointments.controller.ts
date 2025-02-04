@@ -254,12 +254,50 @@ export class AppointmentsController {
   async receiveSurveyResponse(@Body() data: CreateSurveyResponseDto) {
     console.log('📩 Survey response received:', JSON.stringify(data, null, 2))
 
-    if (!data.appointment_id || !data.clinic_id) {
+    if (!data.appointment_id || !data.clinic_name) {
       throw new BadRequestException(
-        'Invalid survey data: Missing appointment_id or clinic_id',
+        'Invalid survey data: Missing appointment_id or clinic_name',
       )
     }
 
     return await this.appointmentsService.createSurveyResponse(data)
+  }
+
+  @Get('survey')
+  @UseGuards(RolesGuard, PermissionsGuard)
+  @ApiOperation({ summary: 'Get all surveys by clinic_id' })
+  @ApiQuery({
+    name: 'clinic_id',
+    required: true,
+    type: String,
+    description: 'The ID of the clinic to filter surveys.',
+  })
+  async getSurveys(@Query('clinic_id') clinicId: string) {
+    return await this.appointmentsService.getSurveysByClinic(clinicId)
+  }
+
+  @Get('survey/details')
+  @UseGuards(RolesGuard, PermissionsGuard)
+  @ApiOperation({ summary: 'Get a survey by clinic_id and appointment_id' })
+  @ApiQuery({
+    name: 'clinic_id',
+    required: true,
+    type: String,
+    description: 'The ID of the clinic.',
+  })
+  @ApiQuery({
+    name: 'appointment_id',
+    required: true,
+    type: String,
+    description: 'The ID of the appointment associated with the survey.',
+  })
+  async getSurveyByAppointment(
+    @Query('clinic_id') clinicId: string,
+    @Query('appointment_id') appointmentId: string,
+  ) {
+    return await this.appointmentsService.getSurveyByAppointment(
+      clinicId,
+      appointmentId,
+    )
   }
 }

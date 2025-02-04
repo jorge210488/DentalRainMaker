@@ -129,4 +129,54 @@ export class BrevoController {
     console.log('🔹 Sincronizando historial de SMS...')
     return await this.brevoService.syncSmsHistory(startDate, endDate)
   }
+
+  @ApiOperation({ summary: 'Send survey email to patient' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string', example: 'patient@example.com' },
+        given_name: { type: 'string', example: 'John' },
+        family_name: { type: 'string', example: 'Doe' },
+        wall_start_time: {
+          type: 'string',
+          example: '2025-02-10 14:30',
+          description: 'Appointment date and time',
+        },
+        clinic_name: { type: 'string', example: 'Sunrise Dental Clinic' },
+        survey_url: {
+          type: 'string',
+          example:
+            'https://docs.google.com/forms/d/e/1FAIpQLSfMkVvdMlLEo3RlW_V5OeB7M2vR0lWcK77u4JMBgXdlrvzMvQ/viewform?usp=pp_url&entry.2114435485=appointmentId&entry.1484905053=clinicId',
+          description: 'Pre-filled survey form URL',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Survey email sent successfully' })
+  @ApiResponse({ status: 400, description: 'Error sending survey email' })
+  @Post('send-survey')
+  async sendSurveyEmail(@Body() body: any) {
+    console.log('📩 Sending survey email:', JSON.stringify(body, null, 2))
+
+    if (
+      !body.email ||
+      !body.given_name ||
+      !body.family_name ||
+      !body.wall_start_time ||
+      !body.clinic_name ||
+      !body.survey_url
+    ) {
+      throw new BadRequestException('Missing required parameters')
+    }
+
+    return await this.brevoService.sendSurveyEmail(
+      body.email,
+      body.given_name,
+      body.family_name,
+      body.wall_start_time,
+      body.clinic_name,
+      body.survey_url,
+    )
+  }
 }
