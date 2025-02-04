@@ -147,7 +147,7 @@ export class BrevoController {
         survey_url: {
           type: 'string',
           example:
-            'https://docs.google.com/forms/d/e/1FAIpQLSfMkVvdMlLEo3RlW_V5OeB7M2vR0lWcK77u4JMBgXdlrvzMvQ/viewform?usp=pp_url&entry.2114435485=appointmentId&entry.1484905053=clinicId',
+            'https://docs.google.com/forms/d/e/1FAIpQLSfMkVvdMlLEo3RlW_V5OeB7M2vR0lWcK77u4JMBgXdlrvzMvQ/viewform?usp=pp_url&entry.957406845=email&entry.2114435485=appointment_id&entry.1484905053=clinic_name&entry.2057911068=OK',
           description: 'Pre-filled survey form URL',
         },
       },

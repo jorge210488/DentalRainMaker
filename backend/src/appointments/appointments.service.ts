@@ -20,6 +20,7 @@ import {
   SurveyResponseDocument,
 } from './schemas/surveyResponse.schema'
 import { CreateSurveyResponseDto } from './dto/createSurveyResponse.dto'
+import { BrevoService } from 'src/brevo/brevo.service'
 
 @Injectable()
 export class AppointmentsService {
@@ -30,6 +31,7 @@ export class AppointmentsService {
     private readonly clinicConfigService: ClinicConfigService,
     private readonly contactsService: ContactsService,
     private readonly resourceService: ResourcesService,
+    private readonly brevoService: BrevoService,
   ) {}
 
   private async getRequestConfig(clinicId: string) {
@@ -540,6 +542,70 @@ export class AppointmentsService {
       console.error('Error fetching survey by appointment:', error)
       throw new HttpException(
         'Failed to fetch survey from the database.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      )
+    }
+  }
+
+  async sendSurvey(
+    remoteId: string,
+    appointmentId: string,
+    clinicId: string,
+    clinicName?: string,
+  ) {
+    try {
+      // ✅ Get contact details
+      const contact = await this.contactsService.getContactById(
+        clinicId,
+        remoteId,
+      )
+      if (!contact) {
+        throw new NotFoundException(
+          `Contact with remoteId ${remoteId} not found.`,
+        )
+      }
+
+      const { given_name, family_name, primary_email_address } = contact
+      if (!primary_email_address) {
+        throw new HttpException(
+          'Email is required to send the survey.',
+          HttpStatus.BAD_REQUEST,
+        )
+      }
+
+      // ✅ Get appointment details
+      const appointment = await this.getAppointmentById(clinicId, appointmentId)
+      if (!appointment || !appointment.wall_start_time) {
+        throw new NotFoundException(
+          `Appointment with ID ${appointmentId} not found or missing wall_start_time.`,
+        )
+      }
+
+      const wall_start_time = appointment.wall_start_time
+
+      // ✅ Format clinicName (replace spaces with "+")
+      const formattedClinicName = clinicName.replace(/\s+/g, '+')
+
+      // ✅ Construct survey URL
+      const survey_url = `https://docs.google.com/forms/d/e/1FAIpQLSfMkVvdMlLEo3RlW_V5OeB7M2vR0lWcK77u4JMBgXdlrvzMvQ/viewform?usp=pp_url&entry.957406845=${encodeURIComponent(
+        primary_email_address,
+      )}&entry.2114435485=${encodeURIComponent(appointmentId)}&entry.1484905053=${encodeURIComponent(
+        formattedClinicName,
+      )}&entry.2057911068=OK`
+
+      // ✅ Send email using Brevo
+      return await this.brevoService.sendSurveyEmail(
+        primary_email_address,
+        given_name,
+        family_name,
+        wall_start_time,
+        clinicName,
+        survey_url,
+      )
+    } catch (error) {
+      console.error('❌ Error sending survey:', error)
+      throw new HttpException(
+        'Failed to send survey email.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       )
     }

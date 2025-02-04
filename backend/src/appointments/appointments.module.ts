@@ -13,6 +13,7 @@ import {
   SurveyResponse,
   SurveyResponseSchema,
 } from './schemas/surveyResponse.schema'
+import { BrevoModule } from 'src/brevo/brevo.module'
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import {
     HttpModule,
     ConfigModule,
     ContactsModule,
+    BrevoModule,
     MongooseModule.forFeature([
       { name: SurveyResponse.name, schema: SurveyResponseSchema },
     ]),

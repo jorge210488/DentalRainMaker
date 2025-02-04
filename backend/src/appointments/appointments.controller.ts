@@ -300,4 +300,49 @@ export class AppointmentsController {
       appointmentId,
     )
   }
+
+  @Post('send-survey/:remote_id/:appointment_id/:clinic_id/:clinic_name')
+  @UseGuards(RolesGuard, PermissionsGuard)
+  @ApiOperation({ summary: 'Send survey email for a specific appointment' })
+  @ApiParam({
+    name: 'remote_id',
+    required: true,
+    type: String,
+    description: 'The remote ID of the patient.',
+  })
+  @ApiParam({
+    name: 'appointment_id',
+    required: true,
+    type: String,
+    description: 'The ID of the appointment.',
+  })
+  @ApiParam({
+    name: 'clinic_id',
+    required: true,
+    type: String,
+    description: 'The ID of the clinic.',
+  })
+  @ApiParam({
+    name: 'clinic_name',
+    required: true,
+    type: String,
+    description: 'The name of the clinic.',
+  })
+  @ApiResponse({ status: 200, description: 'Survey email sent successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid data or missing email' })
+  @ApiResponse({ status: 404, description: 'Appointment not found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  async sendSurvey(
+    @Param('remote_id') remoteId: string,
+    @Param('appointment_id') appointmentId: string,
+    @Param('clinic_id') clinicId: string,
+    @Param('clinic_name') clinicName: string,
+  ) {
+    return await this.appointmentsService.sendSurvey(
+      remoteId,
+      appointmentId,
+      clinicId,
+      clinicName,
+    )
+  }
 }
