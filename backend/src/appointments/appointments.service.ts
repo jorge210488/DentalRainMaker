@@ -4,6 +4,8 @@ import {
   HttpStatus,
   NotFoundException,
 } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
 import { HttpService } from '@nestjs/axios'
 import { ClinicConfigService } from 'src/config/clinicsConfig.service'
 import { filter, lastValueFrom } from 'rxjs'
@@ -13,10 +15,17 @@ import { UpdateAppointmentDto } from './dto/updateAppointment.dto'
 import { CancelAppointmentDto } from './dto/cancelAppointment.dto'
 import { ResourcesService } from 'src/resources/resource.service'
 import { convertDateTime } from 'src/utils/convertDateTime'
+import {
+  SurveyResponse,
+  SurveyResponseDocument,
+} from './schemas/surveyResponse.schema'
+import { CreateSurveyResponseDto } from './dto/createSurveyResponse.dto'
 
 @Injectable()
 export class AppointmentsService {
   constructor(
+    @InjectModel(SurveyResponse.name)
+    private readonly surveyResponseModel: Model<SurveyResponseDocument>,
     private readonly httpService: HttpService,
     private readonly clinicConfigService: ClinicConfigService,
     private readonly contactsService: ContactsService,
@@ -69,7 +78,7 @@ export class AppointmentsService {
         ),
       ])
 
-      const appointments = response.data.appointments;
+      const appointments = response.data.appointments
 
       // Crear un mapa de remote_id -> display_name usando Object.fromEntries
       const remoteIdToDisplayName = Object.fromEntries(
@@ -80,26 +89,23 @@ export class AppointmentsService {
       )
 
       // Mapear appointments para agregar propiedades adicionales
-      const updatedAppointments = appointments.map(
-        (appointment) => ({
-          ...appointment,
-          doctor:
-            appointment.providers
-              .map((provider) => remoteIdToDisplayName[provider.remote_id])
-              .filter(Boolean)[0] || null, // Toma el primer display_name válido o null
-          operator:
-            appointment.resources
-              .map((resource) => remoteIdToDisplayName[resource.remote_id])
-              .filter(Boolean)[0] || null,
-          date: appointment.wall_start_time.split(" ")[0],
-          time: appointment.wall_start_time.split(' ')[1],
-          atention_type: 'In-person',
-          paymentStatus: 'Pending',
-        }),
-      )
+      const updatedAppointments = appointments.map((appointment) => ({
+        ...appointment,
+        doctor:
+          appointment.providers
+            .map((provider) => remoteIdToDisplayName[provider.remote_id])
+            .filter(Boolean)[0] || null, // Toma el primer display_name válido o null
+        operator:
+          appointment.resources
+            .map((resource) => remoteIdToDisplayName[resource.remote_id])
+            .filter(Boolean)[0] || null,
+        date: appointment.wall_start_time.split(' ')[0],
+        time: appointment.wall_start_time.split(' ')[1],
+        atention_type: 'In-person',
+        paymentStatus: 'Pending',
+      }))
 
       return updatedAppointments
-
     } catch (error) {
       console.error('Error fetching appointments:', error)
 
@@ -481,5 +487,11 @@ export class AppointmentsService {
     } catch (error) {
       throw new Error('Error fetching appointments: ' + error.message)
     }
+  }
+
+  async createSurveyResponse(
+    data: CreateSurveyResponseDto,
+  ): Promise<SurveyResponse> {
+    return this.surveyResponseModel.create(data)
   }
 }
