@@ -19,23 +19,28 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // 🚨 Si no hay sesión y no está en /login, redirigir a /login
   if (!session && pathname !== '/login') {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  // 🚨 Si hay sesión y está en /login, redirigir según el tipo de usuario
   if (session && pathname === '/login') {
-    const user = session.user as { type: string }
-    switch (user.type) {
-      case 'PATIENT':
-        return NextResponse.redirect(
-          new URL('/pages/patientDashboard', request.url),
-        )
-        break
-      case 'EMPLOYEER':
-        return NextResponse.redirect(
-          new URL('/pages/doctorDashboard', request.url),
-        )
-        break
+    const user = session.user as { type?: string } | undefined
+
+    if (!user || !user.type) {
+      return NextResponse.next()
+    }
+
+    const dashboardRoutes: Record<string, string> = {
+      PATIENT: '/pages/patientDashboard',
+      EMPLOYEER: '/pages/doctorDashboard',
+    }
+
+    const redirectPath = dashboardRoutes[user.type]
+
+    if (redirectPath) {
+      return NextResponse.redirect(new URL(redirectPath, request.url))
     }
   }
 
@@ -43,7 +48,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico).*)', // Protege todas las rutas excepto recursos estáticos
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }
