@@ -1,6 +1,12 @@
 # Dental Rain Maker
 
-![Dental Rain Maker Preview](frontend/public/DoctorDashboard.png)
+![Dental Rain Maker Doctor Dashboard](frontend/public/DoctorDashboard.png)
+![Dental Rain Maker Patient List](frontend/public/PatientsList.png)
+![Dental Rain Maker Patient Appointments](frontend/public/PatientsAppointments.png)
+![Dental Rain Maker Patient Dashboard](frontend/public/PatientDashboard.png)
+![Dental Rain Maker Patient Schedule Appointment](frontend/public/ScheduleAppointment.png)
+![Dental Rain Maker Patient Notifications](frontend/public/notifications.png)
+
 
 ## Description
 
@@ -89,7 +95,7 @@ The **Dental Rain Maker** dashboard provides insightful data visualizations:
 
 ```bash
 git clone https://github.com/yourusername/dental-rain-maker.git
-cd dental-rain-maker
+cd DentalRainMaker
 ```
 
 ### **Install Dependencies**
