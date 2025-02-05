@@ -8,6 +8,7 @@ import { fetchAppointments } from '@/server/appointments'
 import { IAppointment } from '@/interfaces/ComponentsInterfaces/Appointment'
 import { AppointmentList } from '@/components/AdminDashboard/Appointments/AppointmentsList'
 import { SearchAndSort } from '@/components/AdminDashboard/Appointments/SearchAndSort'
+import { AppointmentModal } from '@/components/AdminDashboard/Appointments/AppointmentModal'
 
 export default function Home() {
   const [allAppointments, setAllAppointments] = useState<IAppointment[]>([])
@@ -17,6 +18,8 @@ export default function Home() {
 
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string>('') // Búsqueda
+
+  const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | null>(null)
 
   const [refreshAppointments, setRefreshAppointments] = useState(false)
 
@@ -76,7 +79,20 @@ export default function Home() {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         appointmentsPerPage={appointmentsPerPage}
+        setSelectedAppointment={setSelectedAppointment}
       />
+
+
+      {/* Modal for Details */}
+          {selectedAppointment && (
+            <AppointmentModal
+              appointment={selectedAppointment}
+              refreshAppointment={handleRefreshAppointments}
+              closeAppointmentModal={() => setSelectedAppointment(null)}
+            />
+          )}
+
+
     </div>
   )
 }
