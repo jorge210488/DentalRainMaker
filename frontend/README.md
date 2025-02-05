@@ -29,6 +29,7 @@ This project integrates a range of modern technologies to ensure an optimized us
 - **Firebase**: Push notifications.
 - **Make.com**: Workflow automation.
 - **Google Forms**: Patient inquiries and feedback collection.
+- **Swagger**: For API documentation.
 - **Kolla API Integration**: Efficiently integrates with external Kolla API while working in parallel with the in-house system.
 
 ### Database
@@ -87,8 +88,8 @@ The **Dental Rain Maker** dashboard provides insightful data visualizations:
 ### **Clone the Repository**
 
 ```bash
-git clone https://github.com/yourusername/dental-rain-maker.git
-cd dental-rain-maker
+git clone https://github.com/jorge210488/DentalRainMaker.git
+cd DENTALRAINMAKER
 ```
 
 ### **Install Dependencies**
