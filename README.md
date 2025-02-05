@@ -1,6 +1,6 @@
 # Dental Rain Maker
 
-![Dental Rain Maker Preview](https://yourimageurl.com/dentalrainmaker.png)
+![Dental Rain Maker Preview](frontend/public/DoctorDashboard.png)
 
 ## Description
 
@@ -68,8 +68,8 @@ The project implements a data pipeline for **ETL (Extract, Transform, Load)** pr
 
 ## Deployment
 
-- **Backend**: Deployed on **Render**.
-- **Frontend**: Deployed on **Vercel**.
+- **Backend**: Deployed on [**Render**](https://dentalrainmaker.onrender.com/api).
+- **Frontend**: Deployed on [**Vercel**](https://dental-rain-maker.vercel.app/).
 - **Data Pipeline**: Hosted on **Google Cloud Platform (GCP)**.
 
 ## Dashboard Overview
