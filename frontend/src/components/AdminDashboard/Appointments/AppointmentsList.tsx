@@ -7,6 +7,7 @@ type AppointmentListProps = {
   currentPage: number
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>
   appointmentsPerPage: number
+  setSelectedAppointment: React.Dispatch<React.SetStateAction<IAppointment | null>>
 }
 
 export const AppointmentList: React.FC<AppointmentListProps> = ({
@@ -14,7 +15,11 @@ export const AppointmentList: React.FC<AppointmentListProps> = ({
   currentPage,
   setCurrentPage,
   appointmentsPerPage,
+  setSelectedAppointment,
+
 }) => {
+
+   
   const totalPages = Math.ceil(appointments.length / appointmentsPerPage)
 
   const handlePageChange = (newPage: number) => {
@@ -56,7 +61,7 @@ export const AppointmentList: React.FC<AppointmentListProps> = ({
                 <td className='p-2'>
                   <button
                     className='text-blue-500 hover:underline'
-                    onClick={() => {}}
+                    onClick={() => setSelectedAppointment(appointment)}
                   >
                     {appointment.remote_id}
                   </button>
