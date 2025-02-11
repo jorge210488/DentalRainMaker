@@ -1,76 +1,74 @@
 
-# Data Pipeline en Google Cloud Platform (GCP)
+# Data Pipeline in Google Cloud Platform (GCP)
 
-Este proyecto implementa un pipeline de datos en GCP para la extracción, transformación y carga (ETL) de datos desde una API externa hasta su almacenamiento y análisis en BigQuery.
+This project implements a data pipeline in GCP for Extract, Transform, and Load (ETL) processes, extracting data from an external API and storing and analyzing it in BigQuery.
 
-Arquitectura del Pipeline
+Pipeline Architecture
 
-El pipeline sigue los siguientes pasos:
+The pipeline follows these steps:
 
-Extracción de Datos: Se obtienen datos desde una API REST.
+Data Extraction: Data is retrieved from a REST API.
 
-Procesamiento con Cloud Functions: Se utilizan dos Cloud Functions para manejar la extracción y transformación de los datos.
+Processing with Cloud Functions: Two Cloud Functions handle data extraction and transformation.
 
-Almacenamiento en Cloud Storage: Los datos en formato JSON se almacenan en el bucket almacen-data.
+Storage in Cloud Storage: JSON data is stored in the almacen-data bucket.
 
-Transformación con Python y Pandas: Se procesan los archivos JSON para limpiar y estructurar los datos antes de su carga en BigQuery.
+Transformation with Python and Pandas: JSON files are processed to clean and structure the data before loading it into BigQuery.
 
-Almacenamiento de Datos Transformados: Los archivos transformados en formato CSV se almacenan en el bucket clean-api-data.
+Storage of Transformed Data: Transformed CSV files are stored in the clean-api-data bucket.
 
-Carga en BigQuery: Los datos transformados se almacenan en tablas dentro de BigQuery, manteniendo la actualización de la información con una frecuencia diaria.
+Loading into BigQuery: Transformed data is stored in BigQuery tables, ensuring daily updates.
 
-Visualización con Looker: Se genera un dashboard en Looker para el análisis de los datos extraídos.
+Visualization with Looker: A Looker dashboard is created for data analysis.
 
-Detalles Técnicos
+Technical Details
 
-1. Extracción de Datos
+1. Data Extraction
 
-Los datos se obtienen desde una API REST externa.
+Data is obtained from an external REST API.
 
-2. Procesamiento con Cloud Functions
+2. Processing with Cloud Functions
 
-Se implementan dos Cloud Functions:
+Two Cloud Functions are implemented:
 
-Función de Extracción: Obtiene los datos desde la API y los almacena en almacen-data.
+Extraction Function: Retrieves data from the API and stores it in almacen-data.
 
-Función de Transformación: Procesa los datos JSON, elimina columnas innecesarias y los convierte a CSV, almacenándolos en clean-api-data.
+Transformation Function: Processes JSON data, removes unnecessary columns, converts it to CSV, and stores it in clean-api-data.
 
-3. Almacenamiento en Cloud Storage
+3. Storage in Cloud Storage
 
-Bucket almacen-data: Contiene los archivos JSON sin procesar.
+almacen-data bucket: Contains raw JSON files.
 
-Bucket clean-api-data: Contiene los archivos CSV listos para ser cargados en BigQuery.
+clean-api-data bucket: Contains CSV files ready for loading into BigQuery.
 
-4. Transformación de Datos
+4. Data Transformation
 
-Se realizan las siguientes transformaciones antes de la carga en BigQuery:
+Before loading into BigQuery, the following transformations are applied:
 
-Desanidación: En cada endpoint, la columna corrspondiente a la informacion principal se desanida para normalizar la estructura.
+Denormalization: The main information column in each endpoint is denormalized to normalize the structure.
 
-Eliminación de columnas innecesarias: La columna next_page_token se elimina de todos los archivos.
+Unnecessary Column Removal: The next_page_token column is removed from all files.
 
-Conversión de formato: Los archivos JSON se convierten a CSV y se almacenan en el bucket clean-api-data.
+Format Conversion: JSON files are converted to CSV and stored in the clean-api-data bucket.
 
-5. Carga en BigQuery
+5. Loading into BigQuery
 
-Los archivos CSV almacenados en clean-api-data se cargan en BigQuery en tablas predefinidas. Se mantiene la actualización automática para asegurar que los datos reflejen la información más reciente.
+CSV files stored in clean-api-data are loaded into predefined BigQuery tables. Automatic updates ensure data reflects the latest information.
 
-6. Visualización de Datos
+6. Data Visualization
 
-Looker: Se utiliza para generar dashboards interactivos basados en los datos cargados en BigQuery.
+Looker: Used to generate interactive dashboards based on data loaded in BigQuery.
 
-![Dashboard analítico para la vista del administrador de la app](images/desktop.png)
+![Analytical dashboard for the app administrator view](images/desktop.png)
 
-
-Tecnologías Utilizadas
+Technologies Used
 
 Google Cloud Platform (GCP): Cloud Functions, Cloud Storage, BigQuery
 
 Python: Requests, Pandas
 
-Looker: Visualización de datos
+Looker: Data visualization
 
-Despliegue y Automatización
+Deployment and Automation
 
-El proceso de extracción y carga se ejecuta mediante Cloud Functions automatizadas, garantizando la actualización constante de los datos en BigQuery
-
+The extraction and loading process runs through automated Cloud Functions, ensuring continuous data updates in BigQuery.
